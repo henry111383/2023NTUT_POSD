@@ -19,7 +19,7 @@ public:
 
     int numberOfFiles() const;
 
-    Iterator * createIterator();
+    // Iterator * createIterator();
 };
 
 

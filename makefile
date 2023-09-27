@@ -1,12 +1,15 @@
 .PHONY: clean stat
 
-all: directories ut_all main
+all: directories ut_all
 
-main: src/main.cpp src/hello.h
-	g++ -std=c++11 src/main.cpp -o bin/main
 
-ut_all: test/ut_main.cpp test/ut_hello.h src/hello.h
-	g++ -std=c++11 test/ut_main.cpp -o bin/ut_all -lgtest -lpthread
+TEST = test/ut_node.h
+		
+
+SRC  = src/node.h
+
+ut_all: test/ut_all.cpp $(TEST) $(SRC)
+	g++ -std=c++11 test/ut_all.cpp -o bin/ut_all -lgtest -lpthread
 
 directories:
 	mkdir -p bin
