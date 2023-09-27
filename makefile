@@ -1,11 +1,11 @@
-.PHONY: directories clean stat
+.PHONY: clean stat
 
-all: directories bin/ut_all bin/main
+all: directories ut_all main
 
-bin/main: src/main.cpp src/hello.h
+main: src/main.cpp src/hello.h
 	g++ -std=c++11 src/main.cpp -o bin/main
 
-bin/ut_all: test/ut_main.cpp test/ut_hello.h src/hello.h
+ut_all: test/ut_main.cpp test/ut_hello.h src/hello.h
 	g++ -std=c++11 test/ut_main.cpp -o bin/ut_all -lgtest -lpthread
 
 directories:
