@@ -1,4 +1,4 @@
-.PHONY: clean test
+.PHONY: directories clean stat
 
 all: directories bin/ut_all bin/main
 
