@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuites tests="1" failures="0" disabled="0" errors="0" time="0.026" timestamp="2023-09-27T08:28:38.366" name="AllTests">
-  <testsuite name="HelloTest" tests="1" failures="0" disabled="0" skipped="0" errors="0" time="0.007" timestamp="2023-09-27T08:28:38.384">
-    <testcase name="SayHello" status="run" result="completed" time="0.004" timestamp="2023-09-27T08:28:38.385" classname="HelloTest" />
-  </testsuite>
-</testsuites>

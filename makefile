@@ -26,4 +26,4 @@ valgrind: clean all
 	valgrind \
 	--tool=memcheck --error-exitcode=1 --track-origins=yes --leak-check=full --leak-resolution=high \
 	--num-callers=50 --show-leak-kinds=definite,possible --show-error-list=yes \
-	bin/ut_all --gtest_output=xml:result.xml
+	bin/ut_all 
