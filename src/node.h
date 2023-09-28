@@ -17,6 +17,8 @@ public:
     
     Node * getChildByName(const char * name) const;
 
+    Node * find(string path);
+
     int numberOfFiles() const;
 
     // Iterator * createIterator();

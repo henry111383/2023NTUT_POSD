@@ -18,7 +18,7 @@
 
 ## Assignment 1
 
-### Due: TBA
+### Due: 2023/10/10 23:59
 
 ### Notice
 
@@ -50,20 +50,12 @@ Both `File` and `Folder` accepts a string of its path. A path is an absolute pat
 Each `Node` provides following member functions:
 
 * `string name() const`: This function returns the name of the node without any path information.
-
 * `string path() const`: This function returns the entire path of the node.
-
 * `void add(Node * node)`: This function add a child node to the current node if the current node is a folder.
-
 * `void remove(string path)`: This function removes the node under the given path from the composite hierarchy.
   * **HINT**: refer to *Explicit parent reference* in the Implementation section of the ***Composite*** pattern in the text book [GoF p.166]
-
 * `Node * getChildByName(const char * name) const`: This function returns a child node according to the receiving name. `nullptr` is returned if no node matches the name.
-
-* `Node * find(string path)`: This function returns the node under the composite structure with path matching the argument. If no matched node is found, a `nullptr` is returned. 
-
 * `int numberOfFiles()`: This function calculates the total numbers of the files under the current node. For example, a folder "Books" gets a file "design-pattern.pdf" and a folder "SOLID". There are five files in the folder "SOLID" for the SOLID principles. The `numberOfFiles` for the folder "Books" is 6.
-
 * `Iterator * createIterator()`: This function is a ***Factory Method*** for generating the corresponding iterators according to the concrete classes.
   * For `Folder`, it generates a `FolderIterator`.
   * For leaf classes, it generates a null iterator. 
