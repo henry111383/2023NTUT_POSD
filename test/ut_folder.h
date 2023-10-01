@@ -1,5 +1,5 @@
-#include "../src/Folder.h"
-#include "../src/File.h"
+#include "../src/folder.h"
+#include "../src/file.h"
 #include <string>
 #include <gtest/gtest.h>
 #include <map>
