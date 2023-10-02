@@ -3,15 +3,23 @@
 #define FOLDER
 
 #include <string>
-#include <map>
+#include <list>
+#include <algorithm>
 #include "./iterator.h"
 #include "./null_iterator.h"
 #include "./node.h"
 
+struct IsMatchingName {
+    IsMatchingName(const std::string& key) : key_(key) {}
+    bool operator()(const Node* node) const {
+        return (node->name()) == key_;
+    }
+    std::string key_;
+};
 
 class Folder: public Node {
 public:
-    std::map<std::string, Node *> ChildMap;
+    std::list<Node *> child;
 
     Folder(std::string path):_path(path) 
     {
@@ -32,7 +40,7 @@ public:
     
     void add(Node * node) override 
     {
-        ChildMap[node->name()] = node;
+        child.push_back(node);
     }
 
     void remove(std::string path) override 
@@ -42,12 +50,13 @@ public:
 
     Node * getChildByName(const char * name) const override 
     {
-        auto it = ChildMap.find(name);
-        if(it != ChildMap.end()){
-            return it->second;
+        auto it = std::find_if(child.begin(), child.end(), IsMatchingName(name));
+        if(it != child.end()){
+            return *it;
         } else {
             return nullptr;
         }
+        return nullptr;
     }
 
     Node * find(std::string path) override 

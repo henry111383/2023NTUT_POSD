@@ -29,7 +29,7 @@ public:
 
 private:
     Folder * _folder;
-    std::map<std::string, Node *>::iterator _current;
+    std::list<Node *>::iterator _current;
 };
 
 

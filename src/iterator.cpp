@@ -8,21 +8,21 @@ FolderIterator::FolderIterator(Folder* composite):_folder(composite){
 
 void FolderIterator::first() 
 {
-    _current = _folder -> ChildMap.begin();
+    _current = _folder -> child.begin();
 };
 
 
 Node * FolderIterator::currentItem() const 
 {
-    if (_folder->ChildMap.empty() || this->isDone()){
+    if (_folder->child.empty() || this->isDone()){
         throw std::string("No current item!");
     }
-    return _current->second;
+    return *_current;
 };
 
 void FolderIterator::next() 
 {
-    if (_folder->ChildMap.empty() || this->isDone()){
+    if (_folder->child.empty() || this->isDone()){
         throw std::string("Moving past the end!");
     }
     _current++;
@@ -30,6 +30,6 @@ void FolderIterator::next()
 
 bool FolderIterator::isDone() const 
 {
-    return _current == _folder->ChildMap.end();
+    return _current == _folder->child.end();
 };
 

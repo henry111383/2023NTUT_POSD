@@ -2,7 +2,7 @@
 #include "../src/file.h"
 #include <string>
 #include <gtest/gtest.h>
-#include <map>
+#include <list>
 
 class FolderTest : public ::testing::Test
 {
@@ -44,8 +44,8 @@ TEST_F(FolderTest, NameShouldbeCorrect)
 
 TEST_F(FolderTest, EmptyFoldergetChildmapShouldbeEmpty)
 {
-	std::map <std::string, Node *> MyMap;
-	MyMap = folder -> ChildMap;
+	std::list <Node *> MyMap;
+	MyMap = folder -> child;
 	ASSERT_TRUE(MyMap.empty());
 }
 
