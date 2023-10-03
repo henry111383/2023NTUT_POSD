@@ -12,6 +12,7 @@ public:
     File(std::string path):_path(path) 
     {
         _name = _path.substr(_path.find_last_of("/\\") + 1);
+        nodeType = "File";
     };
 
     ~File(){};
@@ -43,7 +44,8 @@ public:
 
     Node * find(std::string path) override 
     {
-        throw "Current node (file) shouldn't have a child node!";
+        // throw "Current node (file) shouldn't have a child node!";
+        return nullptr;
     }
 
     int numberOfFiles() const override 
@@ -59,7 +61,6 @@ public:
 private:
     std::string _name;
     std::string _path;
-
 };
 
 #endif // FILE_H

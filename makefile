@@ -7,22 +7,27 @@ TEST = test/ut_node.h \
 		test/ut_file.h \
 		test/ut_folder.h \
 		test/ut_null_iterator.h \
-		test/ut_iterator.h
+		test/ut_iterator.h \
+		test/ut_dfs_iterator.h
 		
 
 SRC  = src/node.h \
 		src/node.h \
 		src/folder.h \
 		src/null_iterator.h \
-		src/iterator.h
+		src/iterator.h \
+		src/dfs_iterator.h
 
-ITERATOR = obj/iterator.o
+ITERATOR = obj/iterator.o #obj/dfs_iterator.o
 
 ut_all: test/ut_all.cpp $(TEST) $(SRC) $(ITERATOR)
 	g++ -std=c++11 test/ut_all.cpp $(ITERATOR) -o bin/ut_all -lgtest -lpthread
 
 obj/iterator.o: src/iterator.h src/iterator.cpp
 	g++ -std=c++11 -c src/iterator.cpp -o obj/iterator.o
+
+# obj/dfs_iterator.o: src/dfs_iterator.h src/dfs_iterator.cpp
+# 	g++ -std=c++11 -c src/dfs_iterator.cpp -o obj/dfs_iterator.o
 
 
 directories:

@@ -19,11 +19,11 @@ struct IsMatchingName {
 
 class Folder: public Node {
 public:
-    std::list<Node *> child;
 
     Folder(std::string path):_path(path) 
     {
         _name = _path.substr(_path.find_last_of("/\\") + 1);
+        nodeType = "Folder";
     };
 
     ~Folder(){};
@@ -61,7 +61,22 @@ public:
 
     Node * find(std::string path) override 
     {
-        throw "Current node (file) shouldn't have a child node!";
+        Node *item;
+        Iterator *it = this->createIterator();
+        for(it->first(); !it->isDone(); it->next())
+        {
+            item = it->currentItem();
+            // return item;
+            if((item->path())==path)
+            {
+                break;
+            } else 
+            {
+                item = item -> find(path);
+            }
+        }
+        delete it;
+        return item;
     }
 
     int numberOfFiles() const override 

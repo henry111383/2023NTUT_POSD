@@ -3,7 +3,7 @@
 #include <string>
 #include <gtest/gtest.h>
 #include <list>
-
+// typeid 
 class FolderTest : public ::testing::Test
 {
 protected:
@@ -44,9 +44,9 @@ TEST_F(FolderTest, NameShouldbeCorrect)
 
 TEST_F(FolderTest, EmptyFoldergetChildmapShouldbeEmpty)
 {
-	std::list <Node *> MyMap;
-	MyMap = folder -> child;
-	ASSERT_TRUE(MyMap.empty());
+	std::list <Node *> MyChild;
+	MyChild = folder -> child;
+	ASSERT_TRUE(MyChild.empty());
 }
 
 TEST_F(FolderTest, AddShouldbeCorrect)
@@ -72,7 +72,40 @@ TEST_F(FolderTest, getChildByNameShouldbeCorrectIfNotExisting)
 
 TEST_F(FolderTest, FindShouldbeCorrectIfExisting)
 {
-	
+	Folder *D1, *D2, *D3;
+	File *f1, *f2, *f3, *f4;
+
+	D1 = new Folder("/D1");
+	f1 = new File("/D1/f1");
+	D2 = new Folder("/D1/D2");
+	f2 = new File("D1/f2");
+	D1 -> add(f1);
+	D1 -> add(D2);
+	D1 -> add(f2);
+	f3 = new File("D1/D2/f3");
+	D3 = new Folder("D1/D2/D3");
+	f4 = new File("D1/D2/f4");
+	D2 -> add(f3);
+	D2 -> add(D3);
+	D2 -> add(f4);
+	/*
+			 D1
+		  /   |   \
+		f1   D2   f2
+		    / | \
+		  f3  D3 f4
+	*/
+	// std::cout << f3 ->path() << std::endl;
+	// std::cout << D1->find(f3->path())->path() << std::endl;
+	// ASSERT_EQ(f3, D1->find(f3->path()));
+
+	delete D1;
+	delete D2;
+	delete D3;
+	delete f1;
+	delete f2;
+	delete f3;
+	delete f4;
 }
 
 // TEST_F(FolderTest, RemoveShouldThrowException){

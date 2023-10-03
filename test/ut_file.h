@@ -49,9 +49,9 @@ TEST_F(FileTest, getChildByNameShouldThrowException)
 	ASSERT_ANY_THROW(file->getChildByName(""));
 }
 
-TEST_F(FileTest, FindShouldThrowException)
+TEST_F(FileTest, FindShouldbeNull)
 {
-	ASSERT_ANY_THROW(file->find(""));
+	ASSERT_EQ(file->find(""), nullptr);
 }
 
 TEST_F(FileTest, numberOfFilesShouldThrowException)

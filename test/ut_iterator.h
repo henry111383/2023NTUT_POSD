@@ -9,7 +9,7 @@ class IteratorTest : public ::testing::Test
 {
 protected:
     File *afile1, *afile2, *afile3;
-    Folder *afolder, *achildfolder;
+    Folder *afolder, *achildfolder, *aemptyfolder;
 
     Iterator *anullIterator, *afolderIterator;
 
@@ -20,6 +20,7 @@ protected:
         achildfolder = new Folder("/home/A/B");
         afile2 = new File("/home/A/B/2");
         afile3 = new File("/home/A/B/3");
+        aemptyfolder = new Folder("/home/C");
 
         afolder -> add(afile1);
         afolder -> add(achildfolder);
@@ -37,6 +38,7 @@ protected:
         delete achildfolder;
         delete afile2;
         delete afile3;
+        delete aemptyfolder;
         delete anullIterator;
         delete afolderIterator;
     }
@@ -62,4 +64,46 @@ TEST_F(IteratorTest, FolderIteratorNextShouldbeCorrect)
     ASSERT_EQ(afolderIterator -> currentItem(), afile1);
     ASSERT_NO_THROW(afolderIterator -> next());
     ASSERT_EQ(afolderIterator -> currentItem(), achildfolder);
+}
+
+TEST_F(IteratorTest, FolderIteratorIsDoneShouldbeCorrect)
+{   
+    ASSERT_NO_THROW(afolderIterator -> next());
+    ASSERT_NO_THROW(afolderIterator -> next());
+    ASSERT_TRUE(afolderIterator -> isDone());
+}
+
+TEST_F(IteratorTest, EmptyFolderIteratorFirstShouldbeCorrect)
+{   
+    Iterator *it = aemptyfolder -> createIterator();
+    ASSERT_NO_THROW(it -> first());
+    delete it;
+}
+
+TEST_F(IteratorTest, EmptyFolderIteratorFirstShouldNotThrowException)
+{   
+    Iterator *it = aemptyfolder -> createIterator();
+    ASSERT_NO_THROW(it -> first());
+    delete it;
+}
+
+TEST_F(IteratorTest, EmptyFolderIteratorCurrentItemShouldThrowException)
+{   
+    Iterator *it = aemptyfolder -> createIterator();
+    ASSERT_ANY_THROW(it -> currentItem());
+    delete it;
+}
+
+TEST_F(IteratorTest, EmptyFolderIteratorNextShouldThrowException)
+{   
+    Iterator *it = aemptyfolder -> createIterator();
+    ASSERT_ANY_THROW(it -> next());
+    delete it;
+}
+
+TEST_F(IteratorTest, EmptyFolderIteratorIsDoneShouldbeCorrect)
+{   
+    Iterator *it = aemptyfolder -> createIterator();
+    ASSERT_TRUE(it -> isDone());
+    delete it;
 }

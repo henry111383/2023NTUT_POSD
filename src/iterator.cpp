@@ -14,7 +14,7 @@ void FolderIterator::first()
 
 Node * FolderIterator::currentItem() const 
 {
-    if (_folder->child.empty() || this->isDone()){
+    if (this->isDone()){
         throw std::string("No current item!");
     }
     return *_current;
@@ -22,7 +22,7 @@ Node * FolderIterator::currentItem() const
 
 void FolderIterator::next() 
 {
-    if (_folder->child.empty() || this->isDone()){
+    if (this->isDone()){
         throw std::string("Moving past the end!");
     }
     _current++;

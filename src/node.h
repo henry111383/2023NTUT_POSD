@@ -3,11 +3,16 @@
 #define NODE_H
 
 #include <string>
+#include <list>
 #include "./iterator.h"
 
 
 class Node {
 public:
+    Node(){};
+
+    virtual ~Node() {};
+
     virtual std::string name() const = 0;
     
     virtual std::string path() const = 0;
@@ -23,6 +28,11 @@ public:
     virtual int numberOfFiles() const = 0;
 
     virtual Iterator * createIterator() = 0;
+
+    std::list<Node *> child;
+
+    std::string nodeType;
+
 };
 
 
