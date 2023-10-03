@@ -2,9 +2,9 @@
 #if !defined(FILE_H)
 #define FILE_H
 #include <string>
-#include "./node.h"
-#include "./iterator.h"
-#include "./null_iterator.h"
+#include "node.h"
+#include "iterator.h"
+#include "null_iterator.h"
 
 class File: public Node {
 

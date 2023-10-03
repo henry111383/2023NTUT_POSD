@@ -5,6 +5,7 @@
 #include "ut_null_iterator.h"
 #include "ut_iterator.h"
 #include "ut_dfs_iterator.h"
+#include "ut_bfs_iterator.h"
 
 // #include "ut_file.h"
 

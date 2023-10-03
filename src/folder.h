@@ -5,9 +5,10 @@
 #include <string>
 #include <list>
 #include <algorithm>
-#include "./iterator.h"
-#include "./null_iterator.h"
-#include "./node.h"
+#include "iterator.h"
+#include "null_iterator.h"
+#include "node.h"
+#include "dfs_iterator.h"
 
 struct IsMatchingName {
     IsMatchingName(const std::string& key) : key_(key) {}

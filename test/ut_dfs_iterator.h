@@ -44,22 +44,78 @@ protected:
 
 };
 
-TEST_F(DfsIteratorTest, test1)
+
+TEST_F(DfsIteratorTest, DfsIteratorShouldbeCorrectlyBuilded) 
+{
+    ASSERT_NO_THROW(DfsIterator tmp(D1));
+}
+
+TEST_F(DfsIteratorTest, firstShouldThrowNoException)
 {
     Iterator *dfs_it =  new DfsIterator(D1);
-    // ASSERT_NO_THROW(dfs_it -> first());
-    // ASSERT_EQ(f1, dfs_it -> currentItem());
-    // ASSERT_NO_THROW(dfs_it -> next());
-    // ASSERT_EQ(f3, dfs_it -> currentItem());
-    // ASSERT_NO_THROW(dfs_it -> next());
-    // ASSERT_EQ(D3, dfs_it -> currentItem());
-    // ASSERT_NO_THROW(dfs_it -> next());
-    // ASSERT_EQ(f4, dfs_it -> currentItem());
-    // ASSERT_NO_THROW(dfs_it -> next());
-    // ASSERT_EQ(D2, dfs_it -> currentItem());
-    // ASSERT_NO_THROW(dfs_it -> next());
-    // ASSERT_EQ(f2, dfs_it -> currentItem());
-    // ASSERT_NO_THROW(dfs_it -> next());
-    // ASSERT_TRUE(dfs_it -> isDone());
+    ASSERT_NO_THROW(dfs_it -> first());
+    delete dfs_it;
+}
+
+TEST_F(DfsIteratorTest, currentItemShouldbeCorrect)
+{
+    Iterator *dfs_it =  new DfsIterator(D1);
+    ASSERT_NO_THROW(dfs_it -> first());
+    ASSERT_EQ(dfs_it -> currentItem(), f1);
+    delete dfs_it;
+}
+
+TEST_F(DfsIteratorTest, NextShouldbeCorrect)
+{
+    Iterator *dfs_it =  new DfsIterator(D1);
+    ASSERT_NO_THROW(dfs_it -> first());
+    ASSERT_EQ(dfs_it -> currentItem(), f1);
+    ASSERT_NO_THROW(dfs_it -> next());
+    ASSERT_EQ(D2, dfs_it -> currentItem());
+    delete dfs_it;
+}
+
+
+TEST_F(DfsIteratorTest, isDoneShouldbeCorrect)
+{
+    Iterator *dfs_it =  new DfsIterator(D1);
+    ASSERT_NO_THROW(dfs_it -> first());
+    ASSERT_EQ(f1, dfs_it -> currentItem());
+    ASSERT_NO_THROW(dfs_it -> next());
+    ASSERT_EQ(D2, dfs_it -> currentItem());
+    ASSERT_NO_THROW(dfs_it -> next());
+    ASSERT_EQ(f3, dfs_it -> currentItem());
+    ASSERT_NO_THROW(dfs_it -> next());
+    ASSERT_EQ(D3, dfs_it -> currentItem());
+    ASSERT_NO_THROW(dfs_it -> next());
+    ASSERT_EQ(f4, dfs_it -> currentItem());
+    ASSERT_NO_THROW(dfs_it -> next());
+    ASSERT_EQ(f2, dfs_it -> currentItem());
+    ASSERT_NO_THROW(dfs_it -> next());
+    ASSERT_TRUE(dfs_it -> isDone());
+    delete dfs_it;
+}
+
+TEST_F(DfsIteratorTest, EmptyFolderDfsIteratorFirstShouldbeCorrect)
+{
+    Iterator *dfs_it =  new DfsIterator(D3);
+    ASSERT_NO_THROW(dfs_it -> first());
+    delete dfs_it;
+}
+
+TEST_F(DfsIteratorTest, EmptyFolderDfsIteratorNextShouldThrowException)
+{
+    Iterator *dfs_it =  new DfsIterator(D3);
+    ASSERT_NO_THROW(dfs_it -> first());
+    ASSERT_ANY_THROW(dfs_it -> next());
+    delete dfs_it;
+}
+
+TEST_F(DfsIteratorTest, EmptyFolderDfsIteratorCurrentItemShouldThrowException)
+{
+    Iterator *dfs_it =  new DfsIterator(D3);
+    ASSERT_NO_THROW(dfs_it -> first());
+    ASSERT_ANY_THROW(dfs_it -> next());
+    ASSERT_ANY_THROW(dfs_it -> currentItem());
     delete dfs_it;
 }

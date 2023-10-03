@@ -8,7 +8,8 @@ TEST = test/ut_node.h \
 		test/ut_folder.h \
 		test/ut_null_iterator.h \
 		test/ut_iterator.h \
-		test/ut_dfs_iterator.h
+		test/ut_dfs_iterator.h \
+		test/ut_bfs_iterator.h
 		
 
 SRC  = src/node.h \
@@ -16,7 +17,8 @@ SRC  = src/node.h \
 		src/folder.h \
 		src/null_iterator.h \
 		src/iterator.h \
-		src/dfs_iterator.h
+		src/dfs_iterator.h \
+
 
 ITERATOR = obj/iterator.o #obj/dfs_iterator.o
 
