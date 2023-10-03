@@ -78,13 +78,13 @@ TEST_F(FolderTest, FindShouldbeCorrectIfExisting)
 	D1 = new Folder("/D1");
 	f1 = new File("/D1/f1");
 	D2 = new Folder("/D1/D2");
-	f2 = new File("D1/f2");
+	f2 = new File("/D1/f2");
 	D1 -> add(f1);
 	D1 -> add(D2);
 	D1 -> add(f2);
-	f3 = new File("D1/D2/f3");
-	D3 = new Folder("D1/D2/D3");
-	f4 = new File("D1/D2/f4");
+	f3 = new File("/D1/D2/f3");
+	D3 = new Folder("/D1/D2/D3");
+	f4 = new File("/D1/D2/f4");
 	D2 -> add(f3);
 	D2 -> add(D3);
 	D2 -> add(f4);
@@ -95,9 +95,6 @@ TEST_F(FolderTest, FindShouldbeCorrectIfExisting)
 		    / | \
 		  f3  D3 f4
 	*/
-	// std::cout << f3 ->path() << std::endl;
-	// std::cout << D1->find(f3->path())->path() << std::endl;
-	// ASSERT_EQ(f3, D1->find(f3->path()));
 
 	delete D1;
 	delete D2;
@@ -106,6 +103,47 @@ TEST_F(FolderTest, FindShouldbeCorrectIfExisting)
 	delete f2;
 	delete f3;
 	delete f4;
+}
+
+TEST_F(FolderTest, XXXXXXXXX){
+	Folder *D1, *D2, *D3;
+	File *f1, *f2, *f3, *f4;
+
+	D1 = new Folder("/D1");
+	f1 = new File("/D1/f1");
+	D2 = new Folder("/D1/D2");
+	f2 = new File("/D1/f2");
+	D1 -> add(f1);
+	D1 -> add(D2);
+	D1 -> add(f2);
+	f3 = new File("/D1/D2/f3");
+	D3 = new Folder("/D1/D2/D3");
+	f4 = new File("/D1/D2/f4");
+	D2 -> add(f3);
+	D2 -> add(D3);
+	D2 -> add(f4);
+	/*
+			 D1
+		  /   |   \
+		f1   D2   f2
+		    / | \
+		  f3  D3 f4
+	*/
+	std::string str;
+	str = D3->path();
+	std::cout << std::endl << str << std::endl;
+	str = D3->path().substr(0, D3->path().find_last_of("/\\"));
+	std::cout << std::endl << str << std::endl;
+
+	delete D1;
+	delete D2;
+	delete D3;
+	delete f1;
+	delete f2;
+	delete f3;
+	delete f4;
+
+	
 }
 
 // TEST_F(FolderTest, RemoveShouldThrowException){

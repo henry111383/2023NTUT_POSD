@@ -8,6 +8,7 @@
 #include "iterator.h"
 #include "null_iterator.h"
 #include "node.h"
+#include "file.h"
 #include "dfs_iterator.h"
 
 struct IsMatchingName {
@@ -41,7 +42,14 @@ public:
     
     void add(Node * node) override 
     {
-        child.push_back(node);
+        std::string parent_path;
+        parent_path = node->path().substr(0, node->path().find_last_of("/\\"));
+        if(parent_path == (this->path()) )
+        {
+            child.push_back(node);
+        } else {
+            throw "worng path...";
+        }
     }
 
     void remove(std::string path) override 
@@ -82,7 +90,18 @@ public:
 
     int numberOfFiles() const override 
     {
-        throw "Current node (file) shouldn't have a child node!";
+        int num =0;
+        for(auto it=child.begin();it!=child.end();it++)
+        {
+            File *isFile = dynamic_cast<File*>(*it);
+            if(isFile)
+            {
+                num++;
+            } else {
+                num += (*it)->numberOfFiles();
+            }
+        }
+        return num;
     }
 
     Iterator * createIterator() override 
@@ -90,13 +109,9 @@ public:
         return new FolderIterator(this);
     }
 
-    
-
 private:
     std::string _name;
     std::string _path;
-    
 };
-
 
 #endif // FOLDER
