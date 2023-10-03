@@ -33,7 +33,7 @@ public:
 
     std::string nodeType;
 
-    Node* parentFolder;
+    Node* parentFolder=nullptr;
 };
 
 
