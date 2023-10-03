@@ -33,6 +33,7 @@ public:
 
     std::string nodeType;
 
+    Node* parentFolder;
 };
 
 

@@ -47,6 +47,7 @@ public:
         if(parent_path == (this->path()) )
         {
             child.push_back(node);
+            node->parentFolder = this;
         } else {
             throw "worng path...";
         }
@@ -54,7 +55,14 @@ public:
 
     void remove(std::string path) override 
     {
-        throw "Current node (file) shouldn't have a child node!";
+        Node *node = this->find(path);
+        if(node)
+        { 
+            node->parentFolder->child.remove(node);
+        } else {
+            throw "not existing file or folder";
+        }
+        
     }
 
     Node * getChildByName(const char * name) const override 
@@ -70,22 +78,19 @@ public:
 
     Node * find(std::string path) override 
     {
-        Node *item;
-        Iterator *it = this->createIterator();
-        for(it->first(); !it->isDone(); it->next())
+        for(auto it=child.begin();it!=child.end();it++)
         {
-            item = it->currentItem();
-            // return item;
-            if((item->path())==path)
+            if(((*it) -> path())==path) return *it;
+            Folder *isFolder = dynamic_cast<Folder*>(*it);
+            if(isFolder)
             {
-                break;
-            } else 
-            {
-                item = item -> find(path);
+                Node *isFind = (*it)->find(path);
+                if(isFind){
+                    return isFind;
+                }
             }
         }
-        delete it;
-        return item;
+        return nullptr;
     }
 
     int numberOfFiles() const override 
