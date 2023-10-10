@@ -1,3 +1,4 @@
+#pragma once
 #if !defined(DFS_ITERATOR_H)
 #define DFS_ITERATOR_H
 #include "node.h"
