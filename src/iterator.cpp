@@ -1,35 +1,21 @@
-#include "folder.h"
 #include "iterator.h"
+#include "folder.h"
 
+FolderIterator::FolderIterator(Folder* composite)
+    :_host(composite) {}
 
-FolderIterator::FolderIterator(Folder* composite):_folder(composite){
-    this -> first();
-};
+void FolderIterator::first() {
+    _current = _host->_nodes.begin();
+}
 
-void FolderIterator::first() 
-{
-    _current = _folder -> child.begin();
-};
-
-
-Node * FolderIterator::currentItem() const 
-{
-    if (this->isDone()){
-        throw std::string("No current item!");
-    }
+Node * FolderIterator::currentItem() const {
     return *_current;
-};
+}
 
-void FolderIterator::next() 
-{
-    if (this->isDone()){
-        throw std::string("Moving past the end!");
-    }
+void FolderIterator::next() {
     _current++;
-};
+}
 
-bool FolderIterator::isDone() const 
-{
-    return _current == _folder->child.end();
-};
-
+bool FolderIterator::isDone() const {
+    return _current == _host->_nodes.end();
+}

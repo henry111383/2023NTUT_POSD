@@ -1,109 +1,148 @@
+#pragma once 
+
 #include "../src/node.h"
-#include "../src/file.h"
 #include "../src/folder.h"
+#include "../src/file.h"
 #include "../src/iterator.h"
-#include "../src/null_iterator.h"
-#include <gtest/gtest.h>
+#include "../src/dfs_iterator.h"
 
-class IteratorTest : public ::testing::Test
-{
+class IteratorTest: public ::testing::Test {
 protected:
-    File *afile1, *afile2, *afile3;
-    Folder *afolder, *achildfolder, *aemptyfolder;
+    virtual void SetUp() {
+        home = new Folder("/Users/user/home");
 
-    Iterator *anullIterator, *afolderIterator;
+        profile = new File("/Users/user/home/my_profile");
+        home->add(profile);
 
-    void SetUp() override
-    {
-        afolder = new Folder("/home/A");
-        afile1 = new File("/home/A/1");
-        achildfolder = new Folder("/home/A/B");
-        afile2 = new File("/home/A/B/2");
-        afile3 = new File("/home/A/B/3");
-        aemptyfolder = new Folder("/home/C");
+        document = new Folder("/Users/user/home/Documents");
+        home->add(document);
 
-        afolder -> add(afile1);
-        afolder -> add(achildfolder);
-        achildfolder -> add(afile2);
-        achildfolder -> add(afile3);
+        favorite = new Folder("/Users/user/home/Documents/favorites");
+        document->add(favorite);
+        ddd = new File("/Users/user/home/Documents/favorites/domain-driven-design.pdf");
+        favorite->add(ddd);
+        ca = new File("/Users/user/home/Documents/favorites/clean-architecture.pdf");
+        favorite->add(ca);
+        cqrs = new File("/Users/user/home/Documents/favorites/cqrs.pdf");
+        favorite->add(cqrs);
 
-        anullIterator = new NullIterator();
-        afolderIterator = new FolderIterator(afolder);
+        note = new File("/Users/user/home/Documents/note.txt");
+        document->add(note);
+
+        download = new Folder("/Users/user/home/Downloads");
+        home->add(download);
+
+        funny = new File("/Users/user/home/Downloads/funny.png");
+        download->add(funny);
     }
 
-    void TearDown() override
-    {
-        delete afolder;
-        delete afile1;
-        delete achildfolder;
-        delete afile2;
-        delete afile3;
-        delete aemptyfolder;
-        delete anullIterator;
-        delete afolderIterator;
+    void TearDown() {
+        delete home;
+        delete profile;
+        delete download;
+        delete document;
+        delete note;
+        delete favorite;
+        delete ddd;
+        delete ca;
+        delete cqrs;
+        delete funny;
     }
+    
+    Node * home;
+    Node * profile;
+    Node * download;
+    Node * document;
+    Node * note;
+    Node * favorite;
+    Node * ddd;
+    Node * ca;
+    Node * cqrs;
+    Node * funny;
 };
 
-TEST_F(IteratorTest, FolderIteratorShouldbeCorrectlyBuilded)
-{
-    ASSERT_NO_THROW(FolderIterator tmp(afolder));
+TEST_F(IteratorTest, Normal) {
+    Iterator * it = home->createIterator();
+    it->first();
+    ASSERT_FALSE(it->isDone());
+    
+    ASSERT_EQ("my_profile", it->currentItem()->name());
+    
+    it->next();
+    ASSERT_EQ("Documents", it->currentItem()->name());
+
+    it->next();
+    ASSERT_EQ("Downloads", it->currentItem()->name());
+
+    it->next();
+    ASSERT_TRUE(it->isDone());
 }
 
-TEST_F(IteratorTest, FolderIteratorFirstShouldNotThrowException)
-{   
-    ASSERT_NO_THROW(afolderIterator -> first());
+TEST_F(IteratorTest, DFS) {
+    Iterator * dfsIt = new DfsIterator(home);
+
+    dfsIt->first();
+    ASSERT_EQ("my_profile", dfsIt->currentItem()->name());
+
+    dfsIt->next();
+    ASSERT_EQ("Documents", dfsIt->currentItem()->name());
+
+    dfsIt->next();
+    ASSERT_EQ("favorites", dfsIt->currentItem()->name());
+
+    dfsIt->next();
+    ASSERT_EQ("domain-driven-design.pdf", dfsIt->currentItem()->name());
+
+    dfsIt->next();
+    ASSERT_EQ("clean-architecture.pdf", dfsIt->currentItem()->name());
+
+    dfsIt->next();
+    ASSERT_EQ("cqrs.pdf", dfsIt->currentItem()->name());
+
+    dfsIt->next();
+    ASSERT_EQ("note.txt", dfsIt->currentItem()->name());
+
+    dfsIt->next();
+    ASSERT_EQ("Downloads", dfsIt->currentItem()->name());
+
+    dfsIt->next();
+    ASSERT_EQ("funny.png", dfsIt->currentItem()->name());
+
+    dfsIt->next();
+    ASSERT_TRUE(dfsIt->isDone());
 }
 
-TEST_F(IteratorTest, FolderIteratorCurrentItemShouldbeCorrect)
-{   
-    ASSERT_EQ(afolderIterator -> currentItem(), afile1);
-}
 
-TEST_F(IteratorTest, FolderIteratorNextShouldbeCorrect)
-{   
-    ASSERT_EQ(afolderIterator -> currentItem(), afile1);
-    ASSERT_NO_THROW(afolderIterator -> next());
-    ASSERT_EQ(afolderIterator -> currentItem(), achildfolder);
-}
+TEST_F(IteratorTest, BFS) {
+    Iterator * bfsIt = new BfsIterator(home);
 
-TEST_F(IteratorTest, FolderIteratorIsDoneShouldbeCorrect)
-{   
-    ASSERT_NO_THROW(afolderIterator -> next());
-    ASSERT_NO_THROW(afolderIterator -> next());
-    ASSERT_TRUE(afolderIterator -> isDone());
-}
+    bfsIt->first();
+    ASSERT_EQ("my_profile", bfsIt->currentItem()->name());
 
-TEST_F(IteratorTest, EmptyFolderIteratorFirstShouldbeCorrect)
-{   
-    Iterator *it = aemptyfolder -> createIterator();
-    ASSERT_NO_THROW(it -> first());
-    delete it;
-}
+    bfsIt->next();
+    ASSERT_EQ("Documents", bfsIt->currentItem()->name());
 
-TEST_F(IteratorTest, EmptyFolderIteratorFirstShouldNotThrowException)
-{   
-    Iterator *it = aemptyfolder -> createIterator();
-    ASSERT_NO_THROW(it -> first());
-    delete it;
-}
+    bfsIt->next();
+    ASSERT_EQ("Downloads", bfsIt->currentItem()->name());
 
-TEST_F(IteratorTest, EmptyFolderIteratorCurrentItemShouldThrowException)
-{   
-    Iterator *it = aemptyfolder -> createIterator();
-    ASSERT_ANY_THROW(it -> currentItem());
-    delete it;
-}
+    bfsIt->next();
+    ASSERT_EQ("favorites", bfsIt->currentItem()->name());
 
-TEST_F(IteratorTest, EmptyFolderIteratorNextShouldThrowException)
-{   
-    Iterator *it = aemptyfolder -> createIterator();
-    ASSERT_ANY_THROW(it -> next());
-    delete it;
-}
+    bfsIt->next();
+    ASSERT_EQ("note.txt", bfsIt->currentItem()->name());
 
-TEST_F(IteratorTest, EmptyFolderIteratorIsDoneShouldbeCorrect)
-{   
-    Iterator *it = aemptyfolder -> createIterator();
-    ASSERT_TRUE(it -> isDone());
-    delete it;
+    bfsIt->next();
+    ASSERT_EQ("funny.png", bfsIt->currentItem()->name());
+
+    bfsIt->next();
+    ASSERT_EQ("domain-driven-design.pdf", bfsIt->currentItem()->name());
+
+    bfsIt->next();
+    ASSERT_EQ("clean-architecture.pdf", bfsIt->currentItem()->name());
+
+    bfsIt->next();
+    ASSERT_EQ("cqrs.pdf", bfsIt->currentItem()->name());
+
+    bfsIt->next();
+    ASSERT_TRUE(bfsIt->isDone());
 }

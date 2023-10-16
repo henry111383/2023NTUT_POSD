@@ -1,66 +1,27 @@
 #pragma once
-#if !defined(FILE_H)
-#define FILE_H
-#include <string>
+
 #include "node.h"
-#include "iterator.h"
-#include "null_iterator.h"
 
 class File: public Node {
-
 public:
-    File(std::string path):_path(path) 
-    {
-        _name = _path.substr(_path.find_last_of("/\\") + 1);
-        nodeType = "File";
-    };
+    File(string path): Node(path) {}
 
-    ~File(){};
-
-    std::string name() const override
-    {
-        return _name;
-    };
-    
-    std::string path() const override
-    {
-        return _path;
-    };
-
-    void add(Node * node) override 
-    {
-        throw "Current node (file) shouldn't add a child node!";
+    int numberOfFiles() const {
+        return 1;
     }
 
-    void remove(std::string path) override 
-    {
-        throw "Current node (file) shouldn't have a child node!";
-    }
-
-    Node * getChildByName(const char * name) const override 
-    {
-        throw "Current node (file) shouldn't have a child node!";
-    }
-
-    Node * find(std::string path) override 
-    {
-        // throw "Current node (file) shouldn't have a child node!";
+    Node * find(string path) {
+        if (this->path() == path) {
+            return this;
+        }
         return nullptr;
     }
 
-    int numberOfFiles() const override 
-    {
-        throw "Current node (file) shouldn't have a child node!";
+    std::list<string> findByName(string name) override {
+        std::list<string> pathList;
+        if (this->name() == name) {
+            pathList.push_back(this->path());
+        }
+        return pathList;
     }
-
-    Iterator * createIterator() override 
-    {
-        return new NullIterator();
-    }
-    
-private:
-    std::string _name;
-    std::string _path;
 };
-
-#endif // FILE_H

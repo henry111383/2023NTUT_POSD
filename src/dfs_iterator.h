@@ -1,176 +1,91 @@
 #pragma once
-#if !defined(DFS_ITERATOR_H)
-#define DFS_ITERATOR_H
-#include "node.h"
-#include "folder.h"
+
 #include <stack>
-#include <queue>
 #include <list>
 
+#include "iterator.h"
 
-// ========= DFSIterator ========= 
 class DfsIterator: public Iterator {
 public:
-    DfsIterator(Node* composite):_node(composite){};
+    DfsIterator(Node* composite) : _root(composite) {}
 
-    void first() 
-    {
-        DFS();
-        _current = DFSlist.begin();
-    };
-
-
-    Node * currentItem() const 
-    {
-        if (this->isDone()){
-            throw std::string("No current item!");
+    void first() {
+        while(!_stack.empty()){
+            _stack.pop();
         }
-        return *_current;
-    };
 
-    void next() 
-    {
-        if (this->isDone()){
-            throw std::string("Moving past the end!");
-        }
-        _current++;
-    };
-
-    bool isDone() const 
-    {
-        return _current == DFSlist.end();
-    };
-
-private:
-    std::list<Node*> DFSlist;
-    Node *_node;
-    std::list<Node *>::iterator _current;
-    
-    void DFS()
-    {
-        std::stack<std::pair<Node*, int>> MyStk;
-        /* ---------------------------------
-        Algorithm:
-        (1) Push node's children in stack.
-        (2) If top of stack is a leaf, pop it and put it in list.
-        (3) If top of stack is a not traveled non-leaf, don't pop and push its children in stack.
-        (4) If top of stack is a traveled non-leaf, pop it and put it in list.
-        (5) Check (2)(3)(4) until stack is empty.
-        (6) Reverse the list and it is the result.
-           --------------------------------- */
-        
-        if(_node->child.empty()) return;
-        MyStk.push(std::make_pair(_node, 0));
-
-        Node *tmp;
-        while(!MyStk.empty())
-        {
-            tmp = MyStk.top().first;
-            // std::cout << tmp->name();
-            bool isleaf = MyStk.top().first->child.empty();
-            bool istraveled = (MyStk.top().second == 1);
-            if(!isleaf && !istraveled)
-            {
-                MyStk.top().second = 1;
-                for(Node *ch : tmp->child) 
-                {
-                    MyStk.push(std::make_pair(ch, 0));
-                }
-            } else
-            {
-                DFSlist.push_back(tmp);
-                MyStk.pop();
-            }
-        }
-        DFSlist.reverse();
-        DFSlist.pop_front();
-
-        // Checking 
-        // for(Node * tt : DFSlist) 
-        // {
-        //     std::cout << tt->name();
-        // }
+        _curr = _root;
+        _pushCurrIter();
+        next();
     }
 
+    Node * currentItem() const {
+        return _curr;
+    }
 
+    void next() {
+        while(!_stack.empty() && _stack.top()->isDone()){
+            _stack.pop();
+        }
+        if(_stack.empty()){
+            return;
+        }
+        if(!_stack.top()->isDone()){
+            _curr = _stack.top()->currentItem();
+            _stack.top()->next();
+            _pushCurrIter();
+        }
+    }
+    
+    bool isDone() const {
+        return _stack.empty();
+    }
+private:
+    Node * _root;
+    Node * _curr;
+    std::stack<Iterator *> _stack;
+
+    void _pushCurrIter() {
+        Iterator * it = _curr->createIterator();
+        it->first();
+        _stack.push(it);
+    }
 };
 
-
-// ========= BFSIterator ========= 
 class BfsIterator: public Iterator {
 public:
-    BfsIterator(Node* composite):_node(composite){};
-    
-    void first() 
-    {
-        BFS();
-        _current = BFSlist.begin();
-    };
+    BfsIterator(Node* composite) : _root(composite) {}
 
+    void first(){
+        if(!_nextLevel.empty())
+            _nextLevel.clear();
 
-    Node * currentItem() const 
-    {
-        if (this->isDone()){
-            throw std::string("No current item!");
-        }
-        return *_current;
-    };
-
-    void next() 
-    {
-        if (this->isDone()){
-            throw std::string("Moving past the end!");
-        }
-        _current++;
-    };
-
-    bool isDone() const 
-    {
-        return _current == BFSlist.end();
-    };
-
-private:
-    std::list<Node*> BFSlist;
-    Node *_node;
-    std::list<Node *>::iterator _current;
-    
-    void BFS()
-    {
-        std::queue<Node*> MyQue;
-        /* ---------------------------------
-        Algorithm:
-        (1) Push node's children in queue.
-        (2) If first element is a leaf, pop it and put it in list.
-        (3) If first element is a non-leaf, pop it, put it in list and push its children in queue.
-        (4) Check (2)(3) until queue is empty.
-        (5) The list is the result.
-           --------------------------------- */
-
-        if(_node->child.empty()) return;
-        MyQue.push(_node);
-        
-        Node *tmp;
-        while(!MyQue.empty())
-        {
-            tmp = MyQue.front();
-            bool isleaf = tmp->child.empty();
-            if(!isleaf){
-                for(Node *ch : tmp->child) 
-                {
-                    MyQue.push(ch);
-                }
-            }
-            MyQue.pop();
-            BFSlist.push_back(tmp);
-        }
-        BFSlist.pop_front();
-
-        // Checking 
-        // for(Node * tt : BFSlist) 
-        // {
-        //     std::cout << tt->name();
-        // }
+        _curr = _root;
+        _nextLevel.push_back(_curr);
+        next();
     }
+
+    Node * currentItem() const {
+        return _curr;
+    }
+
+    void next() {
+        Iterator * it = _curr->createIterator();
+        for(it->first(); !it->isDone(); it->next()){
+            _nextLevel.push_back(it->currentItem());
+        }
+
+        _nextLevel.pop_front();
+        _curr = _nextLevel.front();
+        return;
+    }
+    
+    bool isDone() const {
+        return _nextLevel.empty();
+    }
+private:
+    Node * _root;
+    Node * _curr;
+    std::list<Node *> _nextLevel;
 };
 
-#endif // DFS_ITERATOR_H

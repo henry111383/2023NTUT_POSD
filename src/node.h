@@ -1,40 +1,69 @@
-#pragma once
-#if !defined(NODE_H)
-#define NODE_H
+#pragma once 
 
-#include <string>
-#include <list>
-#include "./iterator.h"
+#include<string>
+#include "iterator.h"
+#include "null_iterator.h"
+#include "visitor.h"
 
+using namespace std;
 
 class Node {
+private:
+    string _path;
+    Node * _parent;
+protected:
+
+    Node(string path): _path(path) {}
+
 public:
-    Node(){};
+    virtual ~Node() {}
 
-    virtual ~Node() {};
+    Node * parent() {
+        return _parent;
+    }
 
-    virtual std::string name() const = 0;
+    void parent(Node * parent) {
+        _parent = parent;
+    }
     
-    virtual std::string path() const = 0;
-    
-    virtual void add(Node * node) = 0;
+    virtual void removeChild(Node * target) {
+        throw string("This node does not support removing sub node");
+    }
 
-    virtual void remove(std::string path) =0;
+    string name() const {
+        size_t slash = _path.rfind("/");
+        return _path.substr(slash+1);
+    }
     
-    virtual Node * getChildByName(const char * name) const = 0;
+    string path() const {
+        return _path;
+    }
+    
+    virtual void add(Node * node) {
+        throw string("This node does not support adding sub node");
+    }
 
-    virtual Node * find(std::string path) = 0;
+    virtual Node * getChildByName(const char * name) const {
+        return nullptr;
+    }
 
     virtual int numberOfFiles() const = 0;
 
-    virtual Iterator * createIterator() = 0;
+    virtual Iterator * createIterator() {
+        return new NullIterator();
+    }
 
-    std::list<Node *> child;
+    virtual Iterator * dfsIterator() {
+        return new NullIterator();
+    }
 
-    std::string nodeType;
+    virtual Node * find(string path) = 0;
+    
+    virtual std::list<string> findByName(string name) = 0;
+    
+    virtual void remove(string path) {
+        throw string("This node does not support deleting sub node");
+    }
 
-    Node* parentFolder=nullptr;
+    void accept(Visitor * visitor);
 };
-
-
-#endif // NODE_H

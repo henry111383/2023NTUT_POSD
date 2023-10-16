@@ -1,52 +1,38 @@
-.PHONY: clean stat
+.PHONY: clean dirs
 
-all: directories ut_all
+UT_ALL = test/ut_all.cpp
 
+TEST_HEADERS = test/ut_iterator.h \
+				test/ut_file.h \
+				test/ut_folder.h \
+				test/ut_node.h \
+				test/ut_find_by_name_visitor.h 
 
-TEST = test/ut_node.h \
-		test/ut_file.h \
-		test/ut_folder.h \
-		test/ut_null_iterator.h \
-		test/ut_iterator.h \
-		test/ut_dfs_iterator.h \
-		test/ut_bfs_iterator.h
-		
+SRC_HEADERS = src/file.h \
+				src/folder.h \
+				src/node.h \
+				src/iterator.h \
+				src/null_iterator.h \
+				src/dfs_iterator.h \
+				src/find_by_name_visitor.h
 
-SRC  = src/node.h \
-		src/node.h \
-		src/folder.h \
-		src/null_iterator.h \
-		src/iterator.h \
-		src/dfs_iterator.h \
+ITERATOR_OBJ = obj/iterator.o
+ITERATOR_SRC = src/iterator.cpp src/iterator.h
 
+all: dirs bin/ut_all
 
-ITERATOR = obj/iterator.o #obj/dfs_iterator.o
+bin/ut_all: $(UT_ALL) $(TEST_HEADERS) $(SRC_HEADERS) $(ITERATOR_OBJ)
+	g++  -std=c++11 -Wfatal-errors -Wall -o bin/ut_all $(UT_ALL) $(ITERATOR_OBJ) -lgtest -lpthread
 
-ut_all: test/ut_all.cpp $(TEST) $(SRC) $(ITERATOR)
-	g++ -std=c++11 test/ut_all.cpp $(ITERATOR) -o bin/ut_all -lgtest -lpthread
-
-obj/iterator.o: src/iterator.h src/iterator.cpp
-	g++ -std=c++11 -c src/iterator.cpp -o obj/iterator.o
-
-# obj/dfs_iterator.o: src/dfs_iterator.h src/dfs_iterator.cpp
-# 	g++ -std=c++11 -c src/dfs_iterator.cpp -o obj/dfs_iterator.o
-
-
-directories:
-	mkdir -p bin
-	mkdir -p obj
+$(ITERATOR_OBJ): $(ITERATOR_SRC)
+	g++  -std=c++11 -Wfatal-errors -Wall -c $< -o $@
 
 clean:
-	rm -f bin/*
+	rm -rf bin obj
 
-stat:
-	wc src/* test/*
+dirs:
+	mkdir -p bin obj
 
-test: all
-	bin/ut_all
-
-
-# valgrind: CXXFLAGS += -O0 -g
 valgrind: clean all
 	valgrind \
 	--tool=memcheck --error-exitcode=1 --track-origins=yes --leak-check=full --leak-resolution=high \
