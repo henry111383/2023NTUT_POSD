@@ -25,7 +25,9 @@ public:
 
     void next() {
         while(!_stack.empty() && _stack.top()->isDone()){
+            delete _stack.top();
             _stack.pop();
+
         }
         if(_stack.empty()){
             return;
@@ -77,6 +79,7 @@ public:
 
         _nextLevel.pop_front();
         _curr = _nextLevel.front();
+        delete it;
         return;
     }
     

@@ -76,6 +76,8 @@ TEST_F(IteratorTest, Normal) {
 
     it->next();
     ASSERT_TRUE(it->isDone());
+
+    delete it;
 }
 
 TEST_F(IteratorTest, DFS) {
@@ -110,6 +112,8 @@ TEST_F(IteratorTest, DFS) {
 
     dfsIt->next();
     ASSERT_TRUE(dfsIt->isDone());
+
+    delete dfsIt;
 }
 
 
@@ -145,4 +149,6 @@ TEST_F(IteratorTest, BFS) {
 
     bfsIt->next();
     ASSERT_TRUE(bfsIt->isDone());
+
+    delete bfsIt;
 }
