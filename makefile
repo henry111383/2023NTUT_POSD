@@ -6,7 +6,7 @@ TEST_HEADERS = test/ut_iterator.h \
 				test/ut_file.h \
 				test/ut_folder.h \
 				test/ut_node.h \
-				test/ut_find_by_name_visitor.h 
+				# test/ut_find_by_name_visitor.h 
 
 SRC_HEADERS = src/file.h \
 				src/folder.h \

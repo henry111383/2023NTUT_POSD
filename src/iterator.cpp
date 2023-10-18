@@ -14,6 +14,7 @@ Node * FolderIterator::currentItem() const {
 
 void FolderIterator::next() {
     _current++;
+    
 }
 
 bool FolderIterator::isDone() const {

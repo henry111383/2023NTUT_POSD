@@ -8,9 +8,15 @@
 class DfsIterator: public Iterator {
 public:
     DfsIterator(Node* composite) : _root(composite) {}
-
+    ~DfsIterator() {
+        while(!_stack.empty()){
+            delete _stack.top();
+            _stack.pop();
+        }
+    }
     void first() {
         while(!_stack.empty()){
+            delete _stack.top();
             _stack.pop();
         }
 
