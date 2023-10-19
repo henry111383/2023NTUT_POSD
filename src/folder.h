@@ -39,10 +39,10 @@ class FolderIterator : public Iterator {
         }
 
         Node * currentItem() const {
-            // if(_version != (_host->_version)) {
-            //     std::cout << _host->_version << _version <<std::endl;
-            //     throw "Structure has changed...";
-            // }
+            if(_version != (_host->_version)) {
+                std::cout << _host->_version << _version <<std::endl;
+                throw "Structure has changed...";
+            }
             return *_current;
         }
 
@@ -55,6 +55,7 @@ class FolderIterator : public Iterator {
         }
 
         bool isDone() const {
+            // 拋例外的話TA會錯
             // if(_version != (_host->_version)) {
             //     std::cout << _host->_version << _version <<std::endl;
             //     throw "Structure has changed...";
