@@ -25,6 +25,8 @@ public:
             _result += "\n";
         }
 
+        _fileCount ++;
+
         _result += "_____________________________________________\n";
         _result += file->path();
         _result += "\n";
@@ -33,7 +35,7 @@ public:
         while (std::getline(ifs, buffer)) {
             content += buffer;
             content += "\n";
-            std::cout << buffer << std::endl;
+            // std::cout << buffer << std::endl;
         }
 
         ifs.close();
@@ -50,9 +52,12 @@ public:
     };
 
     string getResult() const{
-        return _result;
+        if(_fileCount ==1) return _result;
+        else return _result + "\n";
     };
 
+    
 private:
     string _result;
+    int _fileCount = 0;
 };

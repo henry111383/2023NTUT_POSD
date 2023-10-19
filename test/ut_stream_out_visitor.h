@@ -44,14 +44,13 @@ TEST_F(StreamOutVisitorTest, VisitorShouldbeCorrectlyBuilt){
     
 }
 
-// TEST_F(StreamOutVisitorTest, XX){
-//     StreamOutVisitor *visitor = new StreamOutVisitor;
-//     folder->accept(visitor);
-
-//     // std::string ans("This is file 2\nThis is second line\nthis is end of file\n");
-//     std::string res;
-//     res = visitor->getResult();
-//     std::cout << res << std::endl;
-//     // ASSERT_EQ(ans, res);
-//     delete visitor;
-// }
+TEST_F(StreamOutVisitorTest, XX){
+    StreamOutVisitor *visitor = new StreamOutVisitor;
+    folder->accept(visitor);
+    // std::string ans("This is file 2\nThis is second line\nthis is end of file\n");
+    std::string res;
+    res = visitor->getResult();
+    std::cout << res << std::endl;
+    // ASSERT_EQ(ans, res);
+    delete visitor;
+}
