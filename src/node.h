@@ -21,8 +21,9 @@ protected:
 
     Node(string path): _path(path) {
         if (lstat(_path.c_str(), &_st) != 0){
-            std::cout << std::string("Node is not exist!") << " " << path <<std::endl;
-            // throw(std::string("Node is not exist!"));
+            std::cout << std::string("Node is not exist!") << " " << \
+            path <<std::endl;
+            throw(std::string("Node is not exist!"));
         }
             
 

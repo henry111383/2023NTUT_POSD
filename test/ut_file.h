@@ -1,16 +1,23 @@
 #include "../src/file.h"
+#include "../src/folder.h"
 #include <string>
 #include <gtest/gtest.h>
 
 class FileTest : public ::testing::Test
 {
 protected:
-    std::string path ="D1/D2/f4";
+    std::string path;
     std::string name = "f4"; 
     File * file;
+	std::string cwd;
 
     void SetUp() override
     {
+		char *tmp = get_current_dir_name();
+        cwd = std::string(tmp);
+        free(tmp);
+
+		path = cwd + "/test/D1/D2/f4";
 		file = new File(path);
     }
 
@@ -73,7 +80,7 @@ TEST_F(FileTest, notExistingFileShouldThrowException)
 
 TEST_F(FileTest, FileShouldbeFile)
 {
-	ASSERT_NO_THROW(Folder tmp("D1"));
-	ASSERT_ANY_THROW(File tmp("D1"));
+	ASSERT_NO_THROW(Folder tmp(cwd + "/test/D1"));
+	ASSERT_ANY_THROW(File tmp(cwd + "/test/D1"));
 }
 

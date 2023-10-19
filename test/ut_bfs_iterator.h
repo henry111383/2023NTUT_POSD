@@ -11,16 +11,20 @@ protected:
 
     void SetUp() override
     {
-        D1 = new Folder("D1");
-        f1 = new File("D1/f1");
-        D2 = new Folder("D1/D2");
-        f2 = new File("D1/f2");
+        char *tmp = get_current_dir_name();
+        std::string cwd(tmp);
+        free(tmp);
+
+        D1 = new Folder(cwd + "/test/D1");
+        f1 = new File(cwd + "/test/D1/f1");
+        D2 = new Folder(cwd + "/test/D1/D2");
+        f2 = new File(cwd + "/test/D1/f2");
         D1 -> add(f1);
         D1 -> add(D2);
         D1 -> add(f2);
-        f3 = new File("D1/D2/f3");
-        D3 = new Folder("D1/D2/D3");
-        f4 = new File("D1/D2/f4");
+        f3 = new File(cwd + "/test/D1/D2/f3");
+        D3 = new Folder(cwd + "/test/D1/D2/D3");
+        f4 = new File(cwd + "/test/D1/D2/f4");
         D2 -> add(f3);
         D2 -> add(D3);
         D2 -> add(f4);

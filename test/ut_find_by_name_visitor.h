@@ -9,21 +9,25 @@
 class FindbyNameVisitorTest : public ::testing::Test
 {
 protected:
-    Node *folder, *folder1, *folder2, *file1, *file2, *tmp;
-
+    Node *folder, *folder1, *folder2, *file1, *file2, *emptyfolder;
+    std::string cwd;
     void SetUp() override
     {
-        folder  = new Folder("documents");
-        folder1 = new Folder("documents/folder1");
+        char *tmp = get_current_dir_name();
+        cwd = std::string(tmp);
+        free(tmp);
+
+        folder  = new Folder(cwd + "/test/documents");
+        folder1 = new Folder(cwd + "/test/documents/folder1");
         folder -> add(folder1);
-        folder2 = new Folder("documents/folder2");
+        folder2 = new Folder(cwd + "/test/documents/folder2");
         folder -> add(folder2);
-        file1   = new File("documents/folder1/file.txt");
+        file1   = new File(cwd + "/test/documents/folder1/file.txt");
         folder1 -> add(file1);
-        file2   = new File("documents/folder2/file.txt");
+        file2   = new File(cwd + "/test/documents/folder2/file.txt");
         folder2 -> add(file2);
-        tmp = new Folder("documents/folder1/folder1");
-        folder1 -> add(tmp);
+        emptyfolder = new Folder(cwd + "/test/documents/folder1/folder1");
+        folder1 -> add(emptyfolder);
     }
     void TearDown() override {
         delete folder;
@@ -31,7 +35,7 @@ protected:
         delete folder2;
         delete file1;
         delete file2;
-        delete tmp;
+        delete emptyfolder;
     }
 };
 
@@ -53,7 +57,7 @@ TEST_F(FindbyNameVisitorTest, VisitorFileWithExistingFileNameShouldbeCorrect){
 
     file2->accept(visitor);
 
-    ASSERT_EQ("documents/folder2/file.txt", visitor->getPaths().front());
+    ASSERT_EQ(cwd + "/test/documents/folder2/file.txt", visitor->getPaths().front());
     delete visitor;
 }
 
@@ -72,7 +76,7 @@ TEST_F(FindbyNameVisitorTest, VisitorFolderWithItselfNameShouldbeCorrect){
 
     folder->accept(visitor);
 
-    ASSERT_EQ("documents", visitor->getPaths().front());
+    ASSERT_EQ(cwd + "/test/documents", visitor->getPaths().front());
     delete visitor;
 }
 
@@ -82,8 +86,8 @@ TEST_F(FindbyNameVisitorTest, VisitorFolderWithExistingFolderNameShouldbeCorrect
     folder->accept(visitor);
 
     ASSERT_EQ(2, visitor->getPaths().size());
-    ASSERT_EQ("documents/folder1", visitor->getPaths().front());
-    ASSERT_EQ("documents/folder1/folder1", visitor->getPaths().back());
+    ASSERT_EQ(cwd + "/test/documents/folder1", visitor->getPaths().front());
+    ASSERT_EQ(cwd + "/test/documents/folder1/folder1", visitor->getPaths().back());
     delete visitor;
 }
 
@@ -93,7 +97,7 @@ TEST_F(FindbyNameVisitorTest, VisitorFolderWithExistingFileNameShouldbeCorrect){
     folder->accept(visitor);
 
     ASSERT_EQ(2, visitor->getPaths().size());
-    ASSERT_EQ("documents/folder1/file.txt", visitor->getPaths().front());
-    ASSERT_EQ("documents/folder2/file.txt", visitor->getPaths().back());
+    ASSERT_EQ(cwd + "/test/documents/folder1/file.txt", visitor->getPaths().front());
+    ASSERT_EQ(cwd + "/test/documents/folder2/file.txt", visitor->getPaths().back());
     delete visitor;
 }

@@ -3,6 +3,7 @@
 #include <stack>
 #include <list>
 
+#include "node.h"
 #include "iterator.h"
 
 class DfsIterator: public Iterator {
