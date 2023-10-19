@@ -9,6 +9,7 @@ using namespace std;
 
 class Folder: public Node {
     friend class FolderIterator;
+    
 private:
     list<Node *> _nodes;
 
@@ -18,7 +19,10 @@ protected:
     }
 
 public:
-    Folder(string path): Node(path) {}
+    Folder(string path): Node(path) {
+        if (nodeType != "folder")
+            throw(std::string("It is not Folder!"));
+    }
 
     void add(Node * node) {
         if (node->path() != this->path() + "/" + node->name()) {
@@ -98,5 +102,9 @@ public:
         if (target) {
             target->parent()->removeChild(target);
         }
+    }
+
+    void accept(Visitor * visitor) {
+        visitor->visitFolder(this);
     }
 };

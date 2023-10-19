@@ -5,8 +5,8 @@
 class FileTest : public ::testing::Test
 {
 protected:
-    std::string path ="/home/2023POSD/text.txt";
-    std::string name = "text.txt"; 
+    std::string path ="D1/D2/f4";
+    std::string name = "f4"; 
     File * file;
 
     void SetUp() override
@@ -64,5 +64,16 @@ TEST_F(FileTest, createIteratorShouldbeNullIterator)
 	Iterator * tmpIterator;
 	ASSERT_NO_THROW(tmpIterator = file->createIterator());
 	delete tmpIterator;
+}
+
+TEST_F(FileTest, notExistingFileShouldThrowException)
+{
+	ASSERT_ANY_THROW(File tmp("Hello"));
+}
+
+TEST_F(FileTest, FileShouldbeFile)
+{
+	ASSERT_NO_THROW(Folder tmp("D1"));
+	ASSERT_ANY_THROW(File tmp("D1"));
 }
 

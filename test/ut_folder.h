@@ -3,12 +3,12 @@
 #include <string>
 #include <gtest/gtest.h>
 #include <list>
-// typeid 
+
 class FolderTest : public ::testing::Test
 {
 protected:
-    std::string path = "/home/2023POSD/Documents";
-    std::string name = "Documents"; 
+    std::string path = "D1";
+    std::string name = "D1"; 
     Folder *folder;
 	File *file1, *file2;
 	Folder *D1, *D2, *D3;
@@ -17,18 +17,18 @@ protected:
     void SetUp() override
     {
 		folder = new Folder(path);
-		file1  = new File("/home/2023POSD/Documents/test1.txt");
-		file2  = new File("/home/2023POSD/test2");
-		D1 = new Folder("/D1");
-		f1 = new File("/D1/f1");
-		D2 = new Folder("/D1/D2");
-		f2 = new File("/D1/f2");
+		file1  = new File("D1/f1");
+		file2  = new File("D1/f2");
+		D1 = new Folder("D1");
+		f1 = new File("D1/f1");
+		D2 = new Folder("D1/D2");
+		f2 = new File("D1/f2");
 		D1 -> add(f1);
 		D1 -> add(D2);
 		D1 -> add(f2);
-		f3 = new File("/D1/D2/f3");
-		D3 = new Folder("/D1/D2/D3");
-		f4 = new File("/D1/D2/f4");
+		f3 = new File("D1/D2/f3");
+		D3 = new Folder("D1/D2/D3");
+		f4 = new File("D1/D2/f4");
 		D2 -> add(f3);
 		D2 -> add(D3);
 		D2 -> add(f4);
@@ -87,18 +87,18 @@ TEST_F(FolderTest, AddShouldbeCorrect)
 TEST_F(FolderTest, RemoveFileShouldbeCorrect)
 {
 	ASSERT_EQ(D1->find(f2->path()), f2);
-	ASSERT_NO_THROW(D1 -> remove("/D1/f2"));
+	ASSERT_NO_THROW(D1 -> remove("D1/f2"));
 	ASSERT_EQ(D1->find(f2->path()), nullptr);
-	ASSERT_NO_THROW(D1 -> remove("/D2/f2"));
+	ASSERT_NO_THROW(D1 -> remove("D1/D2/f2"));
 	
 }
 
 TEST_F(FolderTest, RemoveFolderShouldbeCorrect)
 {
 	ASSERT_EQ(D1->find(D2->path()), D2);
-	ASSERT_NO_THROW(D1 -> remove("/D1/D2"));
+	ASSERT_NO_THROW(D1 -> remove("D1/D2"));
 	ASSERT_EQ(D1->find(D2->path()), nullptr);
-	ASSERT_NO_THROW(D1 -> remove("/D1/D2"));
+	ASSERT_NO_THROW(D1 -> remove("D1/D2"));
 	ASSERT_EQ(D1->find(f3->path()), nullptr);
 	ASSERT_EQ(D1->find(D3->path()), nullptr);
 	ASSERT_EQ(D1->find(f4->path()), nullptr);
@@ -142,4 +142,13 @@ TEST_F(FolderTest, NumberOfFilesShouldbeCorrect)
 	ASSERT_EQ(D3->numberOfFiles(), 0);
 }
 
+TEST_F(FolderTest, NotExistingFolderShouldThrowException)
+{
+	ASSERT_ANY_THROW(Folder tmp("Hello"));
+}
 
+TEST_F(FolderTest, FolderShouldbeFolder)
+{
+	ASSERT_NO_THROW(File tmp("D1/f1"));
+	ASSERT_ANY_THROW(Folder tmp("D1/f1"));
+}

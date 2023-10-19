@@ -4,7 +4,10 @@
 
 class File: public Node {
 public:
-    File(string path): Node(path) {}
+    File(string path): Node(path) {
+        if (nodeType != "file")
+            throw(std::string("It is not File!"));
+    }
 
     int numberOfFiles() const {
         return 1;
@@ -23,5 +26,9 @@ public:
             pathList.push_back(this->path());
         }
         return pathList;
+    }
+
+    void accept(Visitor * visitor) {
+        visitor->visitFile(this);
     }
 };

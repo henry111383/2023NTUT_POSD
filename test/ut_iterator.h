@@ -8,84 +8,109 @@
 class IteratorTest : public ::testing::Test
 {
 protected:
-    File *afile1, *afile2, *afile3;
-    Folder *afolder, *achildfolder, *aemptyfolder;
-
-    Iterator *anullIterator, *afolderIterator;
+    Folder *D1, *D2, *D3;
+    File *f1, *f2, *f3, *f4;
 
     void SetUp() override
     {
-        afolder = new Folder("/home/A");
-        afile1 = new File("/home/A/1");
-        achildfolder = new Folder("/home/A/B");
-        afile2 = new File("/home/A/B/2");
-        afile3 = new File("/home/A/B/3");
-        aemptyfolder = new Folder("/home/C");
-
-        afolder -> add(afile1);
-        afolder -> add(achildfolder);
-        achildfolder -> add(afile2);
-        achildfolder -> add(afile3);
-
-        anullIterator = new NullIterator();
-        afolderIterator = new FolderIterator(afolder);
+        D1 = new Folder("D1");
+        f1 = new File("D1/f1");
+        D2 = new Folder("D1/D2");
+        f2 = new File("D1/f2");
+        D1 -> add(f1);
+        D1 -> add(D2);
+        D1 -> add(f2);
+        f3 = new File("D1/D2/f3");
+        D3 = new Folder("D1/D2/D3");
+        f4 = new File("D1/D2/f4");
+        D2 -> add(f3);
+        D2 -> add(D3);
+        D2 -> add(f4);
+        /*
+                D1
+            /   |   \
+            f1   D2   f2
+                / | \
+            f3  D3 f4
+        */
     }
-
-    void TearDown() override
-    {
-        delete afolder;
-        delete afile1;
-        delete achildfolder;
-        delete afile2;
-        delete afile3;
-        delete aemptyfolder;
-        delete anullIterator;
-        delete afolderIterator;
+    void TearDown() override {
+        delete D1;
+        delete D2;
+        delete D3;
+        delete f1;
+        delete f2;
+        delete f3;
+        delete f4;
     }
 };
 
 TEST_F(IteratorTest, FolderIteratorShouldbeCorrectlyBuilded)
 {
-    ASSERT_NO_THROW(FolderIterator tmp(afolder));
+    ASSERT_NO_THROW(FolderIterator tmp(D1));
 }
 
 TEST_F(IteratorTest, FolderIteratorFirstShouldNotThrowException)
 {   
-    ASSERT_NO_THROW(afolderIterator -> first());
-}
-
-TEST_F(IteratorTest, FolderIteratorCurrentItemShouldbeCorrect)
-{   
-    ASSERT_NO_THROW(afolderIterator -> first());
-    ASSERT_EQ(afolderIterator -> currentItem(), afile1);
-}
-
-TEST_F(IteratorTest, FolderIteratorNextShouldbeCorrect)
-{   
-    ASSERT_NO_THROW(afolderIterator -> first());
-    ASSERT_EQ(afolderIterator -> currentItem(), afile1);
-    ASSERT_NO_THROW(afolderIterator -> next());
-    ASSERT_EQ(afolderIterator -> currentItem(), achildfolder);
+    Iterator *it = new FolderIterator(D1);
+    ASSERT_NO_THROW(it -> first());
+    delete it;
 }
 
 TEST_F(IteratorTest, FolderIteratorIsDoneShouldbeCorrect)
 {   
-    ASSERT_NO_THROW(afolderIterator -> first());
-    ASSERT_NO_THROW(afolderIterator -> next());
-    ASSERT_NO_THROW(afolderIterator -> next());
-    ASSERT_TRUE(afolderIterator -> isDone());
+    Iterator *it = new FolderIterator(D1);
+    ASSERT_NO_THROW(it -> first());
+    ASSERT_FALSE(it -> isDone());
+    delete it;
+}
+
+TEST_F(IteratorTest, FolderIteratorCurrentItemShouldbeCorrect)
+{   
+    Iterator *it = new FolderIterator(D1);
+    ASSERT_NO_THROW(it -> first());
+    ASSERT_FALSE(it -> isDone());
+    ASSERT_EQ(it -> currentItem(), f1);
+    delete it;
+}
+
+
+TEST_F(IteratorTest, FolderIteratorNextShouldbeCorrect)
+{   
+    Iterator *it = new FolderIterator(D1);
+    ASSERT_NO_THROW(it -> first());
+    ASSERT_FALSE(it -> isDone());
+    ASSERT_EQ(it -> currentItem(), f1);
+    ASSERT_NO_THROW(it -> next());
+    ASSERT_EQ(it -> currentItem(), D2);
+    delete it;
+}
+
+TEST_F(IteratorTest, FolderIteratorAllShouldbeCorrect)
+{   
+    Iterator *it = new FolderIterator(D1);
+    ASSERT_NO_THROW(it -> first());
+    ASSERT_FALSE(it -> isDone());
+    ASSERT_EQ(it -> currentItem(), f1);
+    ASSERT_NO_THROW(it -> next());
+    ASSERT_EQ(it -> currentItem(), D2);
+    ASSERT_NO_THROW(it -> next());
+    ASSERT_EQ(it -> currentItem(), f2);
+    ASSERT_NO_THROW(it -> next());
+    ASSERT_TRUE(it -> isDone());
+    delete it;
 }
 
 TEST_F(IteratorTest, EmptyFolderIteratorFirstShouldbeCorrect)
 {   
-    Iterator *it = aemptyfolder -> createIterator();
+    Iterator *it = D3 -> createIterator();
     ASSERT_NO_THROW(it -> first());
     delete it;
 }
 
 TEST_F(IteratorTest, EmptyFolderIteratorIsDoneShouldbeCorrect)
 {   
-    Iterator *it = aemptyfolder -> createIterator();
+    Iterator *it = D3 -> createIterator();
     ASSERT_NO_THROW(it -> first());
     ASSERT_TRUE(it -> isDone());
     delete it;
@@ -93,7 +118,7 @@ TEST_F(IteratorTest, EmptyFolderIteratorIsDoneShouldbeCorrect)
 
 TEST_F(IteratorTest, EmptyFolderIteratorAllShouldbeCorrect)
 {   
-    Iterator *it = aemptyfolder -> createIterator();
+    Iterator *it = D3 -> createIterator();
     for(it->first(); !it->isDone(); it->next()){
         ASSERT_TRUE(0);
     }
