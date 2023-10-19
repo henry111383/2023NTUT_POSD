@@ -13,16 +13,16 @@ protected:
 
     void SetUp() override
     {
-        folder  = new Folder("./documents");
-        folder1 = new Folder("./documents/folder1");
+        folder  = new Folder("test/documents");
+        folder1 = new Folder("test/documents/folder1");
         folder -> add(folder1);
-        folder2 = new Folder("./documents/folder2");
+        folder2 = new Folder("test/documents/folder2");
         folder -> add(folder2);
-        file1   = new File("./documents/folder1/file.txt");
+        file1   = new File("test/documents/folder1/file.txt");
         folder1 -> add(file1);
-        file2   = new File("./documents/folder2/file.txt");
+        file2   = new File("test/documents/folder2/file.txt");
         folder2 -> add(file2);
-        tmp = new Folder("./documents/folder1/folder1");
+        tmp = new Folder("test/documents/folder1/folder1");
         folder1 -> add(tmp);
     }
     void TearDown() override {
