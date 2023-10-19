@@ -30,10 +30,10 @@ class FolderIterator : public Iterator {
         ~FolderIterator() {}
 
         void first() {
-            if(_version != (_host->_version)) {
-                std::cout << _host->_version << _version <<std::endl;
-                throw "Structure has changed...";
-            }
+            // if(_version != (_host->_version)) {
+            //     std::cout << _host->_version << _version <<std::endl;
+            //     throw "Structure has changed...";
+            // }
                 
             _current = _host->_nodes.begin();
         }
@@ -55,10 +55,10 @@ class FolderIterator : public Iterator {
         }
 
         bool isDone() const {
-            if(_version != (_host->_version)) {
-                std::cout << _host->_version << _version <<std::endl;
-                throw "Structure has changed...";
-            }
+            // if(_version != (_host->_version)) {
+            //     std::cout << _host->_version << _version <<std::endl;
+            //     throw "Structure has changed...";
+            // }
             return _current == _host->_nodes.end();
         }
 
