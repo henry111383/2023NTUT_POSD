@@ -6,37 +6,36 @@
 #include <string>
 #include <gtest/gtest.h>
 
+class StreamOutVisitorTest : public ::testing::Test
+{
+protected:
+    Node *folder, *folder1, *folder2, *file1, *file2, *tmp;
 
-// class StreamOutVisitorTest : public ::testing::Test
-// {
-// protected:
-//     Node *folder, *folder1, *folder2, *file1, *file2, *tmp;
+    void SetUp() override
+    {
+        folder  = new Folder("./documents");
+        folder1 = new Folder("./documents/folder1");
+        folder -> add(folder1);
+        folder2 = new Folder("./documents/folder2");
+        folder -> add(folder2);
+        file1   = new File("./documents/folder1/file.txt");
+        folder1 -> add(file1);
+        file2   = new File("./documents/folder2/file.txt");
+        folder2 -> add(file2);
+        tmp = new Folder("./documents/folder1/folder1");
+        folder1 -> add(tmp);
+    }
+    void TearDown() override {
+        delete folder;
+        delete folder1;
+        delete folder2;
+        delete file1;
+        delete file2;
+        delete tmp;
+    }
+};
 
-//     void SetUp() override
-//     {
-//         folder  = new Folder("./documents");
-//         folder1 = new Folder("./documents/folder1");
-//         folder -> add(folder1);
-//         folder2 = new Folder("./documents/folder2");
-//         folder -> add(folder2);
-//         file1   = new File("./documents/folder1/file.txt");
-//         folder1 -> add(file1);
-//         file2   = new File("./documents/folder2/file.txt");
-//         folder2 -> add(file2);
-//         tmp = new Folder("./documents/folder1/folder1");
-//         folder1 -> add(tmp);
-//     }
-//     void TearDown() override {
-//         delete folder;
-//         delete folder1;
-//         delete folder2;
-//         delete file1;
-//         delete file2;
-//         delete tmp;
-//     }
-// };
-
-TEST(StreamOutVisitorTest, VisitorShouldbeCorrectlyBuilt){
+TEST_F(StreamOutVisitorTest, VisitorShouldbeCorrectlyBuilt){
     ASSERT_NO_THROW(StreamOutVisitor visitor);
 }
 

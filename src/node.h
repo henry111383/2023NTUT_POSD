@@ -1,5 +1,5 @@
 #pragma once 
-
+#include <iostream>
 #include<string>
 #include <sys/stat.h>
 #include "iterator.h"
@@ -20,8 +20,11 @@ protected:
     string nodeType;
 
     Node(string path): _path(path) {
-        if (lstat(_path.c_str(), &_st) != 0)
-            throw(std::string("Node is not exist!"));
+        if (lstat(_path.c_str(), &_st) != 0){
+            std::cout << std::string("Node is not exist!") << " " << path <<std::endl;
+            // throw(std::string("Node is not exist!"));
+        }
+            
 
         switch (_st.st_mode & S_IFMT)
         {
