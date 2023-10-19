@@ -51,19 +51,19 @@ protected:
 
 TEST_F(IteratorTest, FolderIteratorShouldbeCorrectlyBuilded)
 {
-    ASSERT_NO_THROW(FolderIterator tmp(D1));
+    ASSERT_NO_THROW(Folder::FolderIterator tmp(D1));
 }
 
 TEST_F(IteratorTest, FolderIteratorFirstShouldNotThrowException)
 {   
-    Iterator *it = new FolderIterator(D1);
+    Iterator *it = new Folder::FolderIterator(D1);
     ASSERT_NO_THROW(it -> first());
     delete it;
 }
 
 TEST_F(IteratorTest, FolderIteratorIsDoneShouldbeCorrect)
 {   
-    Iterator *it = new FolderIterator(D1);
+    Iterator *it = new Folder::FolderIterator(D1);
     ASSERT_NO_THROW(it -> first());
     ASSERT_FALSE(it -> isDone());
     delete it;
@@ -71,7 +71,7 @@ TEST_F(IteratorTest, FolderIteratorIsDoneShouldbeCorrect)
 
 TEST_F(IteratorTest, FolderIteratorCurrentItemShouldbeCorrect)
 {   
-    Iterator *it = new FolderIterator(D1);
+    Iterator *it = new Folder::FolderIterator(D1);
     ASSERT_NO_THROW(it -> first());
     ASSERT_FALSE(it -> isDone());
     ASSERT_EQ(it -> currentItem(), f1);
@@ -81,7 +81,7 @@ TEST_F(IteratorTest, FolderIteratorCurrentItemShouldbeCorrect)
 
 TEST_F(IteratorTest, FolderIteratorNextShouldbeCorrect)
 {   
-    Iterator *it = new FolderIterator(D1);
+    Iterator *it = new Folder::FolderIterator(D1);
     ASSERT_NO_THROW(it -> first());
     ASSERT_FALSE(it -> isDone());
     ASSERT_EQ(it -> currentItem(), f1);
@@ -92,7 +92,7 @@ TEST_F(IteratorTest, FolderIteratorNextShouldbeCorrect)
 
 TEST_F(IteratorTest, FolderIteratorAllShouldbeCorrect)
 {   
-    Iterator *it = new FolderIterator(D1);
+    Iterator *it = new Folder::FolderIterator(D1);
     ASSERT_NO_THROW(it -> first());
     ASSERT_FALSE(it -> isDone());
     ASSERT_EQ(it -> currentItem(), f1);

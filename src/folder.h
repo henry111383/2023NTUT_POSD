@@ -8,15 +8,57 @@
 using namespace std;
 
 class Folder: public Node {
-    friend class FolderIterator;
     
 private:
     list<Node *> _nodes;
+    int _version = 1; //用來判斷資料夾底下結構有沒有變化
 
 protected:
     void removeChild(Node * target) {
         _nodes.remove(target);
     }
+
+public:
+class FolderIterator : public Iterator {
+
+    public:
+        FolderIterator(Folder* composite):_host(composite) {}
+
+        FolderIterator(Folder* composite, int version):_host(composite), _version(version) {}
+
+        ~FolderIterator() {}
+
+        void first() {
+            if(_version != (_host->_version)) 
+                throw "Structure has changed...";
+            _current = _host->_nodes.begin();
+        }
+
+        Node * currentItem() const {
+            if(_version != (_host->_version)) 
+                throw "Structure has changed...";
+            return *_current;
+        }
+
+        void next() {
+            if(_version != (_host->_version)) 
+                throw "Structure has changed...";
+            _current++;
+        }
+
+        bool isDone() const {
+            if(_version != (_host->_version)) 
+                return true;
+            return _current == _host->_nodes.end();
+        }
+
+        
+    private:
+        Folder* const _host;
+        int _version=1;
+        std::list<Node *>::iterator _current;
+    };    
+
 
 public:
     Folder(string path): Node(path) {
@@ -53,7 +95,7 @@ public:
     }
 
     Iterator * createIterator() {
-        return new FolderIterator(this);
+        return new FolderIterator(this, _version);
     }
 
     Iterator * dfsIterator() {
@@ -109,22 +151,5 @@ public:
     }
 };
 
-FolderIterator::FolderIterator(Folder* composite)
-    :_host(composite) {}
 
-void FolderIterator::first() {
-    _current = _host->_nodes.begin();
-}
 
-Node * FolderIterator::currentItem() const {
-    return *_current;
-}
-
-void FolderIterator::next() {
-    _current++;
-    
-}
-
-bool FolderIterator::isDone() const {
-    return _current == _host->_nodes.end();
-}
