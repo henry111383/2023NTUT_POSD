@@ -20,6 +20,10 @@ public:
         if (!ifs.is_open()) {
             throw "Opening failed...";
         }
+        
+        if(!_result.empty()){
+            _result += "\n";
+        }
 
         _result += "_____________________________________________\n";
         _result += file->path();
