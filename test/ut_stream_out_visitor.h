@@ -9,21 +9,25 @@
 class StreamOutVisitorTest : public ::testing::Test
 {
 protected:
-    Node *folder, *folder1, *folder2, *file1, *file2, *tmp;
+    Node *folder, *folder1, *folder2, *file1, *file2, *emptyfolder;
 
     void SetUp() override
     {
-        folder  = new Folder("test/documents");
-        folder1 = new Folder("test/documents/folder1");
+        char *tmp = get_current_dir_name();
+        std::string cwd(tmp);
+        free(tmp);
+        // std::cout << "Current working directory: " << cwd<< std::endl;
+        folder  = new Folder(cwd + "/test/documents");
+        folder1 = new Folder(cwd + "/test/documents/folder1");
         folder -> add(folder1);
-        folder2 = new Folder("test/documents/folder2");
+        folder2 = new Folder(cwd + "/test/documents/folder2");
         folder -> add(folder2);
-        file1   = new File("test/documents/folder1/file.txt");
+        file1   = new File(cwd + "/test/documents/folder1/file.txt");
         folder1 -> add(file1);
-        file2   = new File("test/documents/folder2/file.txt");
+        file2   = new File(cwd + "/test/documents/folder2/file.txt");
         folder2 -> add(file2);
-        tmp = new Folder("test/documents/folder1/folder1");
-        folder1 -> add(tmp);
+        emptyfolder = new Folder(cwd + "/test/documents/folder1/folder1");
+        folder1 -> add(emptyfolder);
     }
     void TearDown() override {
         delete folder;
@@ -31,12 +35,13 @@ protected:
         delete folder2;
         delete file1;
         delete file2;
-        delete tmp;
+        delete emptyfolder;
     }
 };
 
 TEST_F(StreamOutVisitorTest, VisitorShouldbeCorrectlyBuilt){
     ASSERT_NO_THROW(StreamOutVisitor visitor);
+    
 }
 
 // TEST_F(StreamOutVisitorTest, XX){
