@@ -44,13 +44,23 @@ TEST_F(StreamOutVisitorTest, VisitorShouldbeCorrectlyBuilt){
     
 }
 
-TEST_F(StreamOutVisitorTest, XX){
+TEST_F(StreamOutVisitorTest, VisitorFileShouldbeCorrectlyBuilt){
     StreamOutVisitor *visitor = new StreamOutVisitor;
-    folder->accept(visitor);
-    // std::string ans("This is file 2\nThis is second line\nthis is end of file\n");
+    file1->accept(visitor);
+    std::string ans("_____________________________________________\n/mnt/d/POSD/HW/posd2023f_111598084_hw/test/documents/folder1/file.txt\n---------------------------------------------\nhello, world\n_____________________________________________\n");
     std::string res;
-    res = visitor->getResult();
-    std::cout << res << std::endl;
+    res = visitor-> getResult();
     // ASSERT_EQ(ans, res);
     delete visitor;
 }
+
+TEST_F(StreamOutVisitorTest, VisitorFolderShouldbeCorrectlyBuilt){
+    StreamOutVisitor *visitor = new StreamOutVisitor;
+    file1->accept(visitor);
+    std::string ans("_____________________________________________\n/mnt/d/POSD/HW/posd2023f_111598084_hw/test/documents/folder1/file.txt\n---------------------------------------------\nhello, world\n_____________________________________________\n_____________________________________________\n/mnt/d/POSD/HW/posd2023f_111598084_hw/test/documents/folder2/file.txt\n---------------------------------------------\nThis is file 2\nThis is second line\nthis is end of file\n_____________________________________________\n\n");
+    std::string res;
+    res = visitor-> getResult();
+    // ASSERT_EQ(ans, res);
+    delete visitor;
+}
+

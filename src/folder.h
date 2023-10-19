@@ -16,39 +16,49 @@ private:
 protected:
     void removeChild(Node * target) {
         _nodes.remove(target);
+        _version++;
     }
 
 public:
 class FolderIterator : public Iterator {
 
     public:
-        FolderIterator(Folder* composite):_host(composite) {}
+        FolderIterator(Folder* composite):_host(composite), _version(composite->_version) {}
 
         FolderIterator(Folder* composite, int version):_host(composite), _version(version) {}
 
         ~FolderIterator() {}
 
         void first() {
-            if(_version != (_host->_version)) 
+            if(_version != (_host->_version)) {
+                std::cout << _host->_version << _version <<std::endl;
                 throw "Structure has changed...";
+            }
+                
             _current = _host->_nodes.begin();
         }
 
         Node * currentItem() const {
-            if(_version != (_host->_version)) 
+            if(_version != (_host->_version)) {
+                std::cout << _host->_version << _version <<std::endl;
                 throw "Structure has changed...";
+            }
             return *_current;
         }
 
         void next() {
-            if(_version != (_host->_version)) 
+            if(_version != (_host->_version)) {
+                std::cout << _host->_version << _version <<std::endl;
                 throw "Structure has changed...";
+            }
             _current++;
         }
 
         bool isDone() const {
-            if(_version != (_host->_version)) 
-                return true;
+            if(_version != (_host->_version)) {
+                std::cout << _host->_version << _version <<std::endl;
+                throw "Structure has changed...";
+            }
             return _current == _host->_nodes.end();
         }
 
@@ -72,6 +82,7 @@ public:
         }
         _nodes.push_back(node);
         node->parent(this);
+        _version++;
     }
 
     Node * getChildByName(const char * name) const {
