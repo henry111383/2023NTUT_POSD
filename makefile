@@ -13,7 +13,6 @@ TEST_HEADERS = test/ut_node.h \
 				test/ut_stream_out_visitor.h
 
 SRC_HEADERS = src/node.h \
-				src/node.h \
 				src/folder.h \
 				src/null_iterator.h \
 				src/iterator.h \

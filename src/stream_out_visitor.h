@@ -3,61 +3,40 @@
 #include "file.h"
 #include "folder.h"
 #include "visitor.h"
-#include "iterator.h"
 #include <fstream>
 #include <iostream>
 #include <sstream>
 
 class StreamOutVisitor : public Visitor {
 public:
+    ~StreamOutVisitor(){}
+    void visitFile(File * file) override {
+        std::ifstream t(file->path());
+        std::stringstream buffer;
 
-    void visitFile(File * file){
-        std::ifstream ifs;
-        std::string content;
-        std::string buffer;
-
-        ifs.open(file->path());
-        if (!ifs.is_open()) {
-            throw "Opening failed...";
-        }
-        
-        if(!_result.empty()){
-            _result += "\n";
-        }
-
-        _fileCount ++;
+        buffer << t.rdbuf(); 
 
         _result += "_____________________________________________\n";
-        _result += file->path();
-        _result += "\n";
+        _result += file->path() + "\n";
         _result += "---------------------------------------------\n";
-
-        while (std::getline(ifs, buffer)) {
-            content += buffer;
-            content += "\n";
-            // std::cout << buffer << std::endl;
-        }
-
-        ifs.close();
-        _result += content;
+        _result += buffer.str() + "\n";
         _result += "_____________________________________________\n";
-    };
+    }
 
-    void visitFolder(Folder * folder){
-        Iterator *it = folder->createIterator(); 
-        for (it->first(); !it->isDone(); it->next()) {
+    void visitFolder(Folder * folder) override {
+        Iterator * it = folder->createIterator();
+
+        for(it->first(); !it->isDone(); it->next()) {
             it->currentItem()->accept(this);
+            if(dynamic_cast<File *>(it->currentItem()))
+                _result += "\n";
         }
-        delete it;
-    };
+    }
 
-    string getResult() const{
-        if(_fileCount ==1) return _result;
-        else return _result + "\n";
-    };
+    string getResult() const {
+        return _result;
+    }
 
-    
 private:
     string _result;
-    int _fileCount = 0;
 };

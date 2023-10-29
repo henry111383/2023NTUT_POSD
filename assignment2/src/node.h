@@ -1,19 +1,41 @@
-#pragma once
-
+#pragma once 
+#include <iostream>
 #include<string>
+#include <sys/stat.h>
 #include "iterator.h"
-#include "visitor.h"
 #include "null_iterator.h"
+#include "visitor.h"
 
 using namespace std;
 
 class Node {
 private:
+
     string _path;
     Node * _parent;
-protected:
+    struct stat _st;
+    
 
-    Node(string path): _path(path) {}
+protected:
+    string nodeType;
+
+    Node(string path): _path(path) {
+        if (lstat(_path.c_str(), &_st) != 0){
+            // std::cout << std::string("Node is not exist!") << " " << path <<std::endl;
+            throw(std::string("Node is not exist!"));
+        }
+            
+
+        switch (_st.st_mode & S_IFMT)
+        {
+        case S_IFREG:
+            nodeType = "file";
+            break;
+        case S_IFDIR:
+            nodeType = "folder";
+            break;
+        }
+    }
 
 public:
     virtual ~Node() {}
@@ -53,10 +75,14 @@ public:
         return new NullIterator();
     }
 
+    virtual Iterator * dfsIterator() {
+        return new NullIterator();
+    }
+
     virtual Node * find(string path) = 0;
-
+    
     virtual std::list<string> findByName(string name) = 0;
-
+    
     virtual void remove(string path) {
         throw string("This node does not support deleting sub node");
     }

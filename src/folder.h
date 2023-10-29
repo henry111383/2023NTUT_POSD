@@ -1,99 +1,54 @@
-#pragma once
+#pragma once 
 
 #include <list>
+#include <sys/stat.h>
 #include "node.h"
 #include "iterator.h"
-#include "dfs_iterator.h"
 
 using namespace std;
 
 class Folder: public Node {
-    
 private:
     list<Node *> _nodes;
-    int _version = 1; //用來判斷資料夾底下結構有沒有變化
+    int _operationCount = 0;
 
 protected:
-    void removeChild(Node * target) {
+    void removeChild(Node * target) override {
         _nodes.remove(target);
-        _version++;
+        _operationCount++;
     }
-
-public:
-class FolderIterator : public Iterator {
-
-    public:
-        FolderIterator(Folder* composite):_host(composite), _version(composite->_version) {}
-
-        FolderIterator(Folder* composite, int version):_host(composite), _version(version) {}
-
-        ~FolderIterator() {}
-
-        void first() {
-            if(_version != (_host->_version)) {
-                throw "Structure has changed...";
-            }
-                
-            _current = _host->_nodes.begin();
-        }
-
-        Node * currentItem() const {
-            // 拋例外的話TA會錯
-            // if(_version != (_host->_version)) {
-            //     throw "Structure has changed...";
-            // }
-            return *_current;
-        }
-
-        void next() {
-            if(_version != (_host->_version)) {
-                throw "Structure has changed...";
-            }
-            _current++;
-        }
-
-        bool isDone() const {
-            // 拋例外的話TA會錯
-            // if(_version != (_host->_version)) {
-            //     std::cout << _host->_version << _version <<std::endl;
-            //     throw "Structure has changed...";
-            // }
-            return _current == _host->_nodes.end();
-        }
-
-        
-    private:
-        Folder* const _host;
-        int _version=1;
-        std::list<Node *>::iterator _current;
-    };    
-
 
 public:
     Folder(string path): Node(path) {
-        if (nodeType != "folder")
-            throw(std::string("It is not Folder!"));
+        struct stat fileInfo;
+        const char *c = path.c_str();
+        if(lstat(c, &fileInfo) == 0){
+            if(S_ISDIR(fileInfo.st_mode))
+                return;
+        }
+        throw "No Folder exists";
     }
 
-    void add(Node * node) {
+    void add(Node * node) override {
         if (node->path() != this->path() + "/" + node->name()) {
             throw string("Incorrect path of node: " + node -> path());
         }
         _nodes.push_back(node);
         node->parent(this);
-        _version++;
+        _operationCount++;
     }
 
-    Node * getChildByName(const char * name) const {
+    Node * getChildByName(const char * name) const override {
         for (auto it = _nodes.begin(); it != _nodes.end(); ++it) {
             if ((*it)->name() == name) {
                 return *it;
             }
         }
+
         return nullptr;
     }
 
-    int numberOfFiles() const {
+    int numberOfFiles() const override {
         int num = 0;
         if (_nodes.size() == 0) {
             return 0;
@@ -104,15 +59,11 @@ public:
         return num;
     }
 
-    Iterator * createIterator() {
-        return new FolderIterator(this, _version);
+    Iterator * createIterator() override {
+        return new FolderIterator(this, _operationCount);
     }
 
-    Iterator * dfsIterator() {
-        return new DfsIterator(this);
-    }
-
-    Node * find(string path) {
+    Node * find(string path) override {
         if (this->path() == path) {
             return this;
         }
@@ -149,17 +100,62 @@ public:
         return pathList;
     }
 
-    void remove(string path) {
+    void remove(string path) override {
         Node * target = find(path);
         if (target) {
             target->parent()->removeChild(target);
         }
     }
 
-    void accept(Visitor * visitor) {
+    void accept(Visitor * visitor) override {
         visitor->visitFolder(this);
     }
+
+    class FolderIterator : public Iterator {
+    public:
+        FolderIterator(Folder* composite, int operationCount) : _host(composite), _operationCount(operationCount)  {}
+        
+        ~FolderIterator() {}
+
+        void first() {
+            checkAvailable();
+            _current = _host->_nodes.begin();
+        }
+
+        Node * currentItem() const {
+            return *_current;
+        }
+
+        void next() {
+            checkAvailable();
+            _current++;
+        }
+
+        bool isDone() const {
+            return _current == _host->_nodes.end();
+        }
+
+    private:
+        Folder* const _host;
+        std::list<Node *>::iterator _current;
+        int _operationCount;
+
+        void checkAvailable() const {
+            if(_host->_operationCount != _operationCount) {
+                throw "Iterator Not Avaliable";
+            }
+        }
+    };
+
+    class OrderByNameIterator: public Iterator {
+    
+    };
+
+    class OrderByNameWithFolderFirstIterator: public Iterator {
+    
+    };
+
+    class OrderByKindIterator: public Iterator {
+    
+    };
 };
-
-
-
