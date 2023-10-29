@@ -31,6 +31,7 @@ public:
             if(dynamic_cast<File *>(it->currentItem()))
                 _result += "\n";
         }
+        delete it;
     }
 
     string getResult() const {

@@ -47,20 +47,42 @@ TEST_F(StreamOutVisitorTest, VisitorShouldbeCorrectlyBuilt){
 TEST_F(StreamOutVisitorTest, VisitorFileShouldbeCorrectlyBuilt){
     StreamOutVisitor *visitor = new StreamOutVisitor;
     file1->accept(visitor);
-    std::string ans("_____________________________________________\n/mnt/d/POSD/HW/posd2023f_111598084_hw/test/documents/folder1/file.txt\n---------------------------------------------\nhello, world\n_____________________________________________\n");
+
+    std::string expected;
+    expected += "_____________________________________________\n";
+    expected += "/mnt/d/POSD/HW/posd2023f_111598084_hw/test/documents/folder1/file.txt\n";
+    expected += "---------------------------------------------\n";
+    expected += "hello, world\n";
+    expected += "_____________________________________________\n";
     std::string res;
     res = visitor-> getResult();
-    // ASSERT_EQ(ans, res);
+    ASSERT_EQ(expected, res);
     delete visitor;
 }
 
 TEST_F(StreamOutVisitorTest, VisitorFolderShouldbeCorrectlyBuilt){
     StreamOutVisitor *visitor = new StreamOutVisitor;
-    file1->accept(visitor);
-    std::string ans("_____________________________________________\n/mnt/d/POSD/HW/posd2023f_111598084_hw/test/documents/folder1/file.txt\n---------------------------------------------\nhello, world\n_____________________________________________\n_____________________________________________\n/mnt/d/POSD/HW/posd2023f_111598084_hw/test/documents/folder2/file.txt\n---------------------------------------------\nThis is file 2\nThis is second line\nthis is end of file\n_____________________________________________\n\n");
+    folder->accept(visitor);
+
+    std::string expected;
+    expected += "_____________________________________________\n";
+    expected += "/mnt/d/POSD/HW/posd2023f_111598084_hw/test/documents/folder1/file.txt\n";
+    expected += "---------------------------------------------\n";
+    expected += "hello, world\n";
+    expected += "_____________________________________________\n";
+    expected += "\n";
+    expected += "_____________________________________________\n";
+    expected += "/mnt/d/POSD/HW/posd2023f_111598084_hw/test/documents/folder2/file.txt\n";
+    expected += "---------------------------------------------\n";
+    expected += "This is file 2\n";
+    expected += "This is second line\n";
+    expected += "this is end of file\n";
+    expected += "_____________________________________________\n";
+    expected += "\n";
+
     std::string res;
     res = visitor-> getResult();
-    // ASSERT_EQ(ans, res);
+    ASSERT_EQ(expected, res);
     delete visitor;
 }
 
