@@ -17,16 +17,16 @@ protected:
         std::string cwd(tmp);
         free(tmp);
         // std::cout << "Current working directory: " << cwd<< std::endl;
-        folder  = new Folder(cwd + "/test/documents");
-        folder1 = new Folder(cwd + "/test/documents/folder1");
+        folder  = new Folder("test/documents");
+        folder1 = new Folder("test/documents/folder1");
         folder -> add(folder1);
-        folder2 = new Folder(cwd + "/test/documents/folder2");
+        folder2 = new Folder("test/documents/folder2");
         folder -> add(folder2);
-        file1   = new File(cwd + "/test/documents/folder1/file.txt");
+        file1   = new File("test/documents/folder1/file.txt");
         folder1 -> add(file1);
-        file2   = new File(cwd + "/test/documents/folder2/file.txt");
+        file2   = new File("test/documents/folder2/file.txt");
         folder2 -> add(file2);
-        emptyfolder = new Folder(cwd + "/test/documents/folder1/folder1");
+        emptyfolder = new Folder("test/documents/folder1/folder1");
         folder1 -> add(emptyfolder);
     }
     void TearDown() override {
@@ -50,7 +50,7 @@ TEST_F(StreamOutVisitorTest, VisitorFileShouldbeCorrectlyBuilt){
 
     std::string expected;
     expected += "_____________________________________________\n";
-    expected += "/mnt/d/POSD/HW/posd2023f_111598084_hw/test/documents/folder1/file.txt\n";
+    expected += "test/documents/folder1/file.txt\n";
     expected += "---------------------------------------------\n";
     expected += "hello, world\n";
     expected += "_____________________________________________\n";
@@ -66,13 +66,13 @@ TEST_F(StreamOutVisitorTest, VisitorFolderShouldbeCorrectlyBuilt){
 
     std::string expected;
     expected += "_____________________________________________\n";
-    expected += "/mnt/d/POSD/HW/posd2023f_111598084_hw/test/documents/folder1/file.txt\n";
+    expected += "test/documents/folder1/file.txt\n";
     expected += "---------------------------------------------\n";
     expected += "hello, world\n";
     expected += "_____________________________________________\n";
     expected += "\n";
     expected += "_____________________________________________\n";
-    expected += "/mnt/d/POSD/HW/posd2023f_111598084_hw/test/documents/folder2/file.txt\n";
+    expected += "test/documents/folder2/file.txt\n";
     expected += "---------------------------------------------\n";
     expected += "This is file 2\n";
     expected += "This is second line\n";

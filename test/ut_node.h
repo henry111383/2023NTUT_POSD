@@ -11,7 +11,7 @@ TEST(NodeTest, FileWithPolymorphismShouldBeCorrectlyBuilt)
 	free(tmp);
 
 	Node *file;
-	ASSERT_NO_THROW(file = new File(cwd + "/test/D1/f1"));
+	ASSERT_NO_THROW(file = new File("test/D1/f1"));
 	delete file;
 }
 
@@ -22,7 +22,7 @@ TEST(NodeTest, FoderWithPolymorphismShouldBeCorrectlyBuilt)
 	free(tmp);
 
 	Node *file;
-	ASSERT_NO_THROW(file = new Folder(cwd + "/test/D1/D2"));
+	ASSERT_NO_THROW(file = new Folder("test/D1/D2"));
 	delete file;
 }
 
@@ -33,13 +33,13 @@ TEST(NodeTest, NameWithPolymorphismShouldBeCorrect)
 	free(tmp);
 
 	Node *D1, *D2, *D3, *f1, *f2, *f3, *f4;
-	D1 = new Folder(cwd + "/test/D1");
-	f1 = new File(cwd + "/test/D1/f1");
-	D2 = new Folder(cwd + "/test/D1/D2");
-	f2 = new File(cwd + "/test/D1/f2");
-	f3 = new File(cwd + "/test/D1/D2/f3");
-	D3 = new Folder(cwd + "/test/D1/D2/D3");
-	f4 = new File(cwd + "/test/D1/D2/f4");
+	D1 = new Folder("test/D1");
+	f1 = new File("test/D1/f1");
+	D2 = new Folder("test/D1/D2");
+	f2 = new File("test/D1/f2");
+	f3 = new File("test/D1/D2/f3");
+	D3 = new Folder("test/D1/D2/D3");
+	f4 = new File("test/D1/D2/f4");
 
 	ASSERT_EQ("D1", D1->name());
   	ASSERT_EQ("D2", D2->name());
@@ -65,21 +65,21 @@ TEST(NodeTest, PathWithPolymorphismShouldBeCorrect)
 	free(tmp);
 
 	Node *D1, *D2, *D3, *f1, *f2, *f3, *f4;
-	D1 = new Folder(cwd + "/test/D1");
-	f1 = new File(cwd + "/test/D1/f1");
-	D2 = new Folder(cwd + "/test/D1/D2");
-	f2 = new File(cwd + "/test/D1/f2");
-	f3 = new File(cwd + "/test/D1/D2/f3");
-	D3 = new Folder(cwd + "/test/D1/D2/D3");
-	f4 = new File(cwd + "/test/D1/D2/f4");
+	D1 = new Folder("test/D1");
+	f1 = new File("test/D1/f1");
+	D2 = new Folder("test/D1/D2");
+	f2 = new File("test/D1/f2");
+	f3 = new File("test/D1/D2/f3");
+	D3 = new Folder("test/D1/D2/D3");
+	f4 = new File("test/D1/D2/f4");
 
-	ASSERT_EQ(cwd + "/test/D1", D1->path());
-	ASSERT_EQ(cwd + "/test/D1/D2", D2->path());
-	ASSERT_EQ(cwd + "/test/D1/D2/D3", D3->path());
-	ASSERT_EQ(cwd + "/test/D1/f1", f1->path());
-	ASSERT_EQ(cwd + "/test/D1/f2", f2->path());
-	ASSERT_EQ(cwd + "/test/D1/D2/f3", f3->path());
-	ASSERT_EQ(cwd + "/test/D1/D2/f4", f4->path());
+	ASSERT_EQ("test/D1", D1->path());
+	ASSERT_EQ("test/D1/D2", D2->path());
+	ASSERT_EQ("test/D1/D2/D3", D3->path());
+	ASSERT_EQ("test/D1/f1", f1->path());
+	ASSERT_EQ("test/D1/f2", f2->path());
+	ASSERT_EQ("test/D1/D2/f3", f3->path());
+	ASSERT_EQ("test/D1/D2/f4", f4->path());
 
 	delete D1;
 	delete D2;
@@ -97,18 +97,18 @@ TEST(NodeTest, addWithPolymorphismShouldBeCorrect)
 	free(tmp);
 
 	Node *D1, *D2, *D3, *f1, *f2, *f3, *f4;
-	D1 = new Folder(cwd + "/test/D1");
-	f1 = new File(cwd + "/test/D1/f1");
-	D2 = new Folder(cwd + "/test/D1/D2");
-	f2 = new File(cwd + "/test/D1/f2");
+	D1 = new Folder("test/D1");
+	f1 = new File("test/D1/f1");
+	D2 = new Folder("test/D1/D2");
+	f2 = new File("test/D1/f2");
 
 	ASSERT_NO_THROW(D1 -> add(f1));
 	ASSERT_NO_THROW(D1 -> add(D2));
 	ASSERT_NO_THROW(D1 -> add(f2));
 
-	f3 = new File(cwd + "/test/D1/D2/f3");
-	D3 = new Folder(cwd + "/test/D1/D2/D3");
-	f4 = new File(cwd + "/test/D1/D2/f4");
+	f3 = new File("test/D1/D2/f3");
+	D3 = new Folder("test/D1/D2/D3");
+	f4 = new File("test/D1/D2/f4");
 
 	ASSERT_NO_THROW(D2 -> add(f3));
 	ASSERT_NO_THROW(D2 -> add(D3));
@@ -130,27 +130,27 @@ TEST(NodeTest, RemoveWithPolymorphismShouldBeCorrect)
 	free(tmp);
 
 	Node *D1, *D2, *D3, *f1, *f2, *f3, *f4;
-	D1 = new Folder(cwd + "/test/D1");
-	f1 = new File(cwd + "/test/D1/f1");
-	D2 = new Folder(cwd + "/test/D1/D2");
-	f2 = new File(cwd + "/test/D1/f2");
+	D1 = new Folder("test/D1");
+	f1 = new File("test/D1/f1");
+	D2 = new Folder("test/D1/D2");
+	f2 = new File("test/D1/f2");
 
 	ASSERT_NO_THROW(D1 -> add(f1));
 	ASSERT_NO_THROW(D1 -> add(D2));
 	ASSERT_NO_THROW(D1 -> add(f2));
 
-	f3 = new File(cwd + "/test/D1/D2/f3");
-	D3 = new Folder(cwd + "/test/D1/D2/D3");
-	f4 = new File(cwd + "/test/D1/D2/f4");
+	f3 = new File("test/D1/D2/f3");
+	D3 = new Folder("test/D1/D2/D3");
+	f4 = new File("test/D1/D2/f4");
 
 	ASSERT_NO_THROW(D2 -> add(f3));
 	ASSERT_NO_THROW(D2 -> add(D3));
 	ASSERT_NO_THROW(D2 -> add(f4));
 
-	ASSERT_NO_THROW(D1->remove(cwd + "/test/D1/f1"));
-	ASSERT_NO_THROW(D1->remove(cwd + "/test/D1/D2"));
-	ASSERT_NO_THROW(D1->remove(cwd + "/test/D1/f2"));
-	ASSERT_NO_THROW(D1->remove(cwd + "/test/D1/D2/D3"));
+	ASSERT_NO_THROW(D1->remove("test/D1/f1"));
+	ASSERT_NO_THROW(D1->remove("test/D1/D2"));
+	ASSERT_NO_THROW(D1->remove("test/D1/f2"));
+	ASSERT_NO_THROW(D1->remove("test/D1/D2/D3"));
 
 	delete D1;
 	delete D2;
@@ -168,18 +168,18 @@ TEST(NodeTest, GetChildByNameWithPolymorphismShouldBeCorrect)
 	free(tmp);
 
 	Node *D1, *D2, *D3, *f1, *f2, *f3, *f4;
-	D1 = new Folder(cwd + "/test/D1");
-	f1 = new File(cwd + "/test/D1/f1");
-	D2 = new Folder(cwd + "/test/D1/D2");
-	f2 = new File(cwd + "/test/D1/f2");
+	D1 = new Folder("test/D1");
+	f1 = new File("test/D1/f1");
+	D2 = new Folder("test/D1/D2");
+	f2 = new File("test/D1/f2");
 
 	ASSERT_NO_THROW(D1 -> add(f1));
 	ASSERT_NO_THROW(D1 -> add(D2));
 	ASSERT_NO_THROW(D1 -> add(f2));
 
-	f3 = new File(cwd + "/test/D1/D2/f3");
-	D3 = new Folder(cwd + "/test/D1/D2/D3");
-	f4 = new File(cwd + "/test/D1/D2/f4");
+	f3 = new File("test/D1/D2/f3");
+	D3 = new Folder("test/D1/D2/D3");
+	f4 = new File("test/D1/D2/f4");
 
 	ASSERT_NO_THROW(D2 -> add(f3));
 	ASSERT_NO_THROW(D2 -> add(D3));
@@ -204,25 +204,25 @@ TEST(NodeTest, FindWithPolymorphismShouldBeCorrect)
 	free(tmp);
 
 	Node *D1, *D2, *D3, *f1, *f2, *f3, *f4;
-	D1 = new Folder(cwd + "/test/D1");
-	f1 = new File(cwd + "/test/D1/f1");
-	D2 = new Folder(cwd + "/test/D1/D2");
-	f2 = new File(cwd + "/test/D1/f2");
+	D1 = new Folder("test/D1");
+	f1 = new File("test/D1/f1");
+	D2 = new Folder("test/D1/D2");
+	f2 = new File("test/D1/f2");
 
 	ASSERT_NO_THROW(D1 -> add(f1));
 	ASSERT_NO_THROW(D1 -> add(D2));
 	ASSERT_NO_THROW(D1 -> add(f2));
 
-	f3 = new File(cwd + "/test/D1/D2/f3");
-	D3 = new Folder(cwd + "/test/D1/D2/D3");
-	f4 = new File(cwd + "/test/D1/D2/f4");
+	f3 = new File("test/D1/D2/f3");
+	D3 = new Folder("test/D1/D2/D3");
+	f4 = new File("test/D1/D2/f4");
 
 	ASSERT_NO_THROW(D2 -> add(f3));
 	ASSERT_NO_THROW(D2 -> add(D3));
 	ASSERT_NO_THROW(D2 -> add(f4));
 
-	ASSERT_EQ(D3, D1->find(cwd + "/test/D1/D2/D3"));
-	ASSERT_EQ(nullptr, D1->find(cwd + "/test/D1/D2/D4"));
+	ASSERT_EQ(D3, D1->find("test/D1/D2/D3"));
+	ASSERT_EQ(nullptr, D1->find("test/D1/D2/D4"));
 
 	delete D1;
 	delete D2;
@@ -240,18 +240,18 @@ TEST(NodeTest, NumberOfFilesWithPolymorphismShouldBeCorrect)
 	free(tmp);
 
 	Node *D1, *D2, *D3, *f1, *f2, *f3, *f4;
-	D1 = new Folder(cwd + "/test/D1");
-	f1 = new File(cwd + "/test/D1/f1");
-	D2 = new Folder(cwd + "/test/D1/D2");
-	f2 = new File(cwd + "/test/D1/f2");
+	D1 = new Folder("test/D1");
+	f1 = new File("test/D1/f1");
+	D2 = new Folder("test/D1/D2");
+	f2 = new File("test/D1/f2");
 
 	ASSERT_NO_THROW(D1 -> add(f1));
 	ASSERT_NO_THROW(D1 -> add(D2));
 	ASSERT_NO_THROW(D1 -> add(f2));
 
-	f3 = new File(cwd + "/test/D1/D2/f3");
-	D3 = new Folder(cwd + "/test/D1/D2/D3");
-	f4 = new File(cwd + "/test/D1/D2/f4");
+	f3 = new File("test/D1/D2/f3");
+	D3 = new Folder("test/D1/D2/D3");
+	f4 = new File("test/D1/D2/f4");
 
 	ASSERT_NO_THROW(D2 -> add(f3));
 	ASSERT_NO_THROW(D2 -> add(D3));

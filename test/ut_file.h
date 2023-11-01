@@ -13,11 +13,7 @@ protected:
 
     void SetUp() override
     {
-		char *tmp = get_current_dir_name();
-        cwd = std::string(tmp);
-        free(tmp);
-
-		path = cwd + "/test/D1/D2/f4";
+		path = "test/D1/D2/f4";
 		file = new File(path);
     }
 
@@ -80,7 +76,7 @@ TEST_F(FileTest, notExistingFileShouldThrowException)
 
 TEST_F(FileTest, FileShouldbeFile)
 {
-	ASSERT_NO_THROW(Folder tmp(cwd + "/test/D1"));
-	ASSERT_ANY_THROW(File tmp(cwd + "/test/D1"));
+	ASSERT_NO_THROW(Folder tmp("test/D1"));
+	ASSERT_ANY_THROW(File tmp("test/D1"));
 }
 
