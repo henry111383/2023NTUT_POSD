@@ -19,7 +19,8 @@ public:
             _result += ":";
             _result += it->currentValue()->toString();
             it->currentValue()->accept(this);
-            _result += ",";
+            _result += ",\n";
+            _blank += "    "
         }
         std::size_t found = _result.find_last_of(",");
         _result = _result.substr(0,found);
