@@ -78,7 +78,8 @@ class JsonObjectIterator : public JsonIterator {
     void set(std::string key, Value * value){
         _key = key;
         _string_value = value;
-        _myMap.insert (std::pair<std::string, Value *>(key, value));
+        // _myMap.insert (std::pair<std::string, Value *>(key, value));
+        _myMap.emplace(key, value);
     }
 
     Value * getValue(std::string key){
