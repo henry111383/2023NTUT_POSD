@@ -9,6 +9,8 @@ public:
         std::string tmp;
         auto it = obj->createIterator();
         for(it->first(); !it->isDone(); it->next()){
+            _blank += "    ";
+            tmp += _blank;
             tmp += "\"";
             tmp += it->currentKey();
             tmp += "\"";
@@ -23,12 +25,14 @@ public:
     };
 
     std::string getResult() const {
+        _result += "\n}"; 
         std::cout<<_result;
         return _result;
     };
 
 private:
-    std::string _result;
+    std::string _result = "{\n";
+    std::string _blank="";
 
 
 };
