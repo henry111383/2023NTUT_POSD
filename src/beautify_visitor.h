@@ -17,13 +17,8 @@ public:
             _result += it->currentKey();
             _result += "\"";
             _result += ":";
-            StringValue * isStringValue = dynamic_cast<StringValue*>(it->currentValue());
-            if(isStringValue){
-                _result += it->currentValue()->toString();
-            }
-            else{
-                it->currentValue()->accept(this);
-            }
+            _result += it->currentValue()->toString();
+            it->currentValue()->accept(this);
             _result += ",";
         }
         std::size_t found = _result.find_last_of(",");

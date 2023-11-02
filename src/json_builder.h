@@ -17,6 +17,7 @@ public:
         } else {
             _compounds.top()->set(key, _value);
         }
+        _result = _jsons.front();
     };
 
     void buildObject(){
