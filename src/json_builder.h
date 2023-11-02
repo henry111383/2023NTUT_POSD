@@ -19,6 +19,10 @@ public:
         }
     };
 
+    void buildObject(){
+        _compounds.push(new JsonObject());
+    };
+
     void buildObject(std::string key){
         _compounds.push(new JsonObject(key));
     };
