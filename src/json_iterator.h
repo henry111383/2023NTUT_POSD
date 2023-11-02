@@ -1,4 +1,5 @@
 #pragma once
+#include "./json_object.h"
 
 class Value;
 
@@ -15,4 +16,27 @@ public:
 };
 
 class NullIterator : public JsonIterator {
+public:
+    void first() override
+    {
+        throw std::string("no child member");
+    }
+    std::string currentKey() const override
+    {
+        throw std::string("no child member");
+    }
+    Value *currentValue() const override
+    {
+        throw std::string("no child member");
+    }
+    void next() override
+    {
+        throw std::string("no child member");
+    }
+    bool isDone() const override
+    {
+        return true;
+    }
 };
+
+
