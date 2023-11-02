@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-#include <unordered_map>
+#include <map>
 #include "./value.h"
 #include "./string_value.h"
 #include "./json_iterator.h"
@@ -12,7 +12,7 @@ class JsonObject : public Value {
 private:
     std::string _key;
     Value * _string_value;
-    std::unordered_map<std::string, Value *> _myMap;
+    std::map<std::string, Value *> _myMap;
 
 public:
 class JsonObjectIterator : public JsonIterator {
@@ -43,8 +43,8 @@ class JsonObjectIterator : public JsonIterator {
         };
 
     private:
-        std::unordered_map<std::string, Value *> _itMap;
-        std::unordered_map<std::string, Value *>::iterator it;
+        std::map<std::string, Value *> _itMap;
+        std::map<std::string, Value *>::iterator it;
 };
 
     JsonObject(){};
