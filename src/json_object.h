@@ -89,7 +89,7 @@ class JsonObjectIterator : public JsonIterator {
                 return it->currentValue();
             }
         }
-        return nullptr;
+        throw "no~!";
     }
 
     void accept(JsonVisitor * visitor) override {
