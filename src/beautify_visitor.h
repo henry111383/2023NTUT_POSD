@@ -25,11 +25,11 @@ public:
     };
 
     std::string getResult() const {
-        _result += "\n}"; 
-        std::cout<<_result;
-        return _result;
-    };
 
+        std::cout<<_result;
+        return _result + "\n}";
+    };
+    
 private:
     std::string _result = "{\n";
     std::string _blank="";
