@@ -12,9 +12,10 @@ class JsonObject : public Value {
 private:
     std::string _key;
     Value * _string_value;
-    std::map<std::string, Value *> _myMap;
+    
 
 public:
+std::map<std::string, Value *> _myMap;
 class JsonObjectIterator : public JsonIterator {
 
     public:

@@ -5,19 +5,31 @@
 
 class BeautifyVisitor : public JsonVisitor {
 public:
+
     void visitJsonObject(JsonObject * obj){
-        std::string tmp;
+        std::string _result;
         auto it = obj->createIterator();
-        for(it->first(); !it->isDone(); it->next()){
-            _blank += "    ";
-            tmp += _blank;
-            tmp += "\"";
-            tmp += it->currentKey();
-            tmp += "\"";
-            tmp += ":";
-            tmp += it->currentValue()->toString();
+        _result += "{";
+        for(it->first(); !it->isDone(); it->next()) {
+            _result += "\n";
+            _result += _blank;
+            _result += "\"";
+            _result += it->currentKey();
+            _result += "\"";
+            _result += ":";
+            StringValue * isStringValue = dynamic_cast<StringValue*>(it->currentValue());
+            if(isStringValue){
+                _result += it->currentValue()->toString();
+            }
+            else{
+                it->currentValue()->accept(this);
+            }
+            _result += ",";
         }
-        _result += tmp;
+        std::size_t found = _result.find_last_of(",");
+        _result = _result.substr(0,found);
+        _result += "\n";
+        _result += "}";
     };
 
     void visitStringValue(StringValue * val){
@@ -29,7 +41,7 @@ public:
         std::cout<<_result;
         return _result + "\n}";
     };
-    
+
 private:
     std::string _result = "{\n";
     std::string _blank="";
