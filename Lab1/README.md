@@ -18,7 +18,7 @@
 
 ## Assignment 3
 
-### Due: Nov 15 Wed 23:59
+### Due: Nov 7 Wed 23:59
 
 ### Notice
 

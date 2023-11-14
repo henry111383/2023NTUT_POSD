@@ -1,15 +1,33 @@
 .PHONY: clean dirs
 
-UT_ALL = test/ut_all.cpp
-TEST_HEADERS = test/json_test.h test/beautify_visitor_test.h \
-				test/builder_test.h
+CFLAGS = -std=c++11 -Wfatal-errors -Wall 
+LIBS = -lgtest -lpthread
 
-SRC_HEADERS = src/json_object.h src/value.h src/string_value.h src/json_iterator.h src/visitor.h src/beautify_visitor.h src/json_parser.h src/json_scanner.h src/json_builder.h
+
+UT_ALL = test/ut_all.cpp
+
+TEST_HEADERS = test/ut_node.h \
+				test/ut_file.h \
+				test/ut_folder.h \
+				test/ut_null_iterator.h \
+				test/ut_iterator.h \
+				test/ut_dfs_iterator.h \
+				test/ut_bfs_iterator.h \
+				test/ut_find_by_name_visitor.h \
+				test/ut_stream_out_visitor.h
+
+SRC_HEADERS = src/node.h \
+				src/folder.h \
+				src/null_iterator.h \
+				src/iterator.h \
+				src/dfs_iterator.h \
+				src/find_by_name_visitor.h \
+				src/stream_out_visitor.h
 
 all: dirs bin/ut_all
 
-bin/ut_all: $(UT_ALL) $(TEST_HEADERS) $(SRC_HEADERS)
-	g++ -std=c++11 -Wfatal-errors -Wall -o bin/ut_all $(UT_ALL) -lgtest -lpthread
+bin/ut_all: $(UT_ALL) $(TEST_HEADERS) $(SRC_HEADERS) 
+	g++ $(CFLAGS) -o $@ $<  $(LIBS)
 
 clean:
 	rm -rf bin obj
@@ -22,4 +40,3 @@ valgrind: clean all
 	--tool=memcheck --error-exitcode=1 --track-origins=yes --leak-check=full --leak-resolution=high \
 	--num-callers=50 --show-leak-kinds=definite,possible --show-error-list=yes \
 	bin/ut_all 
-
