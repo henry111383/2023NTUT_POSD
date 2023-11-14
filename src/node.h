@@ -4,6 +4,7 @@
 #include "iterator.h"
 #include "visitor.h"
 #include "null_iterator.h"
+#include "order_by.h"
 
 using namespace std;
 
@@ -52,6 +53,9 @@ public:
     virtual Iterator * createIterator() {
         return new NullIterator();
     }
+    virtual Iterator * createIterator(OrderBy orderby) {
+        return new NullIterator();
+    }
 
     virtual Node * find(string path) = 0;
 
@@ -62,4 +66,8 @@ public:
     }
 
     virtual void accept(Visitor * visitor) = 0;
+
+    std::string nodetype;
+
+    std::string extensionName;
 };

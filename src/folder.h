@@ -2,10 +2,17 @@
 
 #include <list>
 #include <sys/stat.h>
+#include <algorithm>
 #include "node.h"
 #include "iterator.h"
+#include "order_by.h"
 
 using namespace std;
+
+// bool compareName(const Node* &node1, const Node* &node2){
+//     return (node1->name().front()) > (node2->name().front());
+// }
+
 
 class Folder: public Node {
 private:
@@ -20,6 +27,8 @@ protected:
 
 public:
     Folder(string path): Node(path) {
+        nodetype = "folder";
+        extensionName = "folder";
         struct stat fileInfo;
         const char *c = path.c_str();
         if(lstat(c, &fileInfo) == 0){
@@ -61,6 +70,25 @@ public:
 
     Iterator * createIterator() override {
         return new FolderIterator(this, _operationCount);
+    }
+
+    Iterator * createIterator(OrderBy orderBy) override {
+        if(orderBy == OrderBy::Normal){
+            return new FolderIterator(this, _operationCount);
+        }
+
+        if(orderBy == OrderBy::Name){
+            return new OrderByNameIterator(this, _operationCount);
+        }
+        if(orderBy == OrderBy::NameWithFolderFirst){
+            return new OrderByNameWithFolderFirstIterator(this, _operationCount);
+        }
+        if(orderBy == OrderBy::Kind){
+            return new OrderByKindIterator(this, _operationCount);
+        }
+        else {
+            throw "error";
+        }
     }
 
     Node * find(string path) override {
@@ -111,6 +139,7 @@ public:
         visitor->visitFolder(this);
     }
 
+// =============== FolderIterator ===============
     class FolderIterator : public Iterator {
     public:
         FolderIterator(Folder* composite, int operationCount) : _host(composite), _operationCount(operationCount)  {}
@@ -147,15 +176,167 @@ public:
         }
     };
 
+// =============== OrderByNameIterator ===============
     class OrderByNameIterator: public Iterator {
-    
-    };
+    public:
+        OrderByNameIterator(Folder* composite, int operationCount) : _host(composite), _operationCount(operationCount)  {
+            
+            // 複製一個新子節點list
+            std::copy(_host->_nodes.begin(), _host->_nodes.end(), std::back_inserter(_new_nodes));
+            
+            // sort
+            _new_nodes.sort([](const Node* node1, const Node* node2){
+                return (node1->name()) < (node2->name());
+            });
 
+            // test
+            // for(auto it : _new_nodes){
+            //     std::cout << it->name() << " && " << it->nodetype <<std::endl;
+            // }
+        }
+        
+        ~OrderByNameIterator() {}
+
+        void first() {
+            checkAvailable();
+            _current = _new_nodes.begin();
+        }
+
+        Node * currentItem() const {
+            return *_current;
+        }
+
+        void next() {
+            checkAvailable();
+            _current++;
+        }
+
+        bool isDone() const {
+            return _current == _new_nodes.end();
+        }
+    private:
+        Folder* const _host;
+        list<Node *> _new_nodes;
+        std::list<Node *>::iterator _current;
+        int _operationCount;
+
+
+        void checkAvailable() const {
+            if(_host->_operationCount != _operationCount) {
+                throw "Iterator Not Avaliable";
+            }
+        }
+    };  
+
+
+// =============== OrderByNameWithFolderFirstIterator ===============
     class OrderByNameWithFolderFirstIterator: public Iterator {
-    
+    public:
+        OrderByNameWithFolderFirstIterator(Folder* composite, int operationCount) : _host(composite), _operationCount(operationCount)  {
+            
+            // 複製一個新子節點list
+            std::copy(_host->_nodes.begin(), _host->_nodes.end(), std::back_inserter(_new_nodes));
+            
+            // sort
+            _new_nodes.sort([](const Node* node1, const Node* node2){
+                return (node1->name()) < (node2->name());
+            });
+            _new_nodes.sort([](const Node* node1, const Node* node2){
+                return (node1->nodetype) > (node2->nodetype);
+            });
+
+            // test
+            // for(auto it : _new_nodes){
+            //     std::cout << it->name() << " && " << it->nodetype <<std::endl;
+            // }
+        }
+        
+        ~OrderByNameWithFolderFirstIterator() {}
+
+        void first() {
+            checkAvailable();
+            _current = _new_nodes.begin();
+        }
+
+        Node * currentItem() const {
+            return *_current;
+        }
+
+        void next() {
+            checkAvailable();
+            _current++;
+        }
+
+        bool isDone() const {
+            return _current == _new_nodes.end();
+        }
+    private:
+        Folder* const _host;
+        list<Node *> _new_nodes;
+        std::list<Node *>::iterator _current;
+        int _operationCount;
+
+
+        void checkAvailable() const {
+            if(_host->_operationCount != _operationCount) {
+                throw "Iterator Not Avaliable";
+            }
+        }
     };
 
+
+// =============== OrderByKindIterator ===============
     class OrderByKindIterator: public Iterator {
-    
+    public:
+        OrderByKindIterator(Folder* composite, int operationCount) : _host(composite), _operationCount(operationCount)  {
+            
+            // 複製一個新子節點list
+            std::copy(_host->_nodes.begin(), _host->_nodes.end(), std::back_inserter(_new_nodes));
+            
+            // sort
+            _new_nodes.sort([](const Node* node1, const Node* node2){
+                return (node1->name()) < (node2->name());
+            });
+            _new_nodes.sort([](const Node* node1, const Node* node2){
+                return (node1->extensionName) < (node2->extensionName);
+            });
+
+            // test
+            // for(auto it : _new_nodes){
+            //     std::cout << it->name() << " && " << it->extensionName <<std::endl;
+            // }
+        }
+        
+        ~OrderByKindIterator() {}
+
+        void first() {
+            checkAvailable();
+            _current = _new_nodes.begin();
+        }
+
+        Node * currentItem() const {
+            return *_current;
+        }
+
+        void next() {
+            checkAvailable();
+            _current++;
+        }
+
+        bool isDone() const {
+            return _current == _new_nodes.end();
+        }
+    private:
+        Folder* const _host;
+        list<Node *> _new_nodes;
+        std::list<Node *>::iterator _current;
+        int _operationCount;
+
+
+        void checkAvailable() const {
+            if(_host->_operationCount != _operationCount) {
+                throw "Iterator Not Avaliable";
+            }
+        }
     };
 };

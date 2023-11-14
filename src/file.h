@@ -2,10 +2,19 @@
 
 #include "node.h"
 #include "visitor.h"
+#include <sys/stat.h>
 
 class File: public Node {
 public:
     File(string path): Node(path) {
+        nodetype = "file";
+        auto slash = path.find_last_of(".");
+        if(slash==std::string::npos){
+            extensionName = "file";
+        } else {
+            extensionName = path.substr(slash+1);
+        }
+        
         struct stat fileInfo;
         const char *c = path.c_str();
         if(lstat(c, &fileInfo) == 0){
