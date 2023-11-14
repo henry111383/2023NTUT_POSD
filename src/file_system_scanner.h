@@ -1,20 +1,47 @@
 #pragma once
 
 #include <string>
+#include <dirent.h>
 
 using std::string;
 
 class FileSystemScanner {
 public:
-    bool isFile();
+    FileSystemScanner(){};
+    ~FileSystemScanner(){
+        closedir(dir);
+    };
+    
+    bool isFile(){
+        return entry->d_type == DT_REG;
+    };
 
-    bool isFolder();
+    bool isFolder(){
+        return entry->d_type == DT_DIR;
+    };
 
-    bool isDone();
+    bool isDone(){
+        return entry == NULL;
+    };
 
-    void setPath(string path);
+    void setPath(string path){
+        _path = path;
+        dir = opendir(path.c_str());
+        nextNode(); // .
+        nextNode(); // ..
 
-    string currentNodeName();
+    };
 
-    void nextNode();
+    string currentNodeName(){
+        return entry->d_name;
+    };
+
+    void nextNode(){
+        entry = readdir(dir);
+    };
+
+private:
+    std::string _path;
+    DIR *dir;
+    struct dirent* entry;
 };

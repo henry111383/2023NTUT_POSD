@@ -3,9 +3,10 @@
 #include "../src/folder.h"
 #include "../src/iterator.h"
 #include "../src/null_iterator.h"
+#include "../src/tree_visitor.h"
 #include <gtest/gtest.h>
 
-class OrderByNameIteratorTest : public ::testing::Test
+class TreeVisitorTest : public ::testing::Test
 {
 protected:
     Folder *home, *Documents, *Downloads, *programming;
@@ -66,20 +67,38 @@ protected:
     }
 };
 
-TEST_F(OrderByNameIteratorTest, OrderByNameTest)
+TEST_F(TreeVisitorTest, OrderByNormalTest)
 {
-    Iterator* it = home->createIterator(OrderBy::Name);
-    delete it;
+    TreeVisitor *visitor = new TreeVisitor(OrderBy::Normal);
+    visitor->visitFolder(home);
+    std::string res = visitor->getTree();
+    std::cout << res <<std::endl;
+    delete visitor;
 }
 
-TEST_F(OrderByNameIteratorTest, OrderByNameWithFolderFirstTest)
+TEST_F(TreeVisitorTest, OrderByNameTest)
 {
-    Iterator* it = home->createIterator(OrderBy::NameWithFolderFirst);
-    delete it;
+    TreeVisitor *visitor = new TreeVisitor(OrderBy::Name);
+    visitor->visitFolder(home);
+    std::string res = visitor->getTree();
+    std::cout << res <<std::endl;
+    delete visitor;
 }
 
-TEST_F(OrderByNameIteratorTest, OrderByKindIteratorTest)
+TEST_F(TreeVisitorTest, OrderByNameWithFolderFirstTest)
 {
-    Iterator* it = home->createIterator(OrderBy::Kind);
-    delete it;
+    TreeVisitor *visitor = new TreeVisitor(OrderBy::NameWithFolderFirst);
+    visitor->visitFolder(home);
+    std::string res = visitor->getTree();
+    std::cout << res <<std::endl;
+    delete visitor;
+}
+
+TEST_F(TreeVisitorTest, OrderByKindTest)
+{
+    TreeVisitor *visitor = new TreeVisitor(OrderBy::Kind);
+    visitor->visitFolder(home);
+    std::string res = visitor->getTree();
+    std::cout << res <<std::endl;
+    delete visitor;
 }

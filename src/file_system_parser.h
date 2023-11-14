@@ -19,5 +19,12 @@ public:
 
     void parse();
 
-    void setPath(string path);
+    void setPath(string path){
+        _path = path;
+    };
+
+private:
+    std::string _path;
+    FileSystemScanner _scanner;
+    FileSystemBuilder _builder;
 };

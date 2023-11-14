@@ -1,6 +1,9 @@
 #pragma once
 
 #include <string>
+#include <list>
+#include <stack>
+
 
 #include "folder.h"
 
@@ -8,11 +11,36 @@ using std::string;
 
 class FileSystemBuilder {
 public:
-    Folder * getRoot() const;
+    Folder * getRoot() const{
+        return _files.back();
+    };
 
-    void buildFile(string path);
+    void buildFile(string path){
+        Node *file = new File(path);
+        if(_folders.empty()){
+            _files.push_back(file);
+        } else {
+            _folders.top()->add(file);
+        }
+    };
 
-    void buildFolder(string path);
+    void buildFolder(string path){
+        _folders.push(new Folder(path));
+    };
 
-    void endFolder();
+    void endFolder(){
+        if(!_folders.empty()){
+            Node *file = _folders.top();
+            _folders.pop();
+            if(_folders.empty()){
+                _files.push_back(file);
+            } else {
+                _folders.top()->add(file);
+            }
+        }
+    };
+
+private:
+    std::list<Node *> _files;
+    std::stack<Folder *> _folders;
 };
