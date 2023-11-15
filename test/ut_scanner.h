@@ -1,63 +1,58 @@
 #include "../src/file_system_scanner.h"
 #include <gtest/gtest.h>
+#include <set>
 
-TEST(ScannerTest, OK){
+TEST(ScannerTest, ScannerShouldbeCorrectlyBuilt){
+    FileSystemScanner *scanner;
+    ASSERT_NO_THROW(scanner = new FileSystemScanner());
+    delete scanner;
+}
+
+TEST(ScannerTest, ScannerSetPathShouldNotThrow){
+    FileSystemScanner *scanner;
+    ASSERT_NO_THROW(scanner = new FileSystemScanner());
+    ASSERT_NO_THROW(scanner->setPath("structure/home"));
+    delete scanner;
+}
+
+TEST(ScannerTest, ScannerNextNodeShouldNotThrow){
+    FileSystemScanner *scanner;
+    ASSERT_NO_THROW(scanner = new FileSystemScanner());
+    ASSERT_NO_THROW(scanner->setPath("structure/home"));
+    ASSERT_NO_THROW(scanner->nextNode());
+    delete scanner;
+}
+
+
+TEST(ScannerTest, ScannerAllShouldbeCorrectlyBuilt){
     std::string name;
     FileSystemScanner *scanner = new FileSystemScanner();
     ASSERT_NO_THROW(scanner->setPath("structure/home"));
 
-    // std::cout << scanner->isDone() << std::endl;
+    std::set<std::string> expected;
+    std::set<std::string> res;
+    std::set<std::string>::iterator it_expected;
+    std::set<std::string>::iterator it_res;
+
+    expected.insert(".");
+    expected.insert("..");
+    expected.insert("Documents");
+    expected.insert("Downloads");
+    expected.insert("hello.txt");
+    expected.insert("my_profile");
+
+    
     scanner->nextNode();
     while(!scanner->isDone()){
         name = scanner->currentNodeName();
-        std::cout << name << std::endl;
+        // std::cout << name << std::endl;
+        res.insert(name);
         scanner->nextNode();
     }
-    // ASSERT_NO_THROW(scanner->nextNode());
-    // ASSERT_FALSE(scanner->isDone());
-    // ASSERT_NO_THROW(name = scanner->currentNodeName());
-    // ASSERT_EQ(name, ".");
-    // ASSERT_FALSE(scanner->isFile());
-    // ASSERT_TRUE(scanner->isFolder());
-
-    // ASSERT_NO_THROW(scanner->nextNode());
-    // ASSERT_FALSE(scanner->isDone());
-    // ASSERT_NO_THROW(name = scanner->currentNodeName());
-    // ASSERT_EQ(name, "..");
-    // ASSERT_FALSE(scanner->isFile());
-    // ASSERT_TRUE(scanner->isFolder());
-
-    // ASSERT_NO_THROW(scanner->nextNode());
-    // ASSERT_FALSE(scanner->isDone());
-    // ASSERT_NO_THROW(name = scanner->currentNodeName());
-    // ASSERT_EQ(name, "Documents");
-    // ASSERT_FALSE(scanner->isFile());
-    // ASSERT_TRUE(scanner->isFolder());
-
-    // ASSERT_NO_THROW(scanner->nextNode());
-    // ASSERT_FALSE(scanner->isDone());
-    // ASSERT_NO_THROW(name = scanner->currentNodeName());
-    // ASSERT_EQ(name, "Downloads");
-    // ASSERT_FALSE(scanner->isFile());
-    // ASSERT_TRUE(scanner->isFolder());
-
-    // ASSERT_NO_THROW(scanner->nextNode());
-    // ASSERT_FALSE(scanner->isDone());
-    // ASSERT_NO_THROW(name = scanner->currentNodeName());
-    // ASSERT_EQ(name, "hello.txt");
-    // ASSERT_TRUE(scanner->isFile());
-    // ASSERT_FALSE(scanner->isFolder());
-
     
-    // ASSERT_NO_THROW(scanner->nextNode());
-    // ASSERT_FALSE(scanner->isDone());
-    // ASSERT_NO_THROW(name = scanner->currentNodeName());
-    // ASSERT_EQ(name, "my_profile");
-    // ASSERT_TRUE(scanner->isFile());
-    // ASSERT_FALSE(scanner->isFolder());
-
-    // ASSERT_NO_THROW(scanner->nextNode());
-    // ASSERT_TRUE(scanner->isDone());
+    for(it_expected=expected.begin(), it_res=res.begin(); it_expected!=expected.end(); it_expected++, it_res++){
+        ASSERT_EQ(*it_res, *it_expected);
+    }
 
     delete scanner;
 }

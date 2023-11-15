@@ -9,7 +9,10 @@ class FileSystemScanner {
 public:
     FileSystemScanner(){};
     ~FileSystemScanner(){
-        closedir(dir);
+        if(dir!=nullptr){
+            closedir(dir);
+        }
+        
     };
 
     bool isFile(){
@@ -40,6 +43,6 @@ public:
 
 private:
     std::string _path;
-    DIR *dir;
+    DIR *dir = nullptr;
     struct dirent* entry;
 };

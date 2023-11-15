@@ -67,30 +67,109 @@ protected:
     }
 };
 
-TEST_F(TreeVisitorTest, OrderByNormalTest)
+TEST_F(TreeVisitorTest, TreeVisitorByNormalShouldbeCorrectlyBuilt)
+{
+    TreeVisitor *visitor;
+    ASSERT_NO_THROW(visitor = new TreeVisitor(OrderBy::Normal));
+    delete visitor;
+}
+
+TEST_F(TreeVisitorTest, TreeVisitorByNameShouldbeCorrectlyBuilt)
+{
+    TreeVisitor *visitor;
+    ASSERT_NO_THROW(visitor = new TreeVisitor(OrderBy::Name));
+    delete visitor;
+}
+
+TEST_F(TreeVisitorTest, TreeVisitorByNameWithFolderFirstShouldbeCorrectlyBuilt)
+{
+    TreeVisitor *visitor;
+    ASSERT_NO_THROW(visitor = new TreeVisitor(OrderBy::NameWithFolderFirst));
+    delete visitor;
+}
+
+TEST_F(TreeVisitorTest, TreeVisitorByKindShouldbeCorrectlyBuilt)
+{
+    TreeVisitor *visitor;
+    ASSERT_NO_THROW(visitor = new TreeVisitor(OrderBy::Kind));
+    delete visitor;
+}
+
+TEST_F(TreeVisitorTest, TreeVisitorByNormalAllShouldbeCorrect)
 {
     TreeVisitor *visitor = new TreeVisitor(OrderBy::Normal);
     visitor->visitFolder(home);
     std::string res = visitor->getTree();
-    std::cout << res <<std::endl;
+    std::string expected;
+    expected += ".\n";
+    expected += "├── Documents\n";
+    expected += "│   ├── clean-architecture.pdf\n";
+    expected += "│   ├── domain-driven-design.pub\n";
+    expected += "│   ├── hello.txt\n";
+    expected += "│   ├── note.txt\n";
+    expected += "│   ├── object-oriented-analysis-and-design.pdf\n";
+    expected += "│   └── programming\n";
+    expected += "│       ├── cpp.pub\n";
+    expected += "│       ├── oop.pdf\n";
+    expected += "│       └── python.pub\n";
+    expected += "├── Downloads\n";
+    expected += "│   └── funny.png\n";
+    expected += "├── hello.txt\n";
+    expected += "└── my_profile\n";
+    // std::cout << res <<std::endl;
+    ASSERT_EQ(res, expected);
     delete visitor;
 }
 
-TEST_F(TreeVisitorTest, OrderByNameTest)
+TEST_F(TreeVisitorTest, TreeVisitorByNameAllShouldbeCorrect)
 {
     TreeVisitor *visitor = new TreeVisitor(OrderBy::Name);
     visitor->visitFolder(home);
     std::string res = visitor->getTree();
-    std::cout << res <<std::endl;
+    std::string expected;
+    expected += ".\n";
+    expected += "├── Documents\n";
+    expected += "│   ├── clean-architecture.pdf\n";
+    expected += "│   ├── domain-driven-design.pub\n";
+    expected += "│   ├── hello.txt\n";
+    expected += "│   ├── note.txt\n";
+    expected += "│   ├── object-oriented-analysis-and-design.pdf\n";
+    expected += "│   └── programming\n";
+    expected += "│       ├── cpp.pub\n";
+    expected += "│       ├── oop.pdf\n";
+    expected += "│       └── python.pub\n";
+    expected += "├── Downloads\n";
+    expected += "│   └── funny.png\n";
+    expected += "├── hello.txt\n";
+    expected += "└── my_profile\n";
+    // std::cout << res <<std::endl;
+    ASSERT_EQ(res, expected);
     delete visitor;
 }
 
-TEST_F(TreeVisitorTest, OrderByNameWithFolderFirstTest)
+TEST_F(TreeVisitorTest, TreeVisitorByNameWithFolderFirstAllShouldbeCorrect)
 {
     TreeVisitor *visitor = new TreeVisitor(OrderBy::NameWithFolderFirst);
     visitor->visitFolder(home);
     std::string res = visitor->getTree();
-    std::cout << res <<std::endl;
+    std::string expected;
+    expected += ".\n";
+    expected += "├── Documents\n";
+    expected += "│   ├── programming\n";
+    expected += "│   │   ├── cpp.pub\n";
+    expected += "│   │   ├── oop.pdf\n";
+    expected += "│   │   └── python.pub\n";
+    expected += "│   ├── clean-architecture.pdf\n";
+    expected += "│   ├── domain-driven-design.pub\n";
+    expected += "│   ├── hello.txt\n";
+    expected += "│   ├── note.txt\n";
+    expected += "│   └── object-oriented-analysis-and-design.pdf\n";
+    expected += "├── Downloads\n";
+    expected += "│   └── funny.png\n";
+    expected += "├── hello.txt\n";
+    expected += "└── my_profile\n";
+    // std::cout << res <<std::endl;
+    ASSERT_EQ(res, expected);
     delete visitor;
 }
 
@@ -99,6 +178,23 @@ TEST_F(TreeVisitorTest, OrderByKindTest)
     TreeVisitor *visitor = new TreeVisitor(OrderBy::Kind);
     visitor->visitFolder(home);
     std::string res = visitor->getTree();
-    std::cout << res <<std::endl;
+    std::string expected;
+    expected += ".\n";
+    expected += "├── my_profile\n";
+    expected += "├── Documents\n";
+    expected += "│   ├── programming\n";
+    expected += "│   │   ├── oop.pdf\n";
+    expected += "│   │   ├── cpp.pub\n";
+    expected += "│   │   └── python.pub\n";
+    expected += "│   ├── clean-architecture.pdf\n";
+    expected += "│   ├── object-oriented-analysis-and-design.pdf\n";
+    expected += "│   ├── domain-driven-design.pub\n";
+    expected += "│   ├── hello.txt\n";
+    expected += "│   └── note.txt\n";
+    expected += "├── Downloads\n";
+    expected += "│   └── funny.png\n";
+    expected += "└── hello.txt\n";
+    // std::cout << res <<std::endl;
+    ASSERT_EQ(res, expected);
     delete visitor;
 }
