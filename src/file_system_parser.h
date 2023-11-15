@@ -31,25 +31,31 @@ public:
         while(!_scanner->isDone()){
             std::string name = _scanner->currentNodeName();
 
-            if(name == ".") continue;
-            if(name == "..") continue;
+            if(name == ".") {
+                _scanner->nextNode();
+                continue;
+            }
+            if(name == "..") {
+                _scanner->nextNode();
+                continue;
+            }
 
             if(_scanner->isFile()){
                 _builder->buildFile((_path + "/" + name));
-                std::cout << (_path + "/" + name) << std::endl;
             }
             else if(_scanner->isFolder()){
-                _builder->buildFolder((_path + "/" + name));
                 FileSystemParser *parser = new FileSystemParser(_builder);
                 parser->setPath((_path + "/" + name));
-                std::cout << (_path + "/" + name) << std::endl;
                 parser->parse();
                 delete parser;
+
+                _builder->endFolder();
+                std::cout << "endFolder~!!!" << std::endl;
+                
             }
-            
+
             _scanner->nextNode();
         }
-        _builder->endFolder();
 
         delete _scanner;
     };
