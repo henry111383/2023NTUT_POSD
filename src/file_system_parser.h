@@ -24,6 +24,8 @@ public:
     };
 
     void parse(){
+        _builder->buildFolder(_path);
+
         FileSystemScanner *_scanner = new FileSystemScanner();
         _scanner->setPath(_path);
         
@@ -48,8 +50,6 @@ public:
                 parser->setPath((_path + "/" + name));
                 parser->parse();
                 delete parser;
-
-                _builder->endFolder();
                 std::cout << "endFolder~!!!" << std::endl;
                 
             }
@@ -63,7 +63,7 @@ public:
 
     void setPath(string path){
         _path = path;
-        _builder->buildFolder(_path);
+        
     };
 
 private:
