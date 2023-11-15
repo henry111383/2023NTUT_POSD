@@ -15,46 +15,15 @@ public:
     ~TreeVisitor(){};
 
     void visitFile(File * file) override {
-        //
-        for(int j=0; j<level; j++){
-            if(j==(level-1)){
-                MyResult += opening;
-                MyResult += "── ";
-            }
-            else{
-                if(!levelisDone[j]){
-                MyResult += "│   ";
-                }
-                else{
-                    MyResult += "    "; 
-                }
-            }  
-        }
-        //
+        addOpening();
         MyResult += file->name();
         MyResult += '\n';
     };
 
     void visitFolder(Folder * folder) override {
-        //
-        for(int j=0; j<level; j++){
-            if(j==(level-1)){
-                MyResult += opening;
-                MyResult += "── ";
-            }
-            else{
-                if(!levelisDone[j]){
-                MyResult += "│   ";
-                }
-                else{
-                    MyResult += "    "; 
-                }
-            }  
-        }
-        //
+        addOpening();
         MyResult += folder->name();
         MyResult += '\n';
-
         level++;
         levelisDone.push_back(false);
         Iterator *it = folder->createIterator(_orderBy);
@@ -68,10 +37,8 @@ public:
                 // MyResult += "endChild\n";
             }
             tmp -> accept(this);
-            
         }
         delete it;
-        
         level--;
     };
 
@@ -88,4 +55,21 @@ private:
     std::string opening;
     int level = 0;
     std::vector<bool> levelisDone;
+
+    void addOpening(){
+        for(int j=0; j<level; j++){
+            if(j==(level-1)){
+                MyResult += opening;
+                MyResult += "── ";
+            }
+            else{
+                if(!levelisDone[j]){
+                MyResult += "│   ";
+                }
+                else{
+                    MyResult += "    "; 
+                }
+            }  
+        }
+    }
 };
