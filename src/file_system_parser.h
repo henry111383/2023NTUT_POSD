@@ -53,9 +53,10 @@ public:
                 std::cout << "endFolder~!!!" << std::endl;
                 
             }
-
+        
             _scanner->nextNode();
         }
+        _builder->endFolder();
 
         delete _scanner;
     };
