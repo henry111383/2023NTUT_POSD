@@ -13,18 +13,48 @@ private:
 
 
 public:
-    FileSystemParser(FileSystemBuilder * builder): _builder(builder);
+    FileSystemParser(FileSystemBuilder * builder): _builder(builder){
+        
+    };
 
-    Folder * getRoot() const;
+    ~FileSystemParser(){};
 
-    void parse();
+    Folder * getRoot() const {
+        return _builder->getRoot();
+    };
+
+    void parse(){
+        FileSystemScanner *_scanner = new FileSystemScanner();
+        _scanner->setPath(_path);
+        _scanner->nextNode(); // .
+        _scanner->nextNode(); // ..
+        
+
+        while(!_scanner->isDone()){
+            _scanner->nextNode();
+            std::string name = _scanner->currentNodeName();
+            if(_scanner->isFile()){
+                _builder->buildFile((_path + "/" + name));
+            }
+            else if(_scanner->isFolder()){
+                FileSystemParser *parser = new FileSystemParser(_builder);
+                parser->setPath((_path + "/" + name));
+                parser->parse();
+                delete parser;
+            }
+        }
+        _builder->endFolder();
+
+        delete _scanner;
+    };
 
     void setPath(string path){
         _path = path;
+        _builder->buildFolder(_path);
     };
 
 private:
     std::string _path;
-    FileSystemScanner _scanner;
-    FileSystemBuilder _builder;
+    FileSystemScanner *_scanner;
+    FileSystemBuilder *_builder;
 };

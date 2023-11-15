@@ -11,7 +11,7 @@ public:
     ~FileSystemScanner(){
         closedir(dir);
     };
-    
+
     bool isFile(){
         return entry->d_type == DT_REG;
     };
@@ -27,8 +27,6 @@ public:
     void setPath(string path){
         _path = path;
         dir = opendir(path.c_str());
-        nextNode(); // .
-        nextNode(); // ..
 
     };
 

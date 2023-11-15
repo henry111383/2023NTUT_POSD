@@ -18,7 +18,8 @@ TEST_HEADERS = test/ut_node.h \
 				test/ut_order_by_name_iterator.h \
 				test/ut_tree_visitor.h \
 				test/ut_scanner.h \
-				test/ut_builder.h
+				test/ut_builder.h \
+				test/ut_parser.h
 
 SRC_HEADERS = src/node.h \
 				src/folder.h \
@@ -29,7 +30,8 @@ SRC_HEADERS = src/node.h \
 				src/stream_out_visitor.h \
 				src/tree_visitor.h \
 				src/file_system_scanner.h \
-				src/file_system_builder.h
+				src/file_system_builder.h \
+				src/file_system_parser.h
 
 
 all: dirs bin/ut_all

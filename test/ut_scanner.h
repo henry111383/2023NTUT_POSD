@@ -6,6 +6,22 @@ TEST(ScannerTest, OK){
     FileSystemScanner *scanner = new FileSystemScanner();
     ASSERT_NO_THROW(scanner->setPath("structure/home"));
 
+    // std::cout << scanner->isDone() << std::endl;
+
+    ASSERT_NO_THROW(scanner->nextNode());
+    ASSERT_FALSE(scanner->isDone());
+    ASSERT_NO_THROW(name = scanner->currentNodeName());
+    ASSERT_EQ(name, ".");
+    ASSERT_FALSE(scanner->isFile());
+    ASSERT_TRUE(scanner->isFolder());
+
+    ASSERT_NO_THROW(scanner->nextNode());
+    ASSERT_FALSE(scanner->isDone());
+    ASSERT_NO_THROW(name = scanner->currentNodeName());
+    ASSERT_EQ(name, "..");
+    ASSERT_FALSE(scanner->isFile());
+    ASSERT_TRUE(scanner->isFolder());
+
     ASSERT_NO_THROW(scanner->nextNode());
     ASSERT_FALSE(scanner->isDone());
     ASSERT_NO_THROW(name = scanner->currentNodeName());

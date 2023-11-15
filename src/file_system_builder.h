@@ -12,7 +12,7 @@ using std::string;
 class FileSystemBuilder {
 public:
     Folder * getRoot() const{
-        return _files.back();
+        return dynamic_cast<Folder*>(_files.back());
     };
 
     void buildFile(string path){
@@ -30,12 +30,12 @@ public:
 
     void endFolder(){
         if(!_folders.empty()){
-            Node *file = _folders.top();
+            Folder *folder = _folders.top();
             _folders.pop();
             if(_folders.empty()){
-                _files.push_back(file);
+                _files.push_back(folder);
             } else {
-                _folders.top()->add(file);
+                _folders.top()->add(folder);
             }
         }
     };
