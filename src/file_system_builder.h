@@ -12,8 +12,7 @@ using std::string;
 class FileSystemBuilder {
 public:
     Folder * getRoot() const{
-        // return dynamic_cast<Folder*>(_files.back());
-        return nullptr;
+        return dynamic_cast<Folder*>(_files.back());
     };
 
     void buildFile(string path){
