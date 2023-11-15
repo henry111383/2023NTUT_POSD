@@ -15,24 +15,70 @@ public:
     ~TreeVisitor(){};
 
     void visitFile(File * file) override {
+        //
+        for(int j=0; j<level; j++){
+            if(j==(level-1)){
+                MyResult += opening;
+                MyResult += "── ";
+            }
+            else{
+                if(!levelisDone[j]){
+                MyResult += "│   ";
+                }
+                else{
+                    MyResult += "    "; 
+                }
+            }  
+        }
+        //
         MyResult += file->name();
         MyResult += '\n';
     };
 
     void visitFolder(Folder * folder) override {
+        //
+        for(int j=0; j<level; j++){
+            if(j==(level-1)){
+                MyResult += opening;
+                MyResult += "── ";
+            }
+            else{
+                if(!levelisDone[j]){
+                MyResult += "│   ";
+                }
+                else{
+                    MyResult += "    "; 
+                }
+            }  
+        }
+        //
         MyResult += folder->name();
         MyResult += '\n';
 
         level++;
+        levelisDone.push_back(false);
         Iterator *it = folder->createIterator(_orderBy);
-        for(it->first();!it->isDone();it->next()){
-            it->currentItem()->accept(this);
+        for(it->first();!it->isDone();){
+            Node* tmp = it->currentItem();
+            it->next();
+            opening = "├";
+            if(it->isDone()){
+                levelisDone[level-1] = true;
+                opening = "└";
+                // MyResult += "endChild\n";
+            }
+            tmp -> accept(this);
+            
         }
         delete it;
+        
         level--;
     };
 
     std::string getTree(){
+        auto index = MyResult.find_first_of("\n");
+        MyResult.erase(0, index-1);
+        MyResult[0] = '.';
         return MyResult;
     };
 
@@ -41,4 +87,5 @@ private:
     std::string MyResult;
     std::string opening;
     int level = 0;
+    std::vector<bool> levelisDone;
 };

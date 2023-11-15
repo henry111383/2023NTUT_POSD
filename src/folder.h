@@ -27,7 +27,7 @@ protected:
 
 public:
     Folder(string path): Node(path) {
-        std::cout << path << std::endl;
+        // std::cout << path << std::endl;
         nodetype = "folder";
         extensionName = "folder";
         struct stat fileInfo;

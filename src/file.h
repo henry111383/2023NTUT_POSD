@@ -7,7 +7,7 @@
 class File: public Node {
 public:
     File(string path): Node(path) {
-        std::cout << path << std::endl;
+        // std::cout << path << std::endl;
 
         nodetype = "file";
         auto slash = path.find_last_of(".");

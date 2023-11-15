@@ -1,21 +1,13 @@
 #pragma once
-
 #include <string>
-
 #include "folder.h"
 #include "file_system_builder.h"
 #include "file_system_scanner.h"
-
 using std::string;
 
 class FileSystemParser {
-private:
-
-
 public:
-    FileSystemParser(FileSystemBuilder * builder): _builder(builder){
-        
-    };
+    FileSystemParser(FileSystemBuilder * builder): _builder(builder){};
 
     ~FileSystemParser(){};
 
@@ -25,14 +17,11 @@ public:
 
     void parse(){
         _builder->buildFolder(_path);
-
         FileSystemScanner *_scanner = new FileSystemScanner();
         _scanner->setPath(_path);
-        
         _scanner->nextNode();
         while(!_scanner->isDone()){
             std::string name = _scanner->currentNodeName();
-
             if(name == ".") {
                 _scanner->nextNode();
                 continue;
@@ -41,7 +30,6 @@ public:
                 _scanner->nextNode();
                 continue;
             }
-
             if(_scanner->isFile()){
                 _builder->buildFile((_path + "/" + name));
             }
@@ -50,10 +38,8 @@ public:
                 parser->setPath((_path + "/" + name));
                 parser->parse();
                 delete parser;
-                std::cout << "endFolder~!!!" << std::endl;
-                
-            }
-        
+                // std::cout << "endFolder~!!!" << std::endl; 
+            }      
             _scanner->nextNode();
         }
         _builder->endFolder();
