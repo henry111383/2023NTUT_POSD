@@ -33,6 +33,8 @@ public:
         while(!_scanner->isDone()){
             _scanner->nextNode();
             std::string name = _scanner->currentNodeName();
+            if(name == ".") continue;
+            if(name == "..") continue;
             if(_scanner->isFile()){
                 _builder->buildFile((_path + "/" + name));
                 std::cout << (_path + "/" + name) << std::endl;
