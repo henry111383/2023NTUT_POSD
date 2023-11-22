@@ -17,7 +17,7 @@ public:
             if(token == ' ') {
                 continue;
             } else if (token == '{') {
-                _builder->buildObject();
+                _builder->buildObject(key);
             } else if (token == '"') {
                 std::string value;
                 token = _scanner->next();
@@ -35,7 +35,7 @@ public:
                     key = value;
                 }
                 else if(token == ',') {
-                    _builder->buildObject(key);
+                    _builder->buildValue(key, value);
                 } else if (token == '}') {
                     _builder->endObject();
                 }

@@ -13,7 +13,7 @@ public:
     char next() {
         char token;
         ss.get(token);
-
+        // std::cout << token <<std::endl;
         return token;
     }
     

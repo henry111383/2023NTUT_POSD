@@ -1,6 +1,7 @@
 #include "../src/json_object.h"
 #include "../src/string_value.h"
 #include "../src/beautify_visitor.h"
+#include <gtest/gtest.h>
 
 TEST(visitorSuite, visitorTest) {
     JsonObject *json1 = new JsonObject();
@@ -34,6 +35,7 @@ TEST(visitorSuite, visitorTest) {
     expected += "        }\n";
     expected += "    }\n";
     expected += "}";
+    
     std::string res = visitor->getResult();
     // std::cout << std::endl << "---This is result---\n";
     // std::cout << res << std::endl; 

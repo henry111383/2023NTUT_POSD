@@ -15,39 +15,38 @@ public:
         if (_compounds.empty()) {
             _jsons.push_back(tmpJson);
         } else {
-            _compounds.top()->set(key, _value);
+            JsonObject * compound = _compounds.top().second;
+            std::string _key = _compounds.top().first;
+            compound->set(_key, tmpJson);
         }
-        _result = _jsons.front();
-    };
-
-    void buildObject(){
-        _compounds.push(new JsonObject());
+        // _result = _jsons.front();
     };
 
     void buildObject(std::string key){
-        _compounds.push(new JsonObject(key));
+        JsonObject *tmpJson = new JsonObject();
+        _compounds.push(std::make_pair(key, tmpJson));
     };
 
     void endObject(){
         if (!_compounds.empty()) {
-            JsonObject * compound = _compounds.top();
+            JsonObject * compound = _compounds.top().second;
+            std::string _key = _compounds.top().first;
             _compounds.pop();
             if (_compounds.empty()) {
                 _jsons.push_back(compound);
             } else {
-                _compounds.top()->set(_compounds.top()->getKey(), compound);
+                _compounds.top().second->set(_key, compound);
             }
-            _result = compound;
         }
-        
     };
 
     JsonObject * getJsonObject(){
+        _result = _jsons.front();
         return _result;
     };
 
 private:
     JsonObject *_result;
     std::list<JsonObject *> _jsons;
-    std::stack<JsonObject *> _compounds;
+    std::stack<std::pair<std::string, JsonObject *>> _compounds;
 };

@@ -49,7 +49,6 @@ class JsonObjectIterator : public JsonIterator {
 };
 
     JsonObject(){};
-    JsonObject(std::string key):_key(key){};
     ~JsonObject(){};
 
     std::string toString() override {
@@ -102,9 +101,6 @@ class JsonObjectIterator : public JsonIterator {
         visitor->visitJsonObject(this);
     }
 
-    std::string getKey(){
-        return _key;
-    }
 };
 
 
