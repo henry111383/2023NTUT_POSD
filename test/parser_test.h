@@ -114,25 +114,20 @@ TEST(ParserTest, ParserAllShouldbeCorrect){
     JsonParser *parser;
     ASSERT_NO_THROW(parser = new JsonParser(scanner, builder));
 
-    // std::string input_str;
-    // input_str += "{\n";
-    // input_str += "    \"books\": {\n";
-    // input_str += "        \"clean code\": {\n";
-    // input_str += "            \"author\": \"Robert C. Martin\",\n";
-    // input_str += "            \"name\": \"Clean Code\"\n";
-    // input_str += "        },\n";
-    // input_str += "        \"design pattern\": {\n";
-    // input_str += "            \"author\": \"Erich Gamma, Richard Helm, Ralph Johnson, John Vlissides\",\n";
-    // input_str += "            \"name\": \"Design Patterns Elements of Reusable Object-Oriented Software\"\n";
-    // input_str += "        }\n";
-    // input_str += "    }\n";
-    // input_str += "}";
-
-    std::string input_str;
-    input_str += "{\"clean code\": {\"author\": \"Robert C. Martin\",\"name\": \"Clean Code\"}}";
+    std::string booksJson = 
+    "{\"books\": {"
+    "\"design pattern\": {"
+    "\"name\": \"Design Patterns: Elements of Reusable Object-Oriented Software\","
+    "\"author\": \"Erich Gamma, Richard Helm, Ralph Johnson, and John Vlissides\""
+    "},"
+    "\"clean code\": {"
+    "\"name\": \"Clean Code\","
+    "\"author\": \"Robert C. Martin\""
+    "}"
+    "}}";
 
 
-    ASSERT_NO_THROW(parser->setInput(input_str));
+    ASSERT_NO_THROW(parser->setInput(booksJson));
     ASSERT_NO_THROW(parser->parse());
     JsonObject *resultJson = parser->getJsonObject();
 
@@ -140,10 +135,24 @@ TEST(ParserTest, ParserAllShouldbeCorrect){
     resultJson->accept(visitor);
     std::string res = visitor->getResult();
 
-    std::cout << std::endl << "---Input---\n" << input_str <<std::endl;
-    std::cout << std::endl << "---This is result---\n";
-    std::cout << res << std::endl; 
-    // ASSERT_EQ(input_str, res);
+    std::string expected;
+    expected += "{\n";
+    expected += "    \"books\": {\n";
+    expected += "        \"clean code\": {\n";
+    expected += "            \"author\": \"Robert C. Martin\",\n";
+    expected += "            \"name\": \"Clean Code\"\n";
+    expected += "        },\n";
+    expected += "        \"design pattern\": {\n";
+    expected += "            \"author\": \"Erich Gamma, Richard Helm, Ralph Johnson, and John Vlissides\",\n";
+    expected += "            \"name\": \"Design Patterns: Elements of Reusable Object-Oriented Software\"\n";
+    expected += "        }\n";
+    expected += "    }\n";
+    expected += "}";
+
+    // std::cout << std::endl << "---Input---\n" << booksJson <<std::endl;
+    // std::cout << std::endl << "---This is result---\n";
+    // std::cout << res << std::endl; 
+    ASSERT_EQ(expected, res);
 
 
     delete builder;

@@ -17,9 +17,7 @@ public:
             if(token == ' ') {
                 continue;
             } else if (token == '{') {
-                if(!key.empty()){
-                    _builder->buildObject(key);
-                }
+                _builder->buildObject(key);
             } else if (token == '"') {
                 std::string value;
                 token = _scanner->next();
@@ -43,6 +41,7 @@ public:
                     std::cout << "now ceate \"" << key << "\"" << value <<std::endl;
                     _builder->buildValue(key, value);
                     _builder->endObject();
+                    continue;
                 }
             }
             else if (token == '}') {
@@ -52,7 +51,8 @@ public:
     }
 
     JsonObject * getJsonObject() {
-        return _builder->getJsonObject();  
+        JsonObject *result = dynamic_cast<JsonObject*>(_builder->getJsonObject()->getValue(""));
+        return result;  
     }
 
     void setInput(std::string input) {
