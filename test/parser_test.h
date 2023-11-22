@@ -148,10 +148,7 @@ TEST(ParserTest, ParserAllShouldbeCorrect){
     expected += "        }\n";
     expected += "    }\n";
     expected += "}";
-
-    // std::cout << std::endl << "---Input---\n" << booksJson <<std::endl;
-    // std::cout << std::endl << "---This is result---\n";
-    // std::cout << res << std::endl; 
+ 
     ASSERT_EQ(expected, res);
 
 
@@ -191,9 +188,6 @@ TEST(ParserTest, ParserSpacesShouldbeCorrect){
     resultJson->accept(visitor);
     std::string res = visitor->getResult();
 
-    // std::cout << std::endl << "---Input---\n" << booksJson <<std::endl;
-    // std::cout << std::endl << "---This is result---\n";
-    // std::cout << res << std::endl; 
     ASSERT_EQ(expected, res);
 
 
