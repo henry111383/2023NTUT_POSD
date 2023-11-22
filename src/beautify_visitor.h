@@ -27,6 +27,7 @@ public:
         _result += "\n";
         addOpening();
         _result += "}";
+        delete it;
     };
 
     void visitStringValue(StringValue * val){

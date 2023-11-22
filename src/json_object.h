@@ -49,7 +49,13 @@ class JsonObjectIterator : public JsonIterator {
 };
 
     JsonObject(){};
-    ~JsonObject(){};
+    ~JsonObject(){
+        JsonIterator *it = this->createIterator();
+        for(it->first(); !it->isDone(); it->next()){
+            delete it->currentValue();
+        }
+        delete it;
+    };
 
     std::string toString() override {
         std::string result;
@@ -64,6 +70,7 @@ class JsonObjectIterator : public JsonIterator {
             result += it->currentValue()->toString();
             result += ",";
         }
+        delete it;
         std::size_t found = result.find_last_of(",");
         result = result.substr(0,found);
         result += "\n";
@@ -91,7 +98,9 @@ class JsonObjectIterator : public JsonIterator {
         for(it->first(); !it->isDone(); it->next())
         {
             if(it->currentKey()==key){
-                return it->currentValue();
+                Value *ans = it->currentValue();
+                delete it;
+                return ans;
             }
         }
         throw "no~!";

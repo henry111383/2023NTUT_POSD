@@ -5,12 +5,16 @@
 
 TEST(visitorSuite, visitorTest) {
     JsonObject *json1 = new JsonObject();
-    json1->set("name", new StringValue("Design Patterns Elements of Reusable Object-Oriented Software"));
-    json1->set("author", new StringValue("Erich Gamma, Richard Helm, Ralph Johnson, John Vlissides"));
+    Value *json1_name = new StringValue("Design Patterns Elements of Reusable Object-Oriented Software");
+    Value *json1_author = new StringValue("Erich Gamma, Richard Helm, Ralph Johnson, John Vlissides");
+    json1->set("name", json1_name);
+    json1->set("author", json1_author);
 
     JsonObject *json2 = new JsonObject();
-    json2->set("name", new StringValue("Clean Code"));
-    json2->set("author", new StringValue("Robert C. Martin"));
+    Value *json2_name = new StringValue("Clean Code");
+    Value *json2_author = new StringValue("Robert C. Martin");
+    json2->set("name", json2_name);
+    json2->set("author", json2_author);
 
     JsonObject *compositeJ = new JsonObject();
     compositeJ ->set("design pattern", json1);
@@ -41,4 +45,13 @@ TEST(visitorSuite, visitorTest) {
     // std::cout << res << std::endl; 
     ASSERT_EQ(expected, res);
 
+    // delete json1;
+    // delete json2;
+    // delete compositeJ;
+    delete total_Json;
+    delete visitor;
+    // delete json1_name;
+    // delete json1_author;
+    // delete json2_name;
+    // delete json2_author;
 }

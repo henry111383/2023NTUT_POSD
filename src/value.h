@@ -7,7 +7,7 @@
 class Value {
 public:
     Value(){};
-    ~Value(){};
+    virtual ~Value(){};
     virtual std::string toString()=0;
     virtual JsonIterator * createIterator()=0;
     virtual void accept(JsonVisitor * visitor)=0;

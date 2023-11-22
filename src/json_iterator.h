@@ -5,6 +5,9 @@ class Value;
 
 class JsonIterator {
 public:
+
+    virtual ~JsonIterator(){};
+
     virtual void first() = 0;
 
     virtual std::string currentKey() const = 0;

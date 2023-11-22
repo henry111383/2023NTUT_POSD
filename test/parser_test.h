@@ -81,6 +81,7 @@ TEST(ParserTest, BuilderAllShouldbeCorrect){
     input_str += "    }\n";
     input_str += "}";
 
+    // builder->buildObject("");
     builder->buildObject("books");
     builder->buildObject("clean code");
     builder->buildValue("name", "Clean Code");
@@ -91,6 +92,7 @@ TEST(ParserTest, BuilderAllShouldbeCorrect){
     builder->buildValue("author", "Erich Gamma, Richard Helm, Ralph Johnson, John Vlissides");
     builder->endObject();
     builder->endObject();
+    // builder->endObject();
 
     JsonObject *resultJson = builder->getJsonObject();
 
@@ -103,8 +105,9 @@ TEST(ParserTest, BuilderAllShouldbeCorrect){
     std::cout << res << std::endl; 
     ASSERT_EQ(input_str, res);
 
-
     delete builder;
+    delete visitor;
+    delete resultJson;
 }
 
 TEST(ParserTest, ParserAllShouldbeCorrect){
@@ -150,9 +153,6 @@ TEST(ParserTest, ParserAllShouldbeCorrect){
     expected += "    }\n";
     expected += "}";
 
-    // std::cout << std::endl << "---Input---\n" << booksJson <<std::endl;
-    // std::cout << std::endl << "---This is result---\n";
-    // std::cout << res << std::endl; 
     ASSERT_EQ(expected, res);
 
 
@@ -198,10 +198,6 @@ TEST(ParserTest, ParserSpacesShouldbeCorrect){
     std::cout << res << std::endl; 
     // ASSERT_EQ(expected, res);
 
-    JsonIterator *it = resultJson->createIterator();
-    for(it->first(); !it->isDone(); it->next()){
-        std::cout << it->currentKey() << ":" << it->currentValue() << std::endl;
-    }
 
     delete builder;
     delete scanner;

@@ -7,18 +7,25 @@
 
 class JsonBuilder {
 public:
+
+    // ~JsonBuilder() {
+    //     for (JsonObject* json : _jsons) {
+    //         delete json;
+    //     }
+    // }
+
     void buildValue(std::string key, std::string value){
-        StringValue *_value = new StringValue(value);
+        Value *_value = new StringValue(value);
         JsonObject *tmpJson = new JsonObject();
         tmpJson->set(key, _value);
         
-        if (_compounds.empty()) {
+        if(_compounds.empty()) {
             _jsons.push_back(tmpJson);
         } else {
             JsonObject * compound = _compounds.top().second;
             compound->set(key, _value);
         }
-        // _result = _jsons.front();
+
     };
 
     void buildObject(std::string key){
@@ -50,6 +57,7 @@ public:
                 break;
             }
         }
+        delete it;
         return _result;
     };
 
