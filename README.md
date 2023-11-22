@@ -1,4 +1,4 @@
-# POSD with C++ (and more)
+# POSD Assignment 4 (Lab 1)
 
 #### FALL, 2023
 
@@ -8,17 +8,20 @@
 
 #### Taipei Tech
 
-### Important Links
+## Lab 1
 
-* [Course Link](http://140.124.181.100/yccheng/posd2023f): http://140.124.181.100/yccheng/posd2023f
+### Deadline : 2023/11/29 23:59
 
-* [Gitlab](http://140.124.181.100): http://140.124.181.100
+### Allowed materials
 
-* [Jenkins](http://140.124.181.97:8080): http://140.124.181.97:8080
-
-## Assignment 3
-
-### Due: Nov 15 Wed 23:59
+- Text book: Design Patterns Elements of Reusable Object-Oriented Software.
+- Lab GitLab: http://140.124.181.100
+- Dictionary: https://dictionary.cambridge.org/zht/
+- CPlusPlus.com: https://cplusplus.com
+- CppReference: https://cppreference.com
+- GoogleTest User Guide: https://google.github.io/googletest/
+- course link: http://140.124.181.100/yccheng/posd2023f
+- jenkins link: http://140.124.181.97:8080
 
 ### Notice
 
@@ -31,112 +34,135 @@
 * The design of your program will be also be graded, please follow the required patterns precisely while writing your program.
 * If your code is not compilable on the Jenkins server, you'll get no point for the assignment.
 
-### Description
-
-In this assignment, you will keep working on the file system. You will know how to apply **Builder** and the combination of **Visitor**, **Iterator**, and **Factory Method** patterns to extend the operation for a **Composite** structure.
-
 ### Problem
 
-In this assignment, you will extend the file system program from assignment 2, please do this assignment based on the [given code](./given_code), which is the suggested answer of assignment 2.
+In this lab test, you are going to implement a simplified JSON format beautifier.
+Enclosed by a pair of curly brackets `{` and `}`, a JSON object contains a set of comma-separated key-value pairs, where the key is a string and the value is either a string or a JSON object. Here is an example of a JSON object:
 
-#### Revise `createIterator()`
-
-In the previous assignments, you have written `Node::createIterator()` and implements `Folder::createIterator()` for creating an `FolderIterator`. In this assignment, you will need to revise `Node::createIterator()` to `Node::createIterator(OrderBy)`, which accepts an enum `OrderBy` that is located in `src/order_by.h`. The template method `Node::createIterator(OrderBy)` creates different iterators according to the receiving value. If a `OrderBy::Normal` is received, `createIterator(OrderBy)` creates a `FolderIterator`. For other `OrderBy` values, please implement three additional iterators `OrderByNameIterator`, `OrderByNameWithFolderFirstIterator`, and `OrderByKindIterator` for the enums `OrderBy::Name`, `OrderBy::NameWithFolderFirst`, and `OrderBy::Kind`, respectively. The three iterators should also become invalid if the structure of the target folder is changed. Please implement the three iterators as inner classes of `Folder`, the same way as `FolderIterator`. In addition, please make the method `createIterator` be compatible to the old programs, i.e., statement as `folder->createIterator();` should still work as usual.
-
-##### Rules for iterating
-
-- *Order by name*: The nodes under a folder are traversed alphabetically by their name.
-- *Order by name with folder first*: The folders gets higher priority during the traversal and will be traversed first. Folders and files are traversed alphabetically by their names, respectively.
-- *Order by kind*: The output nodes (files and folders) are sorted according to the kind of the node and the nodes with same kind are sorted alphabetically. The kind of node is defined as follows:
-
-  - Folder: `"folder"`
-  - File: The filename extension
-  - File without filename extension: `"file"`
-
-#### Tree Visitor
-
-Please implement `TreeVisitor` in `src/tree_visitor.h`, which derives from `Visitor`, to simulate the cli tool [`tree`](https://www.javatpoint.com/linux-tree-command) in Unix system. A `TreeVisitor` accepts a enum `OrderBy` as the argument of the constructor to decide the output result.
-
-##### Rules for order
-
-*Order by name*: The output nodes (files and folders) are ordered alphabetically by their names.
-
-```shell
-.
-├── Documents
-│   ├── clean-architecture.pdf
-│   ├── domain-driven-design.pub
-│   ├── hello.txt
-│   ├── note.txt
-│   ├── object-oriented-analysis-and-design.pdf
-│   └── programming
-│       ├── cpp.pub
-│       ├── oop.pdf
-│       └── python.pub
-├── Downloads
-│   └── funny.png
-├── hello.txt
-└── my_profile
+```json
+{
+    "books": {
+        "design pattern": {
+            "author": "Erich Gamma, Richard Helm, Ralph Johnson, John Vlissides",
+            "name": "Design Patterns Elements of Reusable Object-Oriented Software"
+        },
+        "clean code": {
+            "author": "Robert C. Martin",
+            "name": "Clean Code"
+        }
+    }
+}
 ```
 
-*Order by name with folder first*: The folders gets higher priority during the output and will be shown first. Folders and files are ordered alphabetically, respectively.
+This JSON object has only one key-value pair, where the key is the string "books" and the value is another JSON object having two key-value pairs. In the first pair, the key is "design pattern" and the value is yet another JSON object whose two keys are "name" and "author", respectively, and so on. Similarly, the second pair has the key "clean code" and yet another JSON object as its value.
 
-``` shell
-.
-├── Documents
-│   ├── programming
-│   │   ├── cpp.pub
-│   │   ├── oop.pdf
-│   │   └── python.pub
-│   ├── clean-architecture.pdf
-│   ├── domain-driven-design.pub
-│   ├── hello.txt
-│   ├── note.txt
-│   └── object-oriented-analysis-and-design.pdf
-├── Downloads
-│   └── funny.png
-├── hello.txt
-└── my_profile
+In this program, a parser and a builder are needed to parse a JSON format string to build the `Value`, including `JsonObject` and `StringValue`. For example, a JSON string in C++ can be represented as:
+
+```c++
+string booksJson = 
+    "{\"books\": {"
+    "\"design patterns\": {"
+    "\"name\": \"Design Patterns: Elements of Reusable Object-Oriented Software\","
+    "\"author\": \"Erich Gamma, Richard Helm, Ralph Johnson, and John Vlissides\""
+    "},"
+    "\"clean code\": {"
+    "\"name\": \"Clean Code\","
+    "\"author\": \"Robert C. Martin\""
+    "}"
+    "}}"
 ```
 
-*Order by kind*: The output nodes (files and folders) are ordered according to the kind of the node and the nodes with same kind are sorted alphabetically.
+As can be seen, the JSON string above is not easy to read. You need to build a beautifier visitor that generates a beautified JSON string of a `JsonObject`. The following shows an example of a beautified JSON string:
 
-``` shell
-.
-├── my_profile
-├── Documents
-│   ├── programming
-│   │   ├── oop.pdf
-│   │   ├── cpp.pub
-│   │   └── python.pub
-│   ├── clean-architecture.pdf
-│   ├── object-oriented-analysis-and-design.pdf
-│   ├── domain-driven-design.pub
-│   ├── hello.txt
-│   └── note.txt
-├── Downloads
-│   └── funny.png
-└── hello.txt
+```c++
+"{\n"
+"    \"books\": {\n"
+"        \"clean code\": {\n"
+"            \"author\": \"Robert C. Martin\",\n"
+"            \"name\": \"Clean Code\"\n"
+"        },\n"
+"        \"design patterns\": {\n"
+"            \"author\": \"Erich Gamma, Richard Helm, Ralph Johnson, and John Vlissides\",\n"
+"            \"name\": \"Design Patterns: Elements of Reusable Object-Oriented Software\"\n"
+"        }\n"
+"    }\n"
+"}";
 ```
 
-##### Hint
+### Specification for your program
 
-1. Use the four iterators in the class `Folder` to distinguish and implement different ordering rules.
+Please copy the [given template code](./given_code) to your own assignment repository and complete the exam based on it.
 
-#### FileSystemParser
+#### Value
 
-`FileSystemParser` is parser uses `FileSystemScanner` and `FileSystemBuilder` to parse a folder and the entire structure underneath it to build the entire composite structure of `Node` accordingly. `FileSystemParser::setPath(string)` sets the path to the folder that will be parsed. `FileSystemParser::parse()` reads the folders/files info with `FileSystemScanner` and build `Folder` and `File` with `FileSystemBuilder`.
+Refer to the textbook, you will implement a *Composite* structure to model JSON data as the class diagram shown below. In the diagram, `Value` is the **Component**, `StringValue` is the **Leaf**, and `JsonObject` is the **Composite**. 
 
-`FileSystemScanner` scans the files and folders under the receiving path, non-recursively. `FileSystemScanner::setPath(string)` sets the path to the folder that will be scanned. `FileSystemScanner::nextNode()` read the info of next file or folder. `FileSystemScanner::currentNodeName()` returns the name most recently read node. `FileSystemScanner::isFile()` and `FileSystemScanner::isFolder()` tells the clients what type of the most recently read node is. `FileSystemScanner::isDone()` returns true if all the files and folders in the given path are read.
+![class diagram](img/json_class_diagram.png)
 
+There are three tests in `test/json_test.h` in the given code. Please implement the code to make the three tests pass.
 
-`FileSystemBuilder::buildFolder(String path)` starts to build a `Folder` for the receiving path accordingly. `FileSystemBuilder::buildFile(String path)` builds a `File` for the receiving path and add it to the currently building `Folder`. `FileSystemBuilder::endFolder()` ends the currently building folder and adds it to its parent `Folder`. `FileSystemBuilder::getRoot()` returns the pointer to the root folder.
+**HINT > use `std::map`**
 
-##### Hint
+In addition, the method `JsonObject::set(string key, Value * element)` is not only for adding a key-value pair with a new key to a `JsonObject`, but also for updating the key-value pair with an existing key.
 
-1. For scanning the folders and files on the device, you can use [`<dirent.h>`](https://pubs.opengroup.org/onlinepubs/7908799/xsh/dirent.h.html)
+#### JsonIterator
 
-### Score
+The method `Value::createIterator()` is a *Factory Method* for creating a `JsonIterator`; where a `JsonObject` creates a `JsonObjectIterator`, and a `StringValue` creates a `NullIterator`. Both `JsonObjectIterator` and `NullIterator` derive from the abstract class `JsonIterator`.
+
+A `JsonObjectIterator` traverses the key-value pairs under the `JsonObject`. The iterator should traverse the pairs according to the key **alphabetically**. `JsonObjectIterator::currentKey()` returns the key of the current item, and `JsonObjectIterator::currentValue()` returns the value of the current item.
+
+**HINT > use `std::map::iterator`**
+
+A `NullIterator` is not traversable, and `NullIterator::isDone()` always returns true. If `NullIterator::currentKey()` or `NullIterator::currentValue()` is invoked, an exception should be thrown.
+
+#### BeautifyVisitor
+
+The method `Value::accept(Visitor * visitor)` accepts a visitor for extending the functionalities to `Value` with visitors. `BeautifyVisitor`, which derives from `Visitor`, is for generating a beautified Json string from a `Value`.
+
+In `BeautifyVisitor`, the member function `visitJsonObject(JsonObject * obj)` visits a `JsonObject` to add the beautified key-value string to the resulting string. The member function `visitStringValue(StringValue * val)` visits a `StringValue` to add the value to the resulting string. The member function `getResult()` gets the resulting beautified Json string. A beautified Json string is defined with following requirements:
+
+- Line breaks after a `'{'`,
+- a `':'` is placed right after the key with no whitespace between them,
+- a space exists after a `':'` before the value,
+- a `','` exists right after the value if there is other key-value pairs left,
+- line breaks after the end of each value, and
+- the indent of each level is 4 spaces.
+
+Beautified Json string example:
+
+```json
+{
+    "books": {
+        "clean code": {
+            "author": "Robert C. Martin",
+            "name": "Clean Code"
+        },
+        "design pattern": {
+            "author": "Erich Gamma, Richard Helm, Ralph Johnson, John Vlissides",
+            "name": "Design Patterns Elements of Reusable Object-Oriented Software"
+        }
+    }
+}
+```
+
+### JsonParser
+
+Finally, you will implement `JsonParser` to parse a Json string and build the `Value` accordingly. Part of the implementation for `JsonParser` is already provided in the given code, please fill in the missing code where we commented `// fill in the code`.
+
+- `JsonParser::parse()` parses the string and builds the `Value` composite structure.
+- `JsonParser::getJsonObject()` returns the root of the built `JsonObject`.
+
+`JsonScanner` scans over the entire Json string, one character at a time. The implementation for `JsonScanner` is already provided and no need to change.
+
+`JsonBuilder` supports building the composite structure of `Value`. `JsonBuilder` should follow the following specs:
+
+- `JsonBuilder::buildObject(string key)` starts to build a `JsonObject` with a key.  
+  **HINT > you might need to use `std::pair`**
+- `JsonBuilder::buildValue(string key, string value)` builds a `StringValue` and add it to the currently building `JsonObject`.
+- `JsonBuilder::endObject()` ends the currently building `JsonObject` and adds it to its parent `JsonObject`.
+- `JsonBuilder::getJsonObject()` returns the built `JsonObject`.
+
+### Scoring
 
 * Code written by students: 60%
 * Passing Unit tests written by TA: 40%
