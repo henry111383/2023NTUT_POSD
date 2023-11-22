@@ -22,15 +22,12 @@ public:
     };
 
     void buildObject(std::string key){
-        if(key!=""){
-            JsonObject *tmpJson = new JsonObject();
-            _compounds.push(std::make_pair(key, tmpJson));
-        }
-        
+        JsonObject *tmpJson = new JsonObject();
+        _compounds.push(std::make_pair(key, tmpJson));
     };
 
     void endObject(){
-        if (!_compounds.empty()) {
+        if(!_compounds.empty()){
             JsonObject * compound = _compounds.top().second;
             std::string _key = _compounds.top().first;
             _compounds.pop();
@@ -46,6 +43,13 @@ public:
 
     JsonObject * getJsonObject(){
         _result = _jsons.front();
+        JsonIterator *it = _result->createIterator();
+        for(it->first(); !it->isDone(); it->next()){
+            if(it->currentKey()==""){
+                _result = dynamic_cast<JsonObject*>(it->currentValue());
+                break;
+            }
+        }
         return _result;
     };
 
