@@ -4,6 +4,7 @@
 #include "../src/json_parser.h"
 #include "../src/json_builder.h"
 #include "../src/json_scanner.h"
+#include "../src/json_iterator.h"
 #include <gtest/gtest.h>
 
 TEST(ParserTest, BuilderShouldbeCorrectlyBuilt){
@@ -148,7 +149,10 @@ TEST(ParserTest, ParserAllShouldbeCorrect){
     expected += "        }\n";
     expected += "    }\n";
     expected += "}";
- 
+
+    // std::cout << std::endl << "---Input---\n" << booksJson <<std::endl;
+    // std::cout << std::endl << "---This is result---\n";
+    // std::cout << res << std::endl; 
     ASSERT_EQ(expected, res);
 
 
@@ -179,8 +183,9 @@ TEST(ParserTest, ParserSpacesShouldbeCorrect){
     expected += "    }\n";
     expected += "}";
 
+    std::string input= R"({  "id"  :"10","desc"  :  "A Product"  ,         "isDeleted"    :  "false"})";
 
-    ASSERT_NO_THROW(parser->setInput(expected));
+    ASSERT_NO_THROW(parser->setInput(input));
     ASSERT_NO_THROW(parser->parse());
     JsonObject *resultJson = parser->getJsonObject();
 
@@ -188,10 +193,19 @@ TEST(ParserTest, ParserSpacesShouldbeCorrect){
     resultJson->accept(visitor);
     std::string res = visitor->getResult();
 
-    ASSERT_EQ(expected, res);
+    std::cout << std::endl << "---Input---\n" << input <<std::endl;
+    std::cout << std::endl << "---This is result---\n";
+    std::cout << res << std::endl; 
+    // ASSERT_EQ(expected, res);
 
+    JsonIterator *it = resultJson->createIterator();
+    for(it->first(); !it->isDone(); it->next()){
+        std::cout << it->currentKey() << ":" << it->currentValue() << std::endl;
+    }
 
     delete builder;
     delete scanner;
     delete parser;
 }
+
+

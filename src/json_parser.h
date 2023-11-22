@@ -51,9 +51,10 @@ public:
     }
 
     JsonObject * getJsonObject() {
-        std::cout << _builder->getJsonObject() << std::endl;
-        JsonObject *result = dynamic_cast<JsonObject*>(_builder->getJsonObject()->getValue(""));
-        return result;  
+        // std::cout << _builder->getJsonObject() << std::endl;
+        // JsonObject *result = dynamic_cast<JsonObject*>(_builder->getJsonObject()->getValue(""));
+        // return result;  
+        return _builder->getJsonObject();
     }
 
     void setInput(std::string input) {

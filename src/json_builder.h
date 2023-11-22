@@ -22,8 +22,11 @@ public:
     };
 
     void buildObject(std::string key){
-        JsonObject *tmpJson = new JsonObject();
-        _compounds.push(std::make_pair(key, tmpJson));
+        if(key!=""){
+            JsonObject *tmpJson = new JsonObject();
+            _compounds.push(std::make_pair(key, tmpJson));
+        }
+        
     };
 
     void endObject(){
