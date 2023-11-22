@@ -37,6 +37,7 @@ public:
                 else if(token == ',') {
                     _builder->buildValue(key, value);
                 } else if (token == '}') {
+                    _builder->buildValue(key, value);
                     _builder->endObject();
                 }
             }
