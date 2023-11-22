@@ -16,8 +16,7 @@ public:
             _jsons.push_back(tmpJson);
         } else {
             JsonObject * compound = _compounds.top().second;
-            std::string _key = _compounds.top().first;
-            compound->set(_key, tmpJson);
+            compound->set(key, _value);
         }
         // _result = _jsons.front();
     };
@@ -33,7 +32,9 @@ public:
             std::string _key = _compounds.top().first;
             _compounds.pop();
             if (_compounds.empty()) {
-                _jsons.push_back(compound);
+                JsonObject *json = new JsonObject();
+                json->set(_key, compound);
+                _jsons.push_back(json);
             } else {
                 _compounds.top().second->set(_key, compound);
             }

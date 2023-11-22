@@ -17,7 +17,9 @@ public:
             if(token == ' ') {
                 continue;
             } else if (token == '{') {
-                _builder->buildObject(key);
+                if(!key.empty()){
+                    _builder->buildObject(key);
+                }
             } else if (token == '"') {
                 std::string value;
                 token = _scanner->next();
@@ -33,16 +35,18 @@ public:
                 
                 if(token == ':') {
                     key = value;
-                }
-                else if(token == ',') {
+                } else if(token == ',') {
+                    std::cout << "now ceate \"" << key << "\"" << value <<std::endl;
                     _builder->buildValue(key, value);
+
                 } else if (token == '}') {
+                    std::cout << "now ceate \"" << key << "\"" << value <<std::endl;
                     _builder->buildValue(key, value);
                     _builder->endObject();
                 }
             }
             else if (token == '}') {
-                    _builder->endObject();
+                _builder->endObject();
             }
         }
     }
