@@ -19,7 +19,7 @@ public:
             } else if (token == '{') {
                 _builder->buildObject(key);
             } else if (token == '"') {
-                std::string value;
+                std::string value="";
                 token = _scanner->next();
                 while(token != '"') {
                     value += token;
@@ -51,9 +51,6 @@ public:
     }
 
     JsonObject * getJsonObject() {
-        // std::cout << _builder->getJsonObject() << std::endl;
-        // JsonObject *result = dynamic_cast<JsonObject*>(_builder->getJsonObject()->getValue(""));
-        // return result;  
         return _builder->getJsonObject();
     }
 

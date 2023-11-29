@@ -8,22 +8,16 @@
 class JsonBuilder {
 public:
 
-    // ~JsonBuilder() {
-    //     for (JsonObject* json : _jsons) {
-    //         delete json;
-    //     }
-    // }
-
     void buildValue(std::string key, std::string value){
         Value *_value = new StringValue(value);
-        JsonObject *tmpJson = new JsonObject();
-        tmpJson->set(key, _value);
-        
         if(_compounds.empty()) {
+            JsonObject *tmpJson = new JsonObject();
+            tmpJson->set(key, _value);
             _jsons.push_back(tmpJson);
         } else {
             JsonObject * compound = _compounds.top().second;
             compound->set(key, _value);
+            // delete tmpJson;
         }
 
     };

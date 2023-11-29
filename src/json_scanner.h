@@ -12,9 +12,14 @@ public:
 
     char next() {
         char token;
-        ss.get(token);
-        // std::cout << token <<std::endl;
-        return token;
+        if(ss.get(token)){
+            return token;
+        } else if (ss.eof()){
+            return '\0';
+        } else {
+            return '\0';
+        }
+        
     }
     
     bool isDone() const {

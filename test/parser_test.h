@@ -36,8 +36,6 @@ TEST(ParserTest, ScannerAllShouldbeCorrect){
     JsonScanner *scanner;
     ASSERT_NO_THROW(builder = new JsonBuilder());
     ASSERT_NO_THROW(scanner = new JsonScanner());
-    JsonParser *parser;
-    ASSERT_NO_THROW(parser = new JsonParser(scanner, builder));
 
     std::string input_str;
     input_str += "{\n";
@@ -59,7 +57,6 @@ TEST(ParserTest, ScannerAllShouldbeCorrect){
 
     delete builder;
     delete scanner;
-    delete parser;
 }
 
 TEST(ParserTest, SimpleBuilderShouldbeCorrect){
@@ -97,145 +94,192 @@ TEST(ParserTest, SimpleBuilderShouldbeCorrect){
     delete resultJson;
 }
 
-// TEST(ParserTest, BuilderAllShouldbeCorrect){
-//     JsonBuilder *builder;
-//     ASSERT_NO_THROW(builder = new JsonBuilder());
+TEST(ParserTest, BuilderAllShouldbeCorrect){
+    JsonBuilder *builder;
+    ASSERT_NO_THROW(builder = new JsonBuilder());
 
-//     std::string input_str;
-//     input_str += "{\n";
-//     input_str += "    \"books\": {\n";
-//     input_str += "        \"clean code\": {\n";
-//     input_str += "            \"author\": \"Robert C. Martin\",\n";
-//     input_str += "            \"name\": \"Clean Code\"\n";
-//     input_str += "        },\n";
-//     input_str += "        \"design pattern\": {\n";
-//     input_str += "            \"author\": \"Erich Gamma, Richard Helm, Ralph Johnson, John Vlissides\",\n";
-//     input_str += "            \"name\": \"Design Patterns Elements of Reusable Object-Oriented Software\"\n";
-//     input_str += "        }\n";
-//     input_str += "    }\n";
-//     input_str += "}";
+    std::string input_str;
+    input_str += "{\n";
+    input_str += "    \"books\": {\n";
+    input_str += "        \"clean code\": {\n";
+    input_str += "            \"author\": \"Robert C. Martin\",\n";
+    input_str += "            \"name\": \"Clean Code\"\n";
+    input_str += "        },\n";
+    input_str += "        \"design pattern\": {\n";
+    input_str += "            \"author\": \"Erich Gamma, Richard Helm, Ralph Johnson, John Vlissides\",\n";
+    input_str += "            \"name\": \"Design Patterns Elements of Reusable Object-Oriented Software\"\n";
+    input_str += "        }\n";
+    input_str += "    }\n";
+    input_str += "}";
 
-//     builder->buildObject("");
-//     builder->buildObject("books");
-//     builder->buildObject("clean code");
-//     builder->buildValue("name", "Clean Code");
-//     builder->buildValue("author", "Robert C. Martin");
-//     builder->endObject();
-//     builder->buildObject("design pattern");
-//     builder->buildValue("name", "Design Patterns Elements of Reusable Object-Oriented Software");
-//     builder->buildValue("author", "Erich Gamma, Richard Helm, Ralph Johnson, John Vlissides");
-//     builder->endObject();
-//     builder->endObject();
-//     builder->endObject();
+    builder->buildObject("");
+    builder->buildObject("books");
+    builder->buildObject("clean code");
+    builder->buildValue("name", "Clean Code");
+    builder->buildValue("author", "Robert C. Martin");
+    builder->endObject();
+    builder->buildObject("design pattern");
+    builder->buildValue("name", "Design Patterns Elements of Reusable Object-Oriented Software");
+    builder->buildValue("author", "Erich Gamma, Richard Helm, Ralph Johnson, John Vlissides");
+    builder->endObject();
+    builder->endObject();
+    builder->endObject();
 
-//     JsonObject *resultJson = builder->getJsonObject();
-
-
-//     BeautifyVisitor *visitor = new BeautifyVisitor();
-//     resultJson->accept(visitor);
-//     std::string res = visitor->getResult();
-
-//     std::cout << std::endl << "---This is result---\n";
-//     std::cout << res << std::endl; 
-//     ASSERT_EQ(input_str, res);
-
-//     delete builder;
-//     delete visitor;
-//     delete resultJson;
-// }
-
-// TEST(ParserTest, ParserAllShouldbeCorrect){
-//     JsonBuilder *builder;
-//     JsonScanner *scanner;
-//     ASSERT_NO_THROW(builder = new JsonBuilder());
-//     ASSERT_NO_THROW(scanner = new JsonScanner());
-//     JsonParser *parser;
-//     ASSERT_NO_THROW(parser = new JsonParser(scanner, builder));
-
-//     std::string booksJson = 
-//     "{\"books\": {"
-//     "\"design pattern\": {"
-//     "\"name\": \"Design Patterns: Elements of Reusable Object-Oriented Software\","
-//     "\"author\": \"Erich Gamma, Richard Helm, Ralph Johnson, and John Vlissides\""
-//     "},"
-//     "\"clean code\": {"
-//     "\"name\": \"Clean Code\","
-//     "\"author\": \"Robert C. Martin\""
-//     "}"
-//     "}}";
+    JsonObject *resultJson = builder->getJsonObject();
 
 
-//     ASSERT_NO_THROW(parser->setInput(booksJson));
-//     ASSERT_NO_THROW(parser->parse());
-//     JsonObject *resultJson = parser->getJsonObject();
+    BeautifyVisitor *visitor = new BeautifyVisitor();
+    resultJson->accept(visitor);
+    std::string res = visitor->getResult();
 
-//     BeautifyVisitor *visitor = new BeautifyVisitor();
-//     resultJson->accept(visitor);
-//     std::string res = visitor->getResult();
+    std::cout << std::endl << "---This is result---\n";
+    std::cout << res << std::endl; 
+    ASSERT_EQ(input_str, res);
 
-//     std::string expected;
-//     expected += "{\n";
-//     expected += "    \"books\": {\n";
-//     expected += "        \"clean code\": {\n";
-//     expected += "            \"author\": \"Robert C. Martin\",\n";
-//     expected += "            \"name\": \"Clean Code\"\n";
-//     expected += "        },\n";
-//     expected += "        \"design pattern\": {\n";
-//     expected += "            \"author\": \"Erich Gamma, Richard Helm, Ralph Johnson, and John Vlissides\",\n";
-//     expected += "            \"name\": \"Design Patterns: Elements of Reusable Object-Oriented Software\"\n";
-//     expected += "        }\n";
-//     expected += "    }\n";
-//     expected += "}";
+    delete builder;
+    delete visitor;
+    delete resultJson;
+}
 
-//     ASSERT_EQ(expected, res);
+TEST(ParserTest, SimpleParserShouldbeCorrect){
+    JsonBuilder *builder;
+    JsonScanner *scanner;
+    ASSERT_NO_THROW(builder = new JsonBuilder());
+    ASSERT_NO_THROW(scanner = new JsonScanner());
+    JsonParser *parser;
+    ASSERT_NO_THROW(parser = new JsonParser(scanner, builder));
 
-
-//     delete builder;
-//     delete scanner;
-//     delete parser;
-// }
-
-// TEST(ParserTest, ParserSpacesShouldbeCorrect){
-//     JsonBuilder *builder;
-//     JsonScanner *scanner;
-//     ASSERT_NO_THROW(builder = new JsonBuilder());
-//     ASSERT_NO_THROW(scanner = new JsonScanner());
-//     JsonParser *parser;
-//     ASSERT_NO_THROW(parser = new JsonParser(scanner, builder));
-
-//     std::string expected;
-//     expected += "{\n";
-//     expected += "    \"books\": {\n";
-//     expected += "        \"clean code\": {\n";
-//     expected += "            \"author\": \"Robert C. Martin\",\n";
-//     expected += "            \"name\": \"Clean Code\"\n";
-//     expected += "        },\n";
-//     expected += "        \"design pattern\": {\n";
-//     expected += "            \"author\": \"Erich Gamma, Richard Helm, Ralph Johnson, and John Vlissides\",\n";
-//     expected += "            \"name\": \"Design Patterns: Elements of Reusable Object-Oriented Software\"\n";
-//     expected += "        }\n";
-//     expected += "    }\n";
-//     expected += "}";
-
-//     std::string input= R"({  "id"  :"10","desc"  :  "A Product"  ,         "isDeleted"    :  "false"})";
-
-//     ASSERT_NO_THROW(parser->setInput(input));
-//     ASSERT_NO_THROW(parser->parse());
-//     JsonObject *resultJson = parser->getJsonObject();
-
-//     BeautifyVisitor *visitor = new BeautifyVisitor();
-//     resultJson->accept(visitor);
-//     std::string res = visitor->getResult();
-
-//     std::cout << std::endl << "---Input---\n" << input <<std::endl;
-//     std::cout << std::endl << "---This is result---\n";
-//     std::cout << res << std::endl; 
-//     // ASSERT_EQ(expected, res);
+    std::string booksJson = 
+    "{"
+    "\"clean code\": {"
+    "\"name\": \"Clean Code\","
+    "\"author\": \"Robert C. Martin\""
+    "}"
+    "}";
 
 
-//     delete builder;
-//     delete scanner;
-//     delete parser;
-// }
+    ASSERT_NO_THROW(parser->setInput(booksJson));
+    ASSERT_NO_THROW(parser->parse());
+    JsonObject *resultJson = parser->getJsonObject();
+
+    BeautifyVisitor *visitor = new BeautifyVisitor();
+    resultJson->accept(visitor);
+    std::string res = visitor->getResult();
+
+    std::string expected;
+    expected += "{\n";
+    expected += "    \"clean code\": {\n";
+    expected += "        \"author\": \"Robert C. Martin\",\n";
+    expected += "        \"name\": \"Clean Code\"\n";
+    expected += "    }\n";
+    expected += "}";
+
+    ASSERT_EQ(expected, res);
+
+
+    delete builder;
+    delete scanner;
+    delete parser;
+    delete resultJson;
+    delete visitor;
+
+}
+
+TEST(ParserTest, ParserAllShouldbeCorrect){
+    JsonBuilder *builder;
+    JsonScanner *scanner;
+    ASSERT_NO_THROW(builder = new JsonBuilder());
+    ASSERT_NO_THROW(scanner = new JsonScanner());
+    JsonParser *parser;
+    ASSERT_NO_THROW(parser = new JsonParser(scanner, builder));
+
+    std::string booksJson = 
+    "{\"books\": {"
+    "\"design pattern\": {"
+    "\"name\": \"Design Patterns: Elements of Reusable Object-Oriented Software\","
+    "\"author\": \"Erich Gamma, Richard Helm, Ralph Johnson, and John Vlissides\""
+    "},"
+    "\"clean code\": {"
+    "\"name\": \"Clean Code\","
+    "\"author\": \"Robert C. Martin\""
+    "}"
+    "}}";
+
+
+    ASSERT_NO_THROW(parser->setInput(booksJson));
+    ASSERT_NO_THROW(parser->parse());
+    JsonObject *resultJson = parser->getJsonObject();
+
+    BeautifyVisitor *visitor = new BeautifyVisitor();
+    resultJson->accept(visitor);
+    std::string res = visitor->getResult();
+
+    std::string expected;
+    expected += "{\n";
+    expected += "    \"books\": {\n";
+    expected += "        \"clean code\": {\n";
+    expected += "            \"author\": \"Robert C. Martin\",\n";
+    expected += "            \"name\": \"Clean Code\"\n";
+    expected += "        },\n";
+    expected += "        \"design pattern\": {\n";
+    expected += "            \"author\": \"Erich Gamma, Richard Helm, Ralph Johnson, and John Vlissides\",\n";
+    expected += "            \"name\": \"Design Patterns: Elements of Reusable Object-Oriented Software\"\n";
+    expected += "        }\n";
+    expected += "    }\n";
+    expected += "}";
+
+    ASSERT_EQ(expected, res);
+
+    delete builder;
+    delete scanner;
+    delete parser;
+    delete resultJson;
+    delete visitor;
+}
+
+TEST(ParserTest, ParserSpacesShouldbeCorrect){
+    JsonBuilder *builder;
+    JsonScanner *scanner;
+    ASSERT_NO_THROW(builder = new JsonBuilder());
+    ASSERT_NO_THROW(scanner = new JsonScanner());
+    JsonParser *parser;
+    ASSERT_NO_THROW(parser = new JsonParser(scanner, builder));
+
+    std::string expected;
+    expected += "{\n";
+    expected += "    \"books\": {\n";
+    expected += "        \"clean code\": {\n";
+    expected += "            \"author\": \"Robert C. Martin\",\n";
+    expected += "            \"name\": \"Clean Code\"\n";
+    expected += "        },\n";
+    expected += "        \"design pattern\": {\n";
+    expected += "            \"author\": \"Erich Gamma, Richard Helm, Ralph Johnson, and John Vlissides\",\n";
+    expected += "            \"name\": \"Design Patterns: Elements of Reusable Object-Oriented Software\"\n";
+    expected += "        }\n";
+    expected += "    }\n";
+    expected += "}";
+
+    std::string input= R"({  "id"  :"10","desc"  :  "A Product"  ,         "isDeleted"    :  "false"})";
+
+    ASSERT_NO_THROW(parser->setInput(input));
+    ASSERT_NO_THROW(parser->parse());
+    JsonObject *resultJson = parser->getJsonObject();
+
+    BeautifyVisitor *visitor = new BeautifyVisitor();
+    resultJson->accept(visitor);
+    std::string res = visitor->getResult();
+
+    std::cout << std::endl << "---Input---\n" << input <<std::endl;
+    std::cout << std::endl << "---This is result---\n";
+    std::cout << res << std::endl; 
+    // ASSERT_EQ(expected, res);
+
+
+    delete builder;
+    delete scanner;
+    delete parser;
+    delete resultJson;
+    delete visitor;
+}
 
 
