@@ -39,9 +39,10 @@ public:
             std::string _key = _compounds.top().first;
             _compounds.pop();
             if (_compounds.empty()) {
-                JsonObject *json = new JsonObject();
-                json->set(_key, compound);
-                _jsons.push_back(json);
+                // JsonObject *json = new JsonObject();
+                // json->set(_key, compound);
+                // _jsons.push_back(json);
+                _jsons.push_back(compound);
             } else {
                 _compounds.top().second->set(_key, compound);
             }
@@ -50,14 +51,14 @@ public:
 
     JsonObject * getJsonObject(){
         _result = _jsons.front();
-        JsonIterator *it = _result->createIterator();
-        for(it->first(); !it->isDone(); it->next()){
-            if(it->currentKey()==""){
-                _result = dynamic_cast<JsonObject*>(it->currentValue());
-                break;
-            }
-        }
-        delete it;
+        // JsonIterator *it = _result->createIterator();
+        // for(it->first(); !it->isDone(); it->next()){
+        //     if(it->currentKey()==""){
+        //         _result = dynamic_cast<JsonObject*>(it->currentValue());
+        //         break;
+        //     }
+        // }
+        // delete it;
         return _result;
     };
 

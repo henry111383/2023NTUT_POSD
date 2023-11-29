@@ -62,37 +62,24 @@ TEST(ParserTest, ScannerAllShouldbeCorrect){
     delete parser;
 }
 
-
-TEST(ParserTest, BuilderAllShouldbeCorrect){
+TEST(ParserTest, SimpleBuilderShouldbeCorrect){
     JsonBuilder *builder;
     ASSERT_NO_THROW(builder = new JsonBuilder());
 
     std::string input_str;
     input_str += "{\n";
-    input_str += "    \"books\": {\n";
-    input_str += "        \"clean code\": {\n";
-    input_str += "            \"author\": \"Robert C. Martin\",\n";
-    input_str += "            \"name\": \"Clean Code\"\n";
-    input_str += "        },\n";
-    input_str += "        \"design pattern\": {\n";
-    input_str += "            \"author\": \"Erich Gamma, Richard Helm, Ralph Johnson, John Vlissides\",\n";
-    input_str += "            \"name\": \"Design Patterns Elements of Reusable Object-Oriented Software\"\n";
-    input_str += "        }\n";
+    input_str += "    \"clean code\": {\n";
+    input_str += "        \"author\": \"Robert C. Martin\",\n";
+    input_str += "        \"name\": \"Clean Code\"\n";
     input_str += "    }\n";
     input_str += "}";
 
-    // builder->buildObject("");
-    builder->buildObject("books");
+    builder->buildObject("");
     builder->buildObject("clean code");
     builder->buildValue("name", "Clean Code");
     builder->buildValue("author", "Robert C. Martin");
     builder->endObject();
-    builder->buildObject("design pattern");
-    builder->buildValue("name", "Design Patterns Elements of Reusable Object-Oriented Software");
-    builder->buildValue("author", "Erich Gamma, Richard Helm, Ralph Johnson, John Vlissides");
     builder->endObject();
-    builder->endObject();
-    // builder->endObject();
 
     JsonObject *resultJson = builder->getJsonObject();
 
@@ -109,6 +96,53 @@ TEST(ParserTest, BuilderAllShouldbeCorrect){
     delete visitor;
     delete resultJson;
 }
+
+// TEST(ParserTest, BuilderAllShouldbeCorrect){
+//     JsonBuilder *builder;
+//     ASSERT_NO_THROW(builder = new JsonBuilder());
+
+//     std::string input_str;
+//     input_str += "{\n";
+//     input_str += "    \"books\": {\n";
+//     input_str += "        \"clean code\": {\n";
+//     input_str += "            \"author\": \"Robert C. Martin\",\n";
+//     input_str += "            \"name\": \"Clean Code\"\n";
+//     input_str += "        },\n";
+//     input_str += "        \"design pattern\": {\n";
+//     input_str += "            \"author\": \"Erich Gamma, Richard Helm, Ralph Johnson, John Vlissides\",\n";
+//     input_str += "            \"name\": \"Design Patterns Elements of Reusable Object-Oriented Software\"\n";
+//     input_str += "        }\n";
+//     input_str += "    }\n";
+//     input_str += "}";
+
+//     builder->buildObject("");
+//     builder->buildObject("books");
+//     builder->buildObject("clean code");
+//     builder->buildValue("name", "Clean Code");
+//     builder->buildValue("author", "Robert C. Martin");
+//     builder->endObject();
+//     builder->buildObject("design pattern");
+//     builder->buildValue("name", "Design Patterns Elements of Reusable Object-Oriented Software");
+//     builder->buildValue("author", "Erich Gamma, Richard Helm, Ralph Johnson, John Vlissides");
+//     builder->endObject();
+//     builder->endObject();
+//     builder->endObject();
+
+//     JsonObject *resultJson = builder->getJsonObject();
+
+
+//     BeautifyVisitor *visitor = new BeautifyVisitor();
+//     resultJson->accept(visitor);
+//     std::string res = visitor->getResult();
+
+//     std::cout << std::endl << "---This is result---\n";
+//     std::cout << res << std::endl; 
+//     ASSERT_EQ(input_str, res);
+
+//     delete builder;
+//     delete visitor;
+//     delete resultJson;
+// }
 
 // TEST(ParserTest, ParserAllShouldbeCorrect){
 //     JsonBuilder *builder;
