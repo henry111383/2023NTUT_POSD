@@ -67,9 +67,16 @@ protected:
         UnitOfWork::instance()->registerNew(domainObject);
     };
 
-    void abstractUpdate(DomainObject *domainObject);
+    void abstractUpdate(DomainObject *domainObject){
+        if(domainObject != nullptr){
+            sqlite3_exec(_db, updateStmt(domainObject).c_str(), NULL, NULL, &_errorMessage);
+            UnitOfWork::instance()->registerDirty(domainObject);
+        }
+    };
 
-    void abstractDelete(std::string id);
+    void abstractDelete(std::string id){
+        sqlite3_exec(_db, deleteByIdStmt(id).c_str(), NULL, NULL, &_errorMessage);
+    };
 
     void load(DomainObject *domainObject){
         _domainObjects[domainObject->id()] = domainObject;

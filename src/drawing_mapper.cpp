@@ -18,17 +18,18 @@ Drawing * DrawingMapper::find(std::string id)
 
 // add
 void DrawingMapper::add(DomainObject *Drawing){
-
+    abstractAdd(Drawing);
 };
 
 // update
 void DrawingMapper::update(std::string id){
-
+    Drawing *drawing = DrawingMapper::instance()->find(id);
+    abstractUpdate(drawing);
 };
 
 // delete
 void DrawingMapper::del(std::string id){
-
+    abstractDelete(id);
 };
 
 std::string DrawingMapper::updateStmt(DomainObject *domainObject) const {
@@ -51,8 +52,10 @@ std::string DrawingMapper::addStmt(DomainObject *domainObject) const {
     return stmt;
 };
 
-std::string DrawingMapper::deleteByIdStmt(std::string id) const {
-
+std::string DrawingMapper::deleteByIdStmt(std::string id) const 
+{
+    std::string stmt = "DELETE FROM drawing WHERE ID='" + id + "'";
+    return stmt;
 };
 
 
