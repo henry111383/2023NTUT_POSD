@@ -32,6 +32,9 @@ void UnitOfWork::registerDirty(DomainObject * domainObject){
 };
 
 void UnitOfWork::registerDeleted(DomainObject * domainObject){
+    if(inNew(domainObject->id())){
+        _new.erase(domainObject->id());
+    }
     _deleted[domainObject->id()] = domainObject;
     _clean.erase(domainObject->id());
 };

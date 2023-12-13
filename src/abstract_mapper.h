@@ -81,7 +81,8 @@ protected:
     void abstractDelete(std::string id){
         sqlite3_exec(_db, deleteByIdStmt(id).c_str(), NULL, NULL, &_errorMessage);
         std::cout << deleteByIdStmt(id).c_str() << std::endl;
-    };
+        _domainObjects.erase(id);
+        }
 
     void load(DomainObject *domainObject){
         _domainObjects[domainObject->id()] = domainObject;

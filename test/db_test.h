@@ -201,3 +201,18 @@ TEST_F(DBSuite, NewDrawingAndPainterThroughUoWAndFind){
     ASSERT_EQ(drawing_2->id(), "d_0005");
     ASSERT_EQ(drawing_2->painter()->name(), "Richard");
 }
+
+TEST_F(DBSuite, DeletePainterInClean){
+    DomainObject *painter = pm->find("p_0002");
+    ASSERT_TRUE(UnitOfWork::instance()->inClean("p_0002"));
+    UnitOfWork::instance()->registerDeleted(painter);
+    UnitOfWork::instance()->commit();
+    ASSERT_EQ(pm->find("p_0002"), nullptr); 
+}
+
+TEST_F(DBSuite, DeletePainterInNewWithoutCommit){
+    DomainObject *painter = new Painter("p_0020", "0020");
+    UnitOfWork::instance()->registerNew(painter);
+    UnitOfWork::instance()->registerDeleted(painter);
+    ASSERT_FALSE(UnitOfWork::instance()->inNew(painter->id()));
+}
