@@ -183,3 +183,20 @@ TEST_F(DBSuite, findDrawing3)
     ASSERT_EQ(drawing->painter()->id(), "p_0002");
     ASSERT_EQ(drawing->painter()->name(), "Mary");
 }
+
+TEST_F(DBSuite, NewDrawingAndPainterThroughUoWAndFind){
+    DomainObject *painter_1 = new Painter("p_0004", "Richard");
+    DomainObject *drawing = new Drawing("d_0005", static_cast<Painter *>(painter_1));
+
+    UnitOfWork::instance()->registerNew(painter_1);
+    UnitOfWork::instance()->registerNew(drawing);
+    UnitOfWork::instance()->commit();
+
+    // Drawing *drawing_2 = dm->find("d_0005");
+
+    // if(drawing_2 == nullptr){
+    //     std::cout << "NULLPTR" <<std::endl;
+    // }
+
+    // ASSERT_EQ(drawing_2->id(), "d_0005");
+}

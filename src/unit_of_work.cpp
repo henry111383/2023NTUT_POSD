@@ -24,6 +24,9 @@ void UnitOfWork::registerClean(DomainObject * domainObject){
 };
 
 void UnitOfWork::registerDirty(DomainObject * domainObject){
+    if(inNew(domainObject->id())){
+        _new.erase(domainObject->id());
+    }
     _dirty[domainObject->id()] = domainObject;
     _clean.erase(domainObject->id());
 };
@@ -50,9 +53,8 @@ bool UnitOfWork::inDeleted(std::string id) const {
 };
 
 void UnitOfWork::commit(){
-    for(const auto dirty : _dirty){
+    for(const auto &dirty : _dirty){
         Drawing *drawing = dynamic_cast<Drawing *>(dirty.second);
-        Painter *painter = dynamic_cast<Painter *>(dirty.second);
         if(drawing != nullptr){
             DrawingMapper::instance()->update(dirty.first);
             registerClean(dirty.second);
@@ -61,30 +63,31 @@ void UnitOfWork::commit(){
             registerClean(dirty.second);
         }
     }
+    _dirty.clear();
 
-    for(const auto item_new : _new){
+    for(const auto &item_new : _new){
         Drawing *drawing = dynamic_cast<Drawing *>(item_new.second);
-        Painter *painter = dynamic_cast<Painter *>(item_new.second);
         if(drawing != nullptr){
-            DrawingMapper::instance()->update(item_new.first);
+            DrawingMapper::instance()->add(item_new.second);
             registerClean(item_new.second);
         } else {
-            PainterMapper::instance()->update(item_new.first);
+            PainterMapper::instance()->add(item_new.second);
             registerClean(item_new.second);
         }
     }
+    _new.clear();
 
-    for(const auto item_deleted : _deleted){
+    for(const auto &item_deleted : _deleted){
         Drawing *drawing = dynamic_cast<Drawing *>(item_deleted.second);
-        Painter *painter = dynamic_cast<Painter *>(item_deleted.second);
         if(drawing != nullptr){
-            DrawingMapper::instance()->update(item_deleted.first);
+            DrawingMapper::instance()->del(item_deleted.first);
             registerClean(item_deleted.second);
         } else {
-            PainterMapper::instance()->update(item_deleted.first);
+            PainterMapper::instance()->del(item_deleted.first);
             registerClean(item_deleted.second);
         }
     }
+    _deleted.clear();
 };
 
 UnitOfWork * UnitOfWork::_instance = nullptr;

@@ -46,7 +46,7 @@ std::string DrawingMapper::findByIdStmt(std::string id) const
 
 std::string DrawingMapper::addStmt(DomainObject *domainObject) const {
     Drawing* drawing = static_cast<Drawing*>(domainObject);
-    std::string stmt = "INSERT INFO drawing (ID, painter, shapes) " \
+    std::string stmt = "INSERT INTO drawing (ID, painter, shapes) " \
                        "VALUES ('" + drawing->id() + "', '" \
                        + drawing->painter()->name() + "', '" + drawing->getShapesAsString() + "')";
     return stmt;

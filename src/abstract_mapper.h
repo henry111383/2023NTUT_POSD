@@ -55,6 +55,8 @@ protected:
         }
         
         sqlite3_exec(_db, findByIdStmt(id).c_str(), callback, NULL, &_errorMessage);
+        std::cout << findByIdStmt(id).c_str() << std::endl;
+
         DomainObject * object = getDomainObject(id);
         if(object != nullptr) {
             UnitOfWork::instance()->registerClean(object);
@@ -65,17 +67,20 @@ protected:
     void abstractAdd(DomainObject *domainObject){
         sqlite3_exec(_db, addStmt(domainObject).c_str(), NULL, NULL, &_errorMessage);
         UnitOfWork::instance()->registerNew(domainObject);
+        std::cout << addStmt(domainObject).c_str() << std::endl;
     };
 
     void abstractUpdate(DomainObject *domainObject){
         if(domainObject != nullptr){
             sqlite3_exec(_db, updateStmt(domainObject).c_str(), NULL, NULL, &_errorMessage);
+            std::cout << updateStmt(domainObject).c_str() << std::endl;
             UnitOfWork::instance()->registerDirty(domainObject);
         }
     };
 
     void abstractDelete(std::string id){
         sqlite3_exec(_db, deleteByIdStmt(id).c_str(), NULL, NULL, &_errorMessage);
+        std::cout << deleteByIdStmt(id).c_str() << std::endl;
     };
 
     void load(DomainObject *domainObject){
