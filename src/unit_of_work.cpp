@@ -50,7 +50,41 @@ bool UnitOfWork::inDeleted(std::string id) const {
 };
 
 void UnitOfWork::commit(){
+    for(const auto dirty : _dirty){
+        Drawing *drawing = dynamic_cast<Drawing *>(dirty.second);
+        Painter *painter = dynamic_cast<Painter *>(dirty.second);
+        if(drawing != nullptr){
+            DrawingMapper::instance()->update(dirty.first);
+            registerClean(dirty.second);
+        } else {
+            PainterMapper::instance()->update(dirty.first);
+            registerClean(dirty.second);
+        }
+    }
 
+    for(const auto item_new : _new){
+        Drawing *drawing = dynamic_cast<Drawing *>(item_new.second);
+        Painter *painter = dynamic_cast<Painter *>(item_new.second);
+        if(drawing != nullptr){
+            DrawingMapper::instance()->update(item_new.first);
+            registerClean(item_new.second);
+        } else {
+            PainterMapper::instance()->update(item_new.first);
+            registerClean(item_new.second);
+        }
+    }
+
+    for(const auto item_deleted : _deleted){
+        Drawing *drawing = dynamic_cast<Drawing *>(item_deleted.second);
+        Painter *painter = dynamic_cast<Painter *>(item_deleted.second);
+        if(drawing != nullptr){
+            DrawingMapper::instance()->update(item_deleted.first);
+            registerClean(item_deleted.second);
+        } else {
+            PainterMapper::instance()->update(item_deleted.first);
+            registerClean(item_deleted.second);
+        }
+    }
 };
 
 UnitOfWork * UnitOfWork::_instance = nullptr;
