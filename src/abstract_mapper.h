@@ -66,7 +66,6 @@ protected:
 
     void abstractAdd(DomainObject *domainObject){
         sqlite3_exec(_db, addStmt(domainObject).c_str(), NULL, NULL, &_errorMessage);
-        UnitOfWork::instance()->registerNew(domainObject);
         std::cout << addStmt(domainObject).c_str() << std::endl;
     };
 

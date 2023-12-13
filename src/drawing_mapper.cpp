@@ -75,12 +75,12 @@ DrawingMapper::DrawingMapper()
     _parser = new Parser(_scanner, _builder);
 }
 
-// DrawingMapper::~DrawingMapper()
-// {
-//     delete _builder;
-//     delete _scanner;
-//     delete _parser;
-// }
+DrawingMapper::~DrawingMapper()
+{
+    delete _builder;
+    delete _scanner;
+    delete _parser;
+}
 
 std::list<Shape *> DrawingMapper::convertShapes(int argc, char **argv)
 {

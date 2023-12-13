@@ -14,6 +14,9 @@ class Builder;
 class DrawingMapper : public AbstractMapper
 {
 public:
+
+    ~DrawingMapper();
+    
     Drawing *find(std::string id);
 
     // add
@@ -37,7 +40,7 @@ public:
 
 protected:
     DrawingMapper();
-    // ~DrawingMapper();
+    
 
     static int callback(void *notUsed, int argc, char **argv, char **colNames);
 

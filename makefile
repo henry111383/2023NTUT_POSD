@@ -32,3 +32,9 @@ clean:
 
 stat:
 	wc -l src/* test/*.h test/*.cpp
+
+# valgrind: clean all
+# 	valgrind \
+# 	--tool=memcheck --error-exitcode=1 --track-origins=yes --leak-check=full --leak-resolution=high \
+# 	--num-callers=50 --show-leak-kinds=definite,possible --show-error-list=yes \
+# 	bin/ut_all 

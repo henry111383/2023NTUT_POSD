@@ -22,6 +22,7 @@ protected:
         dm->setDB("resource/drawing.db");
         pm = PainterMapper::instance();
         pm->setDB("resource/painter.db");
+        uw = UnitOfWork::instance();
     }
 
     void TearDown() override
@@ -30,6 +31,8 @@ protected:
         drop_painter_table();
         sqlite3_close(db);
         sqlite3_close(db_p);
+        // delete dm;
+        // delete pm;
     }
 
     void create_drawing_table()
@@ -129,23 +132,84 @@ protected:
     char *err_msg = nullptr;
     DrawingMapper *dm;
     PainterMapper *pm;
+    UnitOfWork *uw;
 };
 
 TEST_F(DBSuite, Sanity)
 {
 }
 
-TEST_F(DBSuite, stmtTest)
+TEST_F(DBSuite, DrawingFindStsmtShouldbeCorrect)
 {
     Drawing *drawing = dm->find("d_0001");
-    std::cout << DrawingMapper::instance()->addStmt(drawing) << std::endl;
-    std::cout << PainterMapper::instance()->addStmt(drawing->painter()) << std::endl;
+    std::string expected = "SELECT * FROM drawing WHERE ID = 'd_0001'";
+    ASSERT_EQ(expected, DrawingMapper::instance()->findByIdStmt(drawing->id()));
+}
+
+TEST_F(DBSuite, PainterFindStsmtShouldbeCorrect)
+{
+    Painter *painter = pm->find("p_0001");
+    std::string expected = "SELECT * FROM painter WHERE ID = 'p_0001'";
+    ASSERT_EQ(expected, PainterMapper::instance()->findByIdStmt(painter->id()));
+}
+
+TEST_F(DBSuite, DrawingAddStsmtShouldbeCorrect)
+{
+    Drawing *drawing = dm->find("d_0001");
+    std::string expected = "INSERT INTO drawing (ID, painter, shapes) VALUES ('d_0001', 'p_0001', 'triangle 1 1 1\n')";
+    ASSERT_EQ(expected, DrawingMapper::instance()->addStmt(drawing));
+}
+
+TEST_F(DBSuite, PainterAddStsmtShouldbeCorrect)
+{
+    Painter *painter = pm->find("p_0001");
+    std::string expected = "INSERT INTO painter (ID, name) VALUES ('p_0001', 'Patrick')";
+    ASSERT_EQ(expected, PainterMapper::instance()->addStmt(painter));
+}
+
+TEST_F(DBSuite, DrawingUpdateStsmtShouldbeCorrect)
+{
+    Drawing *drawing = dm->find("d_0001");
+    std::string expected = "UPDATE drawing SET Painter='p_0001' WHERE ID='d_0001'";
+    ASSERT_EQ(expected, DrawingMapper::instance()->updateStmt(drawing));
+}
+
+TEST_F(DBSuite, PainterUpdateStsmtShouldbeCorrect)
+{
+    Painter *painter = pm->find("p_0001");
+    std::string expected = "UPDATE painter SET Name = 'Patrick' WHERE ID='p_0001'";
+    ASSERT_EQ(expected, PainterMapper::instance()->updateStmt(painter));
+}
+
+TEST_F(DBSuite, DrawingDeleteStsmtShouldbeCorrect)
+{
+    Drawing *drawing = dm->find("d_0001");
+    std::string expected = "DELETE FROM drawing WHERE ID='d_0001'";
+    ASSERT_EQ(expected, DrawingMapper::instance()->deleteByIdStmt(drawing->id()));
+}
+
+TEST_F(DBSuite, PainterDeleteStsmtShouldbeCorrect)
+{
+    Painter *painter = pm->find("p_0001");
+    std::string expected = "DELETE FROM painter WHERE ID = 'p_0001'";
+    ASSERT_EQ(expected, PainterMapper::instance()->deleteByIdStmt(painter->id()));
+}
+
+TEST_F(DBSuite, DrawingMapperShouldbeSingleton){
+    ASSERT_EQ(dm, DrawingMapper::instance());
+}
+
+TEST_F(DBSuite, PainterMapperShouldbeSingleton){
+    ASSERT_EQ(pm, PainterMapper::instance());
+}
+
+TEST_F(DBSuite, UnitOfWorkShouldbeSingleton){
+    ASSERT_EQ(uw, UnitOfWork::instance());
 }
 
 TEST_F(DBSuite, findDrawing1)
 {
     Drawing *drawing = dm->find("d_0001");
-
     EXPECT_TRUE(UnitOfWork::instance()->inClean("d_0001"));
     EXPECT_FALSE(UnitOfWork::instance()->inDirty("d_0001"));
     EXPECT_TRUE(UnitOfWork::instance()->inClean("p_0001"));
@@ -184,6 +248,18 @@ TEST_F(DBSuite, findDrawing3)
     ASSERT_EQ(drawing->painter()->name(), "Mary");
 }
 
+TEST_F(DBSuite, findNotExistingDrawing)
+{
+    Drawing *drawing = dm->find("Hi");
+    ASSERT_EQ(nullptr, drawing);
+}
+
+TEST_F(DBSuite, findNotExistingPainter)
+{
+    Painter *painter = pm->find("Hi");
+    ASSERT_EQ(nullptr, painter);
+}
+
 TEST_F(DBSuite, NewDrawingAndPainterThroughUoWAndFind){
     DomainObject *painter_1 = new Painter("p_0004", "Richard");
     DomainObject *drawing = new Drawing("d_0005", static_cast<Painter *>(painter_1));
@@ -211,7 +287,7 @@ TEST_F(DBSuite, DeletePainterInClean){
 }
 
 TEST_F(DBSuite, DeletePainterInNewWithoutCommit){
-    DomainObject *painter = new Painter("p_0020", "0020");
+    DomainObject *painter = new Painter("p_1234", "1234");
     UnitOfWork::instance()->registerNew(painter);
     UnitOfWork::instance()->registerDeleted(painter);
     ASSERT_FALSE(UnitOfWork::instance()->inNew(painter->id()));
