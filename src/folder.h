@@ -395,13 +395,9 @@ public:
                 return "folder";
             }
 
-            struct stat fileInfo;
-            const char *c = node->path().c_str();
-            if(lstat(c, &fileInfo) == 0){ // check link
-                if(S_ISLNK(fileInfo.st_mode)){
-                    std::cout << node->path() << "is Link" << std::endl;
-                    return "link";
-                }
+            const Link * lnk = dynamic_cast<const Link *>(node);
+            if (lnk) {
+                return "link";
             }
 
             std::size_t pos = node->name().rfind(".");
