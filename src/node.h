@@ -1,19 +1,21 @@
 #pragma once
 
-#include<string>
+#include <string>
+#include <sys/stat.h>
 #include "iterator.h"
 #include "visitor.h"
 #include "null_iterator.h"
 #include "order_by.h"
+#include "iterator_factory.h"
 
 using namespace std;
 
 class Node {
 private:
+
+protected:
     string _path;
     Node * _parent;
-protected:
-
     Node(string path): _path(path) {}
 
 public:
@@ -50,7 +52,15 @@ public:
 
     virtual int numberOfFiles() const = 0;
 
-    virtual Iterator * createIterator(OrderBy orderBy=OrderBy::Normal) {
+    virtual Iterator * createIterator() {
+        return new NullIterator();
+    }
+
+    virtual Iterator * createIterator(IteratorFactory * factory){
+        return new NullIterator();
+    }
+
+    virtual Iterator * createIterator(OrderBy orderBy) {
         return new NullIterator();
     }
 
@@ -63,4 +73,28 @@ public:
     }
 
     virtual void accept(Visitor * visitor) = 0;
+
+    void rename(std::string name) {
+        if(name.empty()){
+            throw "Error";
+        }
+        // update name
+        size_t slash = _path.rfind("/");
+        if(slash != std::string::npos ){
+            _path = _path.substr(0, slash+1) + name;
+        }
+        else {
+            _path = name;
+        }
+        // update children's path
+        updateChildren();
+    }
+
+    virtual void updateChildren() = 0;
+    
+    void updatePath(){
+        if(_parent != nullptr){
+            _path = _parent->path() + "/" + name();
+        }
+    }
 };

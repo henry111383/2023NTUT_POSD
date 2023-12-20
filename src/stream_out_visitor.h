@@ -2,6 +2,7 @@
 
 #include "file.h"
 #include "folder.h"
+#include "link.h"
 #include "visitor.h"
 #include <fstream>
 #include <iostream>
@@ -30,6 +31,10 @@ public:
             if(dynamic_cast<File *>(it->currentItem()))
                 _result += "\n";
         }
+    }
+
+    void visitLink(Link * link) override {
+        link->getTarget()->accept(this);
     }
 
     string getResult() const {

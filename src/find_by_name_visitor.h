@@ -2,6 +2,7 @@
 
 #include "file.h"
 #include "folder.h"
+#include "link.h"
 #include "visitor.h"
 
 class FindByNameVisitor : public Visitor {
@@ -27,6 +28,10 @@ public:
         }
 
         delete it;
+    }
+
+    void visitLink(Link * link) override {
+        link->getTarget()->accept(this);
     }
 
     std::list<string> getPaths() const {

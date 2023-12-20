@@ -37,4 +37,7 @@ public:
     void accept(Visitor * visitor) override {
         visitor->visitFile(this);
     }
+
+    void updateChildren() override {};
+
 };

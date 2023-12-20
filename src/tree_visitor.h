@@ -46,6 +46,10 @@ public:
         }
     }
 
+    void visitLink(Link * link) override {
+        _result += link->name() + "\n";
+    }
+
     string getTree() {
         return _result;
     }

@@ -46,3 +46,30 @@ TEST(Folder, add_folder) {
 
     delete home;
 }
+
+TEST(Folder, RenameWithEmptyShouldThrow) {
+    Folder * home = new Folder("structure/home");
+    Folder * document = new Folder("structure/home/Documents");
+
+    home->add(document);
+
+    ASSERT_EQ("Documents", home->getChildByName("Documents")->name());
+    ASSERT_ANY_THROW(home->rename(""));
+
+    delete home;
+}
+
+TEST(Folder, RenameShouldbeCorrect) {
+    Folder * home = new Folder("structure/home");
+    Folder * document = new Folder("structure/home/Documents");
+
+    home->add(document);
+
+    ASSERT_EQ("Documents", home->getChildByName("Documents")->name());
+    ASSERT_NO_THROW(home->rename("HOME"));
+
+    ASSERT_EQ("HOME", home->name());
+    ASSERT_EQ("structure/HOME/Documents", document->path());
+
+    delete home;
+}

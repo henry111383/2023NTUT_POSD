@@ -65,7 +65,15 @@ public:
         return num;
     }
 
-    Iterator * createIterator(OrderBy orderBy=OrderBy::Normal) override {
+    Iterator * createIterator() override {
+        return new FolderIterator(this, _operationCount);
+    }
+
+    Iterator * createIterator(IteratorFactory *factory) override {
+        return factory->create(this, _operationCount);
+    }
+
+    Iterator * createIterator(OrderBy orderBy) override {
         switch (orderBy) {
             case OrderBy::Name :
                 return new OrderByNameIterator(this, _operationCount);
@@ -132,6 +140,12 @@ public:
     void accept(Visitor * visitor) override {
         visitor->visitFolder(this);
     }
+    
+    void updateChildren() override {
+        for(auto node : _nodes){
+            node->updatePath();
+        }
+    };
 
 private:
     class AbstractFolderIterator: public Iterator {
@@ -375,6 +389,14 @@ public:
             std::size_t pos = node->name().rfind(".");
             if (pos == std::string::npos) {
                 return "file";
+            }
+
+            struct stat fileInfo;
+            const char *c = node->path().c_str();
+            if(lstat(c, &fileInfo) == 0){ // check link
+                if(S_ISLNK(fileInfo.st_mode)){
+                    return "link";
+                }
             }
 
             return node->name().substr(pos+1);
