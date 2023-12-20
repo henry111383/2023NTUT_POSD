@@ -10,21 +10,21 @@ private:
 public:
     Link(std::string path, Node * target): Node(path), _target(target) {
         std::cout << path << std::endl;
-        struct stat fileInfo;
-        const char *c = path.c_str();
-        if(lstat(c, &fileInfo) == 0){ // check link
-            if(S_ISLNK(fileInfo.st_mode))
-                // struct stat fileInfo;
-                // const char *c = path.c_str();
-                // if(lstat(c, &fileInfo) == 0){ // check target
-                //     if(S_ISLNK(fileInfo.st_mode)){
-                //         return;
-                //     }
-                // }
-                return;
-        }
-        std::cout << "no Path" << std::endl;
-        throw "No Link exists";
+        // struct stat fileInfo;
+        // const char *c = path.c_str();
+        // if(lstat(c, &fileInfo) == 0){ // check link
+        //     if(S_ISLNK(fileInfo.st_mode))
+        //         // struct stat fileInfo;
+        //         // const char *c = path.c_str();
+        //         // if(lstat(c, &fileInfo) == 0){ // check target
+        //         //     if(S_ISLNK(fileInfo.st_mode)){
+        //         //         return;
+        //         //     }
+        //         // }
+        //         return;
+        // }
+        // std::cout << "no Path" << std::endl;
+        // throw "No Link exists";
     }
 
     Node * getTarget() {
