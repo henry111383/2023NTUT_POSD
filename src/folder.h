@@ -20,7 +20,7 @@ private:
 
 public:
     Folder(string path): Node(path) {
-        std::cout << "Folder: " << path << std::endl;
+        // std::cout << "Folder: " << path << std::endl;
         struct stat fileInfo;
         const char *c = path.c_str();
         if(lstat(c, &fileInfo) == 0){

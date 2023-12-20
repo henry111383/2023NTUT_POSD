@@ -5,11 +5,11 @@
 
 class Link: public Node {
 private:
-    Node * _target = nullptr; 
+    Node * _target; 
 
 public:
     Link(std::string path, Node * target): Node(path), _target(target) {
-        std::cout << "Link: " << path << std::endl;
+        // std::cout << "Link: " << path << std::endl;
         // struct stat fileInfo;
         // const char *c = path.c_str();
         // if(lstat(c, &fileInfo) == 0){ // check link
@@ -55,6 +55,7 @@ public:
     void add(Node *node) override {
         if(_target!=nullptr){
             _target->add(node);
+            return;
         }
         throw "error";
     }
@@ -62,6 +63,7 @@ public:
     void remove(std::string path) override {
         if(_target!=nullptr){
             _target->remove(path);
+            return;
         }
         throw "error";
     }
@@ -79,6 +81,7 @@ public:
     void updateChildren() override {
         if(_target!=nullptr){
             _target->updateChildren();
+            return;
         }
         throw "error";
     };

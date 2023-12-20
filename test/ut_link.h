@@ -47,3 +47,12 @@ TEST(LinkTEST, findByNameShouldbeCorrect){
     delete lnk;
     delete folder;
 }
+
+TEST(LinkTEST, LinkToFile){
+    Node *folder = new Folder("structure/home");
+    Node *lnk = new Link("structure/link_to_home", folder);
+    Node *cpp = new File("structure/home/hello.txt");
+    lnk->add(cpp);
+    delete lnk;
+    delete folder;
+}
