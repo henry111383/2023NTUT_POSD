@@ -9,6 +9,7 @@ private:
 
 public:
     Link(std::string path, Node * target): Node(path), _target(target) {
+        std::cout << path << std::endl;
         struct stat fileInfo;
         const char *c = path.c_str();
         if(lstat(c, &fileInfo) == 0){ // check link
