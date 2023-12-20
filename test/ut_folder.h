@@ -73,3 +73,7 @@ TEST(Folder, RenameShouldbeCorrect) {
 
     delete home;
 }
+
+TEST(folder, newtest){
+    Folder *tmp = new Folder("structure2/home/link_to_programming");
+}
