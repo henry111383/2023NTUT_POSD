@@ -399,7 +399,7 @@ public:
             const char *c = node->path().c_str();
             if(lstat(c, &fileInfo) == 0){ // check link
                 if(S_ISLNK(fileInfo.st_mode)){
-                    std::cout << path << "is Link" << std::endl;
+                    std::cout << node->path() << "is Link" << std::endl;
                     return "link";
                 }
             }
