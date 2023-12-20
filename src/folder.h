@@ -146,6 +146,7 @@ public:
     void updateChildren() override {
         for(auto node : _nodes){
             node->updatePath();
+            node->updateChildren();
         }
     };
 
