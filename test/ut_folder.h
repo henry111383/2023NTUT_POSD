@@ -1,5 +1,6 @@
 #include <string>
 #include "../src/folder.h"
+#include <gtest/gtest.h>
 
 using namespace std;
 
