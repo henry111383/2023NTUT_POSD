@@ -6,12 +6,14 @@
 class File: public Node {
 public:
     File(string path): Node(path) {
+        std::cout << path << std::endl;
         struct stat fileInfo;
         const char *c = path.c_str();
         if(lstat(c, &fileInfo) == 0){
             if(S_ISREG(fileInfo.st_mode))
                 return;
         }
+        std::cout << "no File" << std::endl;
         throw "No File exists";
     }
     

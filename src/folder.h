@@ -19,12 +19,14 @@ private:
 
 public:
     Folder(string path): Node(path) {
+        std::cout << path << std::endl;
         struct stat fileInfo;
         const char *c = path.c_str();
         if(lstat(c, &fileInfo) == 0){
             if(S_ISDIR(fileInfo.st_mode))
                 return;
         }
+        std::cout << "no Folder" << std::endl;
         throw "No Folder exists";
     }
 
