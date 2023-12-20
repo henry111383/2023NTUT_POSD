@@ -23,6 +23,7 @@ public:
                 // }
                 return;
         }
+        std::cout << "no Path" << std::endl;
         throw "No Link exists";
     }
 
