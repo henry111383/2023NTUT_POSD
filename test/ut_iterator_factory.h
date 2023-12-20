@@ -101,8 +101,7 @@ TEST_F(AbstractFactoryTest, OrderByNameIteratorFactoryCanBeBuilt) {
 
 TEST_F(AbstractFactoryTest, OrderByNameIteratorFactoryShouldbeSingletonPattern) {
     ASSERT_NO_THROW(factory = OrderByNameIteratorFactory::instance());
-    IteratorFactory *tmp = OrderByNameIteratorFactory::instance();
-    ASSERT_EQ(factory, tmp);
+    ASSERT_EQ(factory, OrderByNameIteratorFactory::instance());
     delete factory;
 }
 

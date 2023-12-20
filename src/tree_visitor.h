@@ -40,6 +40,7 @@ public:
         while (!it->isDone()) {
             Node * current = it->currentItem();
             it->next();
+            std::cout << "NOW: " << current->name() << std::endl;
 
             ++_currentLevel;
             int notEndLevel = _notEndLevel;
@@ -61,6 +62,7 @@ public:
 
             --_currentLevel;
             _notEndLevel = notEndLevel;
+            
         }
     }
 
@@ -75,7 +77,7 @@ public:
 private:
     OrderBy _orderBy;
     std::string _result;
-    int _currentLevel;
-    int _notEndLevel;
+    int _currentLevel=0;
+    int _notEndLevel=0;
     IteratorFactory *_factory;
 };

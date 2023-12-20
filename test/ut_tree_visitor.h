@@ -1,5 +1,6 @@
 #include "../src/tree_visitor.h"
 #include "../src/order_by.h"
+#include "../src/iterator_factories.h"
 
 #include <iostream>
 
@@ -43,6 +44,8 @@ protected:
         document->add(ca);
         ooad = new File("structure2/home/Documents/object-oriented-analysis-and-design.pdf");
         document->add(ooad);
+
+        std::cout << "OKKKK" << std::endl;
     }
 
     void TearDown() {
@@ -97,8 +100,8 @@ TEST_F(TreeVisitorTest, OrderByName) {
     "│   └── funny.png\n"
     "├── hello.txt\n"
     "└── my_profile\n";
-
-    TreeVisitor * tree = new TreeVisitor(OrderBy::Name);
+   
+    TreeVisitor * tree = new TreeVisitor(OrderByNameIteratorFactory::instance());
     home->accept(tree);
     string result = tree->getTree();
 
@@ -126,7 +129,7 @@ TEST_F(TreeVisitorTest, OrderByNameWithFolderFirst) {
     "├── hello.txt\n"
     "└── my_profile\n";
 
-    TreeVisitor * tree = new TreeVisitor(OrderBy::NameWithFolderFirst);
+    TreeVisitor * tree = new TreeVisitor(OrderByNameWithFolderFirstIteratorFactory::instance());
     home->accept(tree);
     string result = tree->getTree();
 
@@ -153,7 +156,7 @@ TEST_F(TreeVisitorTest, OrderByKind) {
     "│   └── funny.png\n"
     "└── hello.txt\n";
 
-    TreeVisitor * tree = new TreeVisitor(OrderBy::Kind);
+    TreeVisitor * tree = new TreeVisitor(OrderByKindIteratorFactory::instance());
     home->accept(tree);
     string result = tree->getTree();
 
