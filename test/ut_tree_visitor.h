@@ -1,6 +1,7 @@
 #include "../src/tree_visitor.h"
 #include "../src/order_by.h"
 #include "../src/iterator_factories.h"
+#include "../src/link.h"
 
 #include <iostream>
 
@@ -45,6 +46,9 @@ protected:
         ooad = new File("structure2/home/Documents/object-oriented-analysis-and-design.pdf");
         document->add(ooad);
 
+        // lnk = new Link("structure2/home/link_to_programming", programming);
+        // home->add(lnk);
+
         std::cout << "OKKKK" << std::endl;
     }
 
@@ -81,6 +85,7 @@ protected:
     Node * ddd;
     Node * ca;
     Node * ooad;
+    Node * lnk;
 };
 
 TEST_F(TreeVisitorTest, OrderByName) {

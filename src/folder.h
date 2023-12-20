@@ -4,6 +4,7 @@
 #include <sys/stat.h>
 #include "node.h"
 #include "file.h"
+#include "link.h"
 #include "iterator.h"
 #include "dfs_iterator.h"
 #include "order_by.h"
@@ -207,6 +208,11 @@ private:
                 return new File(node->path());
             }
 
+            Link * lnk = dynamic_cast<Link *>(node);
+            if (lnk) {
+                return new Link(node->path(), lnk->getTarget());
+            }
+
             Node * clonedFolder = new Folder(node->path());
 
             std::list<Node *> children;
@@ -389,11 +395,6 @@ public:
                 return "folder";
             }
 
-            std::size_t pos = node->name().rfind(".");
-            if (pos == std::string::npos) {
-                return "file";
-            }
-
             struct stat fileInfo;
             const char *c = node->path().c_str();
             if(lstat(c, &fileInfo) == 0){ // check link
@@ -401,6 +402,13 @@ public:
                     return "link";
                 }
             }
+
+            std::size_t pos = node->name().rfind(".");
+            if (pos == std::string::npos) {
+                return "file";
+            }
+
+            
 
             return node->name().substr(pos+1);
         }
